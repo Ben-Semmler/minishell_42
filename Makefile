@@ -24,4 +24,12 @@ fclean:
 norm:
 	norminette $(FILES)
 
+git:
+	@clear
+	@git add .
+	@echo "commit msg" 
+	@read COMMIT; \
+	git commit -m "$$COMMIT"; \
+	git push;
+
 re: fclean all

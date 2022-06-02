@@ -65,3 +65,7 @@ TASKS COMPLETED:
 
 KNOWN BUGS:
 -No known bugs!
+
+
+|| is the OR operator. It executes the command on the right only if the command on the left returned an error
+&& The second command will only execute if the first command has executed successfully
