@@ -6,20 +6,20 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/06/09 12:38:55 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:50:13 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	inti_g_env(char **env)
-// {
-// 	int	i;
+void	import_env(char **env)
+{
+	int	i;
 
-// 	i = -1;
-// 	while (env[++i])
-// 		insert(hash());
-// }
+	i = -1;
+	while (env[++i])
+		insert(get_key(env[i]), get_data(env[i]));
+}
 
 char *get_key(char *str)
 {
@@ -58,7 +58,7 @@ void	command_env(void)
 	int	i;
 
 	i = -1;
-	while (++i < 2048)
+	while (++i <= 2048)
 		if (g_env_table[i].key)
 			printf("%s=%s\n", g_env_table[i].key, g_env_table[i].data);
 }
