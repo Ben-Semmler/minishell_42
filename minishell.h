@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/11 17:22:03 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:05:19 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,29 @@
 # include <readline/history.h>
 
 # include <sys/types.h>
+
+
+
+//One allowed Global variable, it's the hash table
+// that stores the environment variables
+# define ENV_SIZE 2048
+# define LOCAL_ENV_SIZE 256
+
+typedef struct s_env
+{
+	char	*key;
+	char	*data;
+}	t_env;
+
+# define ENV_SIZE 2048
+t_env	g_env_table[ENV_SIZE];
+
+// hash funs
+u_int64_t	hash(char *str, int envlen);
+t_env		search(char *key);
+void		insert(char *key, char *data);
+char 		*get_key(char *str);
+char 		*get_data(char *str);
 
 char	*ft_joinfree(char *str1, int free1, char *str2, int free2);
 

@@ -10,11 +10,19 @@ FILES = main.c\
 		command_echo.c\
 		command_cd.c\
 		command_pwd.c\
-		ft_joinfree.c
+		ft_joinfree.c \
+		command_environment.c \
+		hashTable.c
 
 all:
 	$(MAKE) -C libft
 	gcc $(c_flags) -o $(NAME) libft/libft.a $(FILES)
+	./$(NAME)
+
+r:
+	@make
+	@clear
+	@./$(NAME)
 
 clean:
 
