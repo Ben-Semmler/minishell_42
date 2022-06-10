@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_environment.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/06/09 14:50:13 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/10 21:40:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,18 @@ void	import_env(char **env)
 	i = -1;
 	while (env[++i])
 		insert(get_key(env[i]), get_data(env[i]));
+}
+
+int insert_data(char *line, char *key)
+{
+	int		i;
+	t_env	temp;
+
+	temp search(key);
+	i = -1;
+	while (temp.data[++i])
+		line[i] = temp.data[i];
+	return (i);
 }
 
 char *get_key(char *str)

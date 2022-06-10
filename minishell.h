@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/09 14:47:13 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/10 21:34:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ char 		*get_key(char *str);
 char 		*get_data(char *str);
 void		command_env(void);
 void		import_env(char **env);
+int			check_env(char **input);
+int 		insert_data(char *line, char *key);
 
 char	*ft_joinfree(char *str1, int free1, char *str2, int free2);
 

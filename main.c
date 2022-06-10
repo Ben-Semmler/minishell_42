@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/09 12:39:27 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/10 21:18:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
-	char *test = "kerdfgkjny=data ya mum";
+	char *test = "kerdfgkjny$USER ya mum";
 
 	printf("%s\n", test);
 	printf("%s\n", get_key(test));
 	printf("%s\n", get_data(test));
+	check_env(argv);
 	// run = 1;
 	// while (run == 1)
 	// {

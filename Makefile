@@ -24,6 +24,9 @@ r:
 	@clear
 	@./$(NAME)
 
+i:
+	gcc main.c
+
 clean:
 
 fclean:
