@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_environment.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/06/10 21:40:09 by marvin           ###   ########.fr       */
+/*   Updated: 2022/06/14 15:17:23 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int insert_data(char *line, char *key)
 	int		i;
 	t_env	temp;
 
-	temp search(key);
+	temp = search(key);
 	i = -1;
 	while (temp.data[++i])
 		line[i] = temp.data[i];

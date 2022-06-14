@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
+# include "../libft/libft.h"
 
 typedef struct s_cmd t_cmd;
 
@@ -11,43 +12,16 @@ typedef struct s_cmd
 	char	**input;
 	char	*output;
 
-	void	*in_fun;
+	void	(*in_fun)(t_cmd *cmd);
 	void	(*out_fun)(t_cmd *cmd);
 }	t_cmd;
 
-int	ft_strlen(const char *s)
+void writeToFile(char *input, char *file)
 {
-	int	length;
-
-	length = 0;
-	if (!s)
-		return (length);
-	while (s[length] != 0)
-		length++;
-	return (length);
+	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
 }
 
-int	ft_strcmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	pos;
-
-	pos = 0;
-	while ((s1[pos] != 0 || s2[pos] != 0) && pos < n)
-	{
-		if (((unsigned char *)s1)[pos] != ((unsigned char *)s2)[pos])
-			return (((unsigned char *)s1)[pos] - ((unsigned char *)s2)[pos]);
-		pos++;
-	}
-	return (0);
-}
-
-
-// void writeToFile(char *input, char *file)
-// {
-// 	write(open(file), input, ft_strlen(input));
-// }
-
-char	*echo(t_cmd *cmd)
+void	echo(t_cmd *cmd)
 {
 	int		len;
 	int		i;
@@ -55,9 +29,9 @@ char	*echo(t_cmd *cmd)
 	char	*to_print;
 
 	to_print = malloc(100);
-	i = 1;
+	i = 1 + (ft_strncmp(cmd->input[1], "-n", 2) == 0);
 	len = 0;
-	while (cmd->input[i] && ft_strcmp(cmd->input[i], ">>", 2) == 0)
+	while (cmd->input[i] && ft_strncmp(cmd->input[i], ">>", 2))
 	{
 		i2 = 0;
 		while (cmd->input[i][i2])
@@ -70,10 +44,10 @@ char	*echo(t_cmd *cmd)
 		len++;
 		i++;
 	}
-	if (!ft_strcmp(cmd->input[1], "-n", 2))
+	if (ft_strncmp(cmd->input[1], "-n", 2))
 		to_print[len - 1] = '\n';
 	to_print[len] = 0;
-	return (to_print);
+	cmd->output = to_print;
 }
 
 void print_out(t_cmd *cmd)
@@ -81,17 +55,44 @@ void print_out(t_cmd *cmd)
 	printf("%s\n", cmd->output);
 }
 
+void	append_out(t_cmd *cmd)
+{
+	int		i;
+	char	*name;
+
+	i = 1;
+	while (cmd->input[i] && ft_strncmp(cmd->input[i], ">>", 2) && ft_strncmp(cmd->input[i], ">", 1)
+		i++;
+	name = cmd->input[i + 1];
+	i = 0;
+	while (*name && (*name == ' ' || *name == '	'))
+		name++;
+	writeToFile(cmd->output, name);
+}
+
 int	main(int ac, char **av)
 {
 	t_cmd	cmd;
-	char	*test = "hello world";
-	void	(*in_fun)(t_cmd *cmd);
-	void	(*out_fun)(t_cmd *cmd);
+	char	*test_input[6] = {"echo", "-n", "hello", "world", ">", "out"};
+	char	*test_output = "hello world";
 
-	out_fun = &print_out;
-	cmd.output = test;
-	cmd.out_fun = out_fun;
 	//cmd.input = av;
+
+	//writeToFile(test, "t");
+	cmd.input = test_input;
+	cmd.output = test_output;
+
+	//void	(*in_fun)(t_cmd *cmd);
+	//void	(*out_fun)(t_cmd *cmd);
+
+	//in_fun	= &echo;
+	//out_fun = &append_out;
+
+	cmd.in_fun = &echo;
+	cmd.out_fun = &append_out;
+	cmd.in_fun(&cmd);
 	cmd.out_fun(&cmd);
-	out_fun(&cmd);
+
+	cmd.in_fun(&cmd);
+	cmd.out_fun(&cmd);
 }

@@ -2,21 +2,15 @@ NAME = minishell
 
 c_flags = -Wall -Werror -Wextra -lreadline
 
-FILES = main.c\
-		get_options.c\
-		switch_command.c\
-		get_command_id.c\
-		run_executable.c\
-		command_echo.c\
-		command_cd.c\
-		command_pwd.c\
-		ft_joinfree.c \
-		command_environment.c \
-		hashTable.c
+INC = includes
+LIB = libft
+INCS = -I$(LIB) -I$(INC)
+
+SRC = srcs/*.c
 
 all:
 	$(MAKE) -C libft
-	gcc $(c_flags) -o $(NAME) libft/libft.a $(FILES)
+	gcc $(c_flags) -o $(NAME) $(INCS) libft/libft.a $(SRC)
 	./$(NAME)
 
 r:
