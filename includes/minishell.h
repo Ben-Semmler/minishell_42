@@ -56,7 +56,7 @@ int 		insert_data(char *line, char *key);
 char	*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int		get_command_id(char *input);
-char	*switch_command(char *input, int *run);
+char	*switch_command(char **input, int *run);
 char	**get_options(char *input);
 
 char	*run_executable(char **input);
