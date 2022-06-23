@@ -6,14 +6,14 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/14 15:23:02 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/23 12:28:27 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../libft/libft.h"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -26,7 +26,20 @@
 
 # include <sys/types.h>
 
+#include <sys/stat.h>
+#include <fcntl.h>
 
+
+typedef struct s_cmd t_cmd;
+
+typedef struct s_cmd
+{
+	char	**input;
+	char	*output;
+
+	void	(*in_fun)(t_cmd *cmd);
+	void	(*out_fun)(t_cmd *cmd);
+}	t_cmd;
 
 //One allowed Global variable, it's the hash table
 // that stores the environment variables
@@ -60,7 +73,7 @@ char	*switch_command(char *input, int *run);
 char	**get_options(char *input);
 
 char	*run_executable(char **input);
-char	*command_echo(char **s_input);
+void	command_echo(t_cmd *cmd);
 char	*command_cd(char **s_input);
 char	*command_pwd(char **s_input);
 

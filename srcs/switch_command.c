@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   switch_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:23:22 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/14 17:23:24 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/06/23 12:30:26 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*switch_command(char *input, int *run)
 		//command for environment variables
 		output = ft_joinfree(ft_strjoin("COMMAND '", s_input[0]), 1,
 				"' NOT YET IMPLEMENTED\n", 0);
-	else if (c_id == 2)
+	//else if (c_id == 2)
 		//command 'echo'
-		output = command_echo(s_input);
+		//output = command_echo(s_input);
 	else if (c_id == 3)
 		//command 'cd'
 		output = command_cd(s_input);
