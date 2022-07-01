@@ -12,28 +12,6 @@
 
 #include "minishell.h"
 
-typedef struct s_pipes
-{
-	char			**action;
-	struct s_pipes	*next;
-}	t_pipes;
-
-char	*ft_strncpy(char *src, int size)
-{
-	int		i;
-	char	*out;
-
-	i = 0;
-	out = malloc(sizeof(char) * (size + 1));
-	while (src[i] && i < size)
-	{
-		out[i] = src[i];
-		i++;
-	}
-	out[i] = 0;
-	return (out);
-}
-
 char	**add_element(char **arr, char *toadd)
 {
 	int		i;
@@ -46,6 +24,7 @@ char	**add_element(char **arr, char *toadd)
 	i = 0;
 	while (arr[i] != NULL)
 	{
+		//printf("arr[i]");
 		newarr[i] = arr[i];
 		i++;
 	}
@@ -56,13 +35,13 @@ char	**add_element(char **arr, char *toadd)
 
 int	main(void)
 {
-	int		run;
-	char	*input;
-	char	*output;
-	t_pipes pipes;
-	char	*pipearg;
-	int		i;
-	int		i2;
+	t_action	*actions;
+	t_action	*tempaction;
+	pid_t		p;
+	int			run;
+	char		*input;
+	char		*stdout;
+	int			filedes[2];
 
 	run = 1;
 	while (run == 1)
@@ -70,61 +49,36 @@ int	main(void)
 		input = readline("minishell& ");
 		add_history(input);
 		//vv - Do stuff with the input in here - vv -b
-		t_pipes *temppipes;
-		temppipes = &pipes;
-		temppipes->action = NULL;
-		char	*tempin = NULL;
-		i = 0;
-		while ((size_t)i < ft_strlen(input))
+		actions = split_actions(input);
+		tempaction = actions;
+		while (tempaction != NULL)
 		{
-			i2 = 0;
-			while (input[i + i2] && input[i + i2] != '|')
-				i2++;
-			tempin = ft_strncpy(&input[i], i2);
-			if (temppipes->action != NULL)
+			stdout = NULL;
+			//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
+			if (ft_strncmp(tempaction->command[0], "cd", 3) == 0)
+				command_cd(tempaction->command);
+			else
 			{
-				temppipes->next = malloc(sizeof(t_pipes));
-				temppipes = temppipes->next;
+				pipe(filedes);
+				p = fork();
+				if (p == 0)
+				{
+					while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+						;
+					switch_command(tempaction->command, stdout, &run);
+					exit(0);
+				}
+				close(filedes[1]);
+				stdout = read_stdout(tempaction, filedes);
 			}
-			temppipes->action = get_options(tempin);
-			temppipes->next = NULL;
-			free(tempin);
-			i += i2 + 2;
-		}
-		temppipes = &pipes;
-		pipearg = NULL;
-		while (temppipes != NULL)
-		{
-			output = switch_command(temppipes->action, &run);
-			if (temppipes->next != NULL)
-				temppipes->action = add_element(temppipes->action, output);
-			else if (output != NULL)
+			if (!tempaction->next && stdout)
 			{
-				printf("%s", output);
-				free(output);
+				printf("%s", stdout);
+				free(stdout);
 			}
-			temppipes = temppipes->next;
+			tempaction = tempaction->next;
 		}
 		free(input);
-
-
-		//while ()
-		//{
-			//temppipes->action = get_options(input);
-			//temppipes->next = NULL;
-		//}
-		//int	c_id = get_command_id(input);
-		
-		/*i = 0;
-		while (split_input != 1)
-		s_input = get_options(input);
-		output = switch_command(s_input, &run);
-		if (output != NULL)
-		{
-			printf("%s", output);
-			free(output);
-		}
-		free(input);*/
 	}
 }
 

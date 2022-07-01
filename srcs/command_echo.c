@@ -14,7 +14,7 @@
 
 int	get_echo_len(char **input);
 
-char	*command_echo(char **input)
+void	command_echo(char **input)
 {
 	int		len;
 	int		i;
@@ -22,11 +22,12 @@ char	*command_echo(char **input)
 	char	*to_print;
 
 	to_print = malloc(100);//get_echo_len(input) + 1);
-	i = 1 + (ft_strncmp(input[1], "-n", 2) == 0);
-	len = 0;
+	i = 1 + (input[1] != NULL && ft_strncmp(input[1], "-n", 2) == 0);
+	len = -1 + (input[1] == NULL);
 	while (input[i])
 	{
 		i2 = 0;
+		len++;
 		while (input[i][i2])
 		{
 			if (input[i][i2] == '$')
@@ -37,13 +38,12 @@ char	*command_echo(char **input)
 			i2++;
 		}
 		to_print[len] = ' ';
-		len++;
 		i++;
 	}
-	if (!ft_strncmp(input[1], "-n", 2))
-		to_print[len - 1] = '\n';
 	to_print[len] = 0;
-	return (to_print);
+	printf("%s", to_print);
+	if (input[1] == NULL || ft_strncmp(input[1], "-n", 2))
+		printf("\n");
 }
 
 // int	get_echo_len(char **input)

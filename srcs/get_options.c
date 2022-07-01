@@ -15,7 +15,7 @@
 int		get_argn(char *input);
 char	*copy_arg(char *input);
 int		get_arg_size(char *input, int include_quotes);
-void	handle_quotations(char *input, int *quotations);
+void	handle_quotations(char input, int *quotations);
 
 char	**get_options(char *input)
 {
@@ -30,10 +30,10 @@ char	**get_options(char *input)
 	argi = 0;
 	while (input[i] && argi < argn)
 	{
-		args[argi] = copy_arg(&input[i]);
-		i += get_arg_size(&input[i], 1);
 		while (input[i] && input[i] == ' ')
 			i++;
+		args[argi] = copy_arg(&input[i]);
+		i += get_arg_size(&input[i], 1);
 		argi++;
 	}
 	i = 0;
@@ -49,7 +49,7 @@ int	get_argn(char *input)
 	int		argn;
 	int		i;
 
-	argn = 0;
+	argn = 0 - (input[0] == ' ');
 	i = 0;
 	while (input[i])
 	{
@@ -90,7 +90,7 @@ char	*copy_arg(char *input)
 		if ((input[i] == 34 || input[i] == 39)
 			&& (quotations == 0 || quotations == input[i]))
 		{
-			handle_quotations(&input[i], &quotations);
+			handle_quotations(input[i], &quotations);
 			offset++;
 		}
 		else
@@ -129,10 +129,10 @@ int	get_arg_size(char *input, int include_quotes)
 	return (len - adjust);
 }
 
-void	handle_quotations(char *input, int *quotations)
+void	handle_quotations(char input, int *quotations)
 {
 	if (*quotations == 0)
-		*quotations = input[0];
-	else if (*quotations == input[0])
+		*quotations = input;
+	else if (*quotations == input)
 		*quotations = 0;
 }

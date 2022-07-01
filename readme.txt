@@ -8,7 +8,8 @@ GENERAL NOTES
 -echo doesnt count multiple spaces between words, reads from args
 -single and double quotes don't work quite like bash, works for now but needs further refinement
 -Running executables is a bit janky for some reason
-
+-Commands should only be added to the history if it is valid
+-command cd does not work because it is a child process now. dunno how to fix
 
 CODING STANDARD:
 I've made some extra coding standard rules to keep our project looking consistent

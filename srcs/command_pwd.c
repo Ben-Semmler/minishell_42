@@ -12,21 +12,18 @@
 
 #include "minishell.h"
 
-char	*command_pwd(char **s_input)
+void	command_pwd(char **s_input)
 {
 	char	*cwd;
-	char	*output;
 
 	//Use of s_input to appease -WWW, not needed for function
 	s_input[0][0] = 'p';
 	//Create buffer with size of PATH_MAX, fill using getcwd to get
-	//the working directory and print
-	output = NULL;
+	//the working directory and prints
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
-		output = ft_strjoin(cwd, "\n");
+		printf("%s\n", cwd);
 	else
-		output = ft_strdup("Error: could not get directory\n");
+		printf("Error: could not get directory\n");
 	free(cwd);
-	return (output);
 }

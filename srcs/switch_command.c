@@ -15,49 +15,42 @@
 char	**split_input(char *input);
 void	free_split_input(char **s_input);
 
-char	*switch_command(char **input, int *run)
+void	switch_command(char **input, char *stdin, int *run)
 {
 	int		c_id;
-	char	*output;
 
+	(void)stdin;
 	//Splits the input into the command and the options.
 	c_id = get_command_id(input[0]);
-	output = NULL;
 	if (c_id == -1)
 		//Invalid command
-		output = ft_joinfree(ft_strjoin("minishell: ", input[0]), 1,
-				": command not found\n", 0);
+		printf("minishell: %s: command not found\n", input[0]);
 	else if (c_id == 0)
 		//command './'
-		output = run_executable(input);
+		run_executable(input);
 	else if (c_id == 1)
 		//command for environment variables
-		output = ft_joinfree(ft_strjoin("COMMAND '", input[0]), 1,
-				"' NOT YET IMPLEMENTED\n", 0);
+		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 2)
 		//command 'echo'
-		output = command_echo(input);
+		command_echo(input);
 	else if (c_id == 3)
 		//command 'cd'
-		output = command_cd(input);
+		command_cd(input);
 	else if (c_id == 4)
 		//command 'pwd'
-		output = command_pwd(input);
+		command_pwd(input);
 	else if (c_id == 5)
 		//command 'export'
-		output = ft_joinfree(ft_strjoin("COMMAND '", input[0]), 1,
-				"' NOT YET IMPLEMENTED\n", 0);
+		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 6)
 		//command 'unset'
-		output = ft_joinfree(ft_strjoin("COMMAND '", input[0]), 1,
-				"' NOT YET IMPLEMENTED\n", 0);
+		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 7)
 		//command 'env'
-		output = ft_joinfree(ft_strjoin("COMMAND '", input[0]), 1,
-				"' NOT YET IMPLEMENTED\n", 0);
+		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 8)
 		//command 'exit'
 		*run = 0;
 	free_split_input(input);
-	return (output);
 }

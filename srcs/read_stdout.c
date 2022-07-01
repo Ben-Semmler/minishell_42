@@ -1,0 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_stdout.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/28 15:13:22 by bsemmler          #+#    #+#             */
+/*   Updated: 2022/06/28 15:13:23 by bsemmler         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <minishell.h>
+
+char	*read_stdout(t_action *action, int *filedes)
+{
+	char		*output;
+	char		*buffer;
+
+	output = ft_strdup("");
+	buffer = ft_calloc(256, sizeof(char));
+	while (1)
+	{
+		ssize_t count = read(filedes[0], buffer, sizeof(buffer) - 1);
+		if (count == -1)
+		{
+			if (errno == EINTR)
+				continue;
+			else
+			{
+				perror("read");
+				exit(1);
+			}
+		}
+		else if (count == 0)
+			break;
+		else
+		{
+			buffer[count] = 0;
+			if (action->next == NULL)
+				printf("%s", buffer);
+			else
+				output = ft_joinfree(output, 1, buffer, 0);
+		}
+	}
+	if (action->next != NULL)
+		return (output);
+	return (NULL);
+}

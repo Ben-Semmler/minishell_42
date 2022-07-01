@@ -20,13 +20,19 @@
 # include <unistd.h>
 # include <signal.h>
 # include <limits.h>
+# include <errno.h>
+# include <stdbool.h>
 
 # include <readline/readline.h>
 # include <readline/history.h>
 
 # include <sys/types.h>
 
-
+typedef struct s_action
+{
+	char			**command;
+	struct s_action	*next;
+}	t_action;
 
 //One allowed Global variable, it's the hash table
 // that stores the environment variables
@@ -53,15 +59,18 @@ void		import_env(char **env);
 int			check_env(char **input);
 int 		insert_data(char *line, char *key);
 
-char	*ft_joinfree(char *str1, int free1, char *str2, int free2);
+t_action	*split_actions(char *input);
+char		*read_stdout(t_action *action, int *filedes);
 
-int		get_command_id(char *input);
-char	*switch_command(char **input, int *run);
-char	**get_options(char *input);
+char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
-char	*run_executable(char **input);
-char	*command_echo(char **s_input);
-char	*command_cd(char **s_input);
-char	*command_pwd(char **s_input);
+int			get_command_id(char *input);
+void		switch_command(char **input, char *stdin, int *run);
+char		**get_options(char *input);
+
+void		run_executable(char **input);
+void		command_echo(char **s_input);
+void		command_cd(char **s_input);
+void		command_pwd(char **s_input);
 
 #endif
