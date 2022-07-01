@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:35:20 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/14 15:17:02 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/23 12:51:35 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,66 @@
 
 int	get_echo_len(char **input);
 
-void	command_echo(char **input)
+void	command_echo(t_cmd *cmd)
 {
 	int		len;
 	int		i;
-	int		i2;
+	int		j;
 	char	*to_print;
+	int		nl;
 
-	to_print = malloc(100);//get_echo_len(input) + 1);
-	i = 1 + (input[1] != NULL && ft_strncmp(input[1], "-n", 2) == 0);
-	len = -1 + (input[1] == NULL);
-	while (input[i])
+	to_print = malloc(get_echo_len(cmd->input) + 1);
+	i = 1 + (ft_strncmp(cmd->input[1], "-n", 2) == 0);
+	nl = i;
+	len = 0;
+	while (cmd->input[i][0])
 	{
-		i2 = 0;
-		len++;
-		while (input[i][i2])
+		if (cmd->input[i][0] == '>')
+			break ;
+		j = -1;
+		while (cmd->input[i][++j])
 		{
-			if (input[i][i2] == '$')
-				len += insert_data(&to_print[len], get_key(&input[i][++i2]));
+			if (cmd->input[i][j] == '$')
+				len += insert_data(&to_print[len], get_key(&cmd->input[i][++j]));
 			else
-				to_print[len] = input[i][i2];
+				to_print[len] = cmd->input[i][j];
 			len++;
-			i2++;
 		}
 		to_print[len] = ' ';
 		i++;
 	}
-	to_print[len] = 0;
-	printf("%s", to_print);
-	if (input[1] == NULL || ft_strncmp(input[1], "-n", 2))
-		printf("\n");
+	len--;
+	if (ft_strncmp(cmd->input[1], "-n", 2) != 0)
+		to_print[len++] = '\n';
+	to_print[len] = '\0';
+	cmd->output = to_print;
 }
 
-// int	get_echo_len(char **input)
-// {
-// 	int		len;
-// 	int		i;
-// 	int		j;
-// 	char	*key;
-// 	int		sum;
-// 	t_env	env_var;
+int	get_echo_len(char **input)
+{
+	int		len;
+	int		i;
+	int		j;
+	char	*key;
+	int		sum;
 
-// 	i = 0 + (ft_strncmp(input[1], "-n", 2) == 0);
-// 	sum = 0;
-// 	len = 0;
-// 	while (input[++i])
-// 	{
-// 		j = -1;
-// 		while (input[i][++j])
-// 		{
-// 			if (input[i][j] == '$')
-// 			{
-// 				key = get_key(&input[i][++j]);
-// 				env_var = search(key);
-// 				sum += ft_strlen(env_var.data);
-// 				j += ft_strlen(key);
-// 			}
-// 			else
-// 				len++;
-// 		}
-// 	}
-// 	return (sum);
-// }
+	i = 0 + (ft_strncmp(input[1], "-n", 2) == 0);
+	sum = 0;
+	len = 0;
+	while (input[++i][0])
+	{
+		j = -1;
+		while (input[i][++j])
+		{
+			if (input[i][j] == '$')
+			{
+				key = get_key(&input[i][++j]);
+				sum += ft_strlen(search(key).data);
+				j += ft_strlen(key);
+			}
+			else
+				sum++;
+		}
+	}
+	return (sum);
+}

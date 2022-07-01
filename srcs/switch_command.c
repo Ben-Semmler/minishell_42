@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   switch_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:23:22 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/14 17:23:24 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/06/23 12:30:26 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	switch_command(char **input, char *stdin, int *run)
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 2)
 		//command 'echo'
-		command_echo(input);
+		//command_echo(input);
+		printf("sorry this doesnt work atm lol\n");
 	else if (c_id == 3)
 		//command 'cd'
 		command_cd(input);

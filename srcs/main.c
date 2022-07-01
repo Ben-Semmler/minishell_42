@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/14 15:26:11 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/23 12:51:10 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,6 @@ void	free_split_input(char **s_input)
 // 	char	*input;
 // 	char	*output;
 
-// 	(void)argc;
-// 	(void)argv;
-// 	(void)env;
-// 	char *test = "kerdfgkjny$USER ya mum";
-
-// 	printf("%s\n", test);
-// 	printf("%s\n", get_key(test));
-// 	printf("%s\n", get_data(test));
-// 	check_env(argv);
 // 	run = 1;
 // 	while (run == 1)
 // 	{
@@ -126,3 +117,83 @@ void	free_split_input(char **s_input)
 // 		free(input);
 // 	}
 // }
+
+// int	main(int argc, char **argv, char **env)
+// {
+// 	int		run;
+// 	char	*input;
+// 	char	*output;
+
+// 	(void)argc;
+// 	(void)argv;
+
+// 	import_env(env);
+// 	run = 1;
+// 	while (run == 1)
+// 	{
+// 		input = readline("minishell& ");
+// 		add_history(input);
+// 		//vv - Do stuff with the input in here - vv -b
+// 		output = switch_command(input, &run);
+// 		if (output != NULL)
+// 		{
+// 			printf("%s", output);
+// 			free(output);
+// 		}
+// 		free(input);
+// 	}
+// }
+
+/*void writeToFile(char *input, char *file)
+{
+	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
+}
+
+void writeToFile_append(char *input, char *file)
+{
+	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));
+}
+
+void print_out(t_cmd *cmd)
+{
+	printf("%s", cmd->output);
+}
+
+void	append_out(t_cmd *cmd)
+{
+	int		i;
+	char	*name;
+
+	i = 1;
+	while (cmd->input[i] && ft_strncmp(cmd->input[i], ">>", 2) && ft_strncmp(cmd->input[i], ">", 1))
+		i++;
+	name = cmd->input[i + 1];
+	i = 0;
+	while (*name && (*name == ' ' || *name == '	'))
+		name++;
+	writeToFile(cmd->output, name);
+}
+
+int	main(void)
+{
+	t_cmd	cmd;
+	char	*test_input[6] = {"echo", "n", "hello", "world", ">", "out"};
+	char	*test_output = "hello world";
+
+	//cmd.input = av;
+
+	//writeToFile(test, "t");
+	cmd.input = test_input;
+	cmd.output = test_output;
+
+	//void	(*in_fun)(t_cmd *cmd);
+	//void	(*out_fun)(t_cmd *cmd);
+
+	//in_fun	= &echo;
+	//out_fun = &append_out;
+
+	cmd.in_fun = &command_echo;
+	cmd.out_fun = &print_out;
+	cmd.in_fun(&cmd);
+	cmd.out_fun(&cmd);
+}*/

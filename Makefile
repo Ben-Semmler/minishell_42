@@ -11,7 +11,6 @@ SRC = srcs/*.c
 all:
 	$(MAKE) -C libft
 	gcc $(c_flags) -o $(NAME) $(INCS) libft/libft.a $(SRC)
-	./$(NAME)
 
 r:
 	@make
