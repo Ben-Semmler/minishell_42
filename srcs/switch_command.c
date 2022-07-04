@@ -33,8 +33,7 @@ void	switch_command(char **input, char *stdin, int *run)
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", input[0]);
 	else if (c_id == 2)
 		//command 'echo'
-		//command_echo(input);
-		printf("sorry this doesnt work atm lol\n");
+		command_echo(input);
 	else if (c_id == 3)
 		//command 'cd'
 		command_cd(input);

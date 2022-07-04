@@ -83,7 +83,7 @@ void		switch_command(char **input, char *stdin, int *run);
 char		**get_options(char *input);
 
 void		run_executable(char **input);
-void		command_echo(t_cmd *cmd);
+void		command_echo(char **input);
 void		command_cd(char **s_input);
 void		command_pwd(char **s_input);
 

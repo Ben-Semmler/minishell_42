@@ -33,6 +33,7 @@ t_env	search(char *key)
 		++hashindex;
 		hashindex %= ENV_SIZE;
 	}
+	printf("FOUND KEY; DATA IS: %s\n", g_env_table[hashindex].data);
 	return (g_env_table[hashindex]);
 }
 //insert a key-value pair into the hashtable

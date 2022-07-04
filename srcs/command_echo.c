@@ -14,39 +14,47 @@
 
 int	get_echo_len(char **input);
 
-void	command_echo(t_cmd *cmd)
+void	command_echo(char **input)
 {
 	int		len;
 	int		i;
 	int		j;
 	char	*to_print;
 	int		nl;
-
-	to_print = malloc(get_echo_len(cmd->input) + 1);
-	i = 1 + (ft_strncmp(cmd->input[1], "-n", 2) == 0);
+	
+	to_print = malloc(get_echo_len(input));
+	i = 1 + (ft_strncmp(input[1], "-n", 3) == 0);
 	nl = i;
 	len = 0;
-	while (cmd->input[i][0])
+	while (input[i])
 	{
-		if (cmd->input[i][0] == '>')
+		if (input[i][0] == '>')
 			break ;
 		j = -1;
-		while (cmd->input[i][++j])
+		while (input[i][++j])
 		{
-			if (cmd->input[i][j] == '$')
-				len += insert_data(&to_print[len], get_key(&cmd->input[i][++j]));
+			if (input[i][j] == '$')
+			{
+				len += insert_data(&to_print[len], get_key(&input[i][++j]));
+				while (input[i][j] && input[i][j] != ' ')
+					j++;
+			}
 			else
-				to_print[len] = cmd->input[i][j];
-			len++;
+			{
+				to_print[len] = input[i][j];
+				len++;
+			}
 		}
 		to_print[len] = ' ';
+		len++;
 		i++;
 	}
 	len--;
-	if (ft_strncmp(cmd->input[1], "-n", 2) != 0)
-		to_print[len++] = '\n';
 	to_print[len] = '\0';
-	cmd->output = to_print;
+	printf("%s", to_print);
+	if (ft_strncmp(input[1], "-n", 3) != 0)
+		printf("\n");
+	free(to_print);
 }
 
 int	get_echo_len(char **input)
@@ -57,10 +65,10 @@ int	get_echo_len(char **input)
 	char	*key;
 	int		sum;
 
-	i = 0 + (ft_strncmp(input[1], "-n", 2) == 0);
+	i = 0 + (ft_strncmp(input[1], "-n", 3) == 0);
 	sum = 0;
 	len = 0;
-	while (input[++i][0])
+	while (input[++i])
 	{
 		j = -1;
 		while (input[i][++j])
@@ -74,6 +82,7 @@ int	get_echo_len(char **input)
 			else
 				sum++;
 		}
+		sum++;
 	}
 	return (sum);
 }

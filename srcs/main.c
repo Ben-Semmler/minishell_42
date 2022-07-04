@@ -33,7 +33,7 @@ char	**add_element(char **arr, char *toadd)
 	return (newarr);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_action	*actions;
 	t_action	*tempaction;
@@ -43,6 +43,9 @@ int	main(void)
 	char		*stdout;
 	int			filedes[2];
 
+	(void)argc;
+	(void)argv;
+ 	import_env(env);
 	run = 1;
 	while (run == 1)
 	{
