@@ -12,36 +12,48 @@
 
 #include "minishell.h"
 
-int	get_echo_len(char **input);
+int	get_echo_len(char **argv);
 
-void	command_echo(char **input)
+void	command_echo(t_inputs *input)
 {
-	int		len;
-	int		i;
-	int		j;
-	char	*to_print;
-	int		nl;
-	
-	to_print = malloc(get_echo_len(input));
-	i = 1 + (ft_strncmp(input[1], "-n", 3) == 0);
+	int	i;
+
+	i = (input->argc > 0 && ft_strncmp(input->argv[0], "-n", 3) == 0);
+	while (input->argv[i])
+	{
+		if (i != 0)
+			printf(" ");
+		printf("%s", input->argv[i]);
+		i++;
+	}
+	if (input->argc == 0 || ft_strncmp(input->argv[0], "-n", 3) != 0)
+		printf("\n");
+
+	//int		len;
+	//int		i;
+	//int		j;
+	//char	*to_print;
+	//int		nl;
+	/*to_print = malloc(get_echo_len(input->argv));
+	i = (ft_strncmp(input->argv[0], "-n", 3) == 0);
 	nl = i;
 	len = 0;
-	while (input[i])
+	while (input->argv[i])
 	{
-		if (input[i][0] == '>')
+		if (input->argv[i][0] == '>')
 			break ;
 		j = -1;
-		while (input[i][++j])
+		while (input->argv[i][++j])
 		{
-			if (input[i][j] == '$')
+			if (input->argv[i][j] == '$')
 			{
-				len += insert_data(&to_print[len], get_key(&input[i][++j]));
-				while (input[i][j] && input[i][j] != ' ')
+				len += insert_data(&to_print[len], get_key(&input->argv[i][++j]));
+				while (input->argv[i][j] && input->argv[i][j] != ' ')
 					j++;
 			}
 			else
 			{
-				to_print[len] = input[i][j];
+				to_print[len] = input->argv[i][j];
 				len++;
 			}
 		}
@@ -52,12 +64,12 @@ void	command_echo(char **input)
 	len--;
 	to_print[len] = '\0';
 	printf("%s", to_print);
-	if (ft_strncmp(input[1], "-n", 3) != 0)
+	if (ft_strncmp(input->argv[0], "-n", 3) != 0)
 		printf("\n");
-	free(to_print);
+	free(to_print);*/
 }
 
-int	get_echo_len(char **input)
+int	get_echo_len(char **argv)
 {
 	int		len;
 	int		i;
@@ -65,17 +77,17 @@ int	get_echo_len(char **input)
 	char	*key;
 	int		sum;
 
-	i = 0 + (ft_strncmp(input[1], "-n", 3) == 0);
+	i = (ft_strncmp(argv[0], "-n", 3) == 0);
 	sum = 0;
 	len = 0;
-	while (input[++i])
+	while (argv[++i])
 	{
 		j = -1;
-		while (input[i][++j])
+		while (argv[i][++j])
 		{
-			if (input[i][j] == '$')
+			if (argv[i][j] == '$')
 			{
-				key = get_key(&input[i][++j]);
+				key = get_key(&argv[i][++j]);
 				sum += ft_strlen(search(key).data);
 				j += ft_strlen(key);
 			}

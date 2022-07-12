@@ -12,25 +12,26 @@
 
 #include "minishell.h"
 
-void	cd_absolute(char **s_input);
-void	cd_relative(char **s_input);
+void	cd_absolute(char **argv);
+void	cd_relative(char **argv);
 
-void	command_cd(char **s_input)
+void	command_cd(t_inputs *input)
 {
-	if (s_input[1] == NULL)
+	if (input->argv[0] == NULL)
 		return ;
-	if (s_input[1][0] == '/')
-		cd_absolute(s_input);
-	cd_relative(s_input);
+	if (input->argv[0][0] == '/')
+		cd_absolute(input->argv);
+	else
+		cd_relative(input->argv);
 }
 
-void	cd_absolute(char **s_input)
+void	cd_absolute(char **argv)
 {
-	if (chdir(s_input[1]) != 0)
-		printf("minishell: %s: No such file or directory\n", s_input[1]);
+	if (chdir(argv[0]) != 0)
+		printf("minishell: %s: No such file or directory\n", argv[0]);
 }
 
-void	cd_relative(char **s_input)
+void	cd_relative(char **argv)
 {
 	char	*cwd;
 	char	*ext;
@@ -39,10 +40,10 @@ void	cd_relative(char **s_input)
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
 	{
-		ext = ft_strjoin("/", s_input[1]);
+		ext = ft_strjoin("/", argv[0]);
 		cwdext = ft_strjoin(cwd, ext);
 		if (chdir(cwdext) != 0)
-			printf("minishell: %s: No such file or directory\n", s_input[1]);
+			printf("minishell: %s: No such file or directory\n", argv[0]);
 		free(ext);
 		free(cwdext);
 	}

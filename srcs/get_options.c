@@ -12,35 +12,53 @@
 
 #include "minishell.h"
 
+int		get_command(t_action *action, char *input);
 int		get_argn(char *input);
 char	*copy_arg(char *input);
-int		get_arg_size(char *input, int include_quotes);
-void	handle_quotations(char input, int *quotations);
+int		get_arg_size(char *input, bool include_quotes);
 
-char	**get_options(char *input)
+void	get_options(t_action *action, char *input)
 {
-	char	**args;
 	int		i;
 	int		argi;
 	int		argn;
 
-	argn = get_argn(input);
-	args = malloc(sizeof(char *) * (argn + 1));
-	i = 0;
+	i = get_command(action, input);
 	argi = 0;
+	argn = get_argn(&input[i]);
+	action->argv = malloc(sizeof(char *) * (argn + 1));
 	while (input[i] && argi < argn)
 	{
 		while (input[i] && input[i] == ' ')
 			i++;
-		args[argi] = copy_arg(&input[i]);
+		action->argv[argi] = copy_arg(&input[i]);
 		i += get_arg_size(&input[i], 1);
 		argi++;
 	}
+	action->argv[argi] = NULL;
+	action->argc = argi;
+}
+
+int	get_command(t_action *action, char *input)
+{
+	int	i;
+
 	i = 0;
-	while (i < argn + 1)
+	while (input[i] == ' ')
 		i++;
-	args[argi] = NULL;
-	return (args);
+	if (ft_strncmp(&input[i], "./", 2) == 0)
+	{
+		if (input[i] == 34 || input[i] == 39)
+			i++;
+		action->command = ft_strdup("./");
+		i += 2;
+	}
+	else
+	{
+		action->command = copy_arg(&input[i]);
+		i += get_arg_size(&input[i], true);
+	}
+	return (i);
 }
 
 int	get_argn(char *input)
@@ -51,18 +69,14 @@ int	get_argn(char *input)
 
 	argn = 0 - (input[0] == ' ');
 	i = 0;
+	if (ft_strncmp(input, "./", 2) == 0)
+		i += 2;
 	while (input[i])
 	{
 		quotations = 0;
 		while (input[i] && (quotations != 0 || input[i] != ' '))
 		{
-			if (input[i] == 34 || input[i] == 39)
-			{
-				if (quotations == 0)
-					quotations = input[i];
-				else if (quotations == input[i])
-					quotations = 0;
-			}
+			quotations = check_quotations(input[i], quotations);
 			i++;
 		}
 		while (input[i] == ' ')
@@ -74,65 +88,49 @@ int	get_argn(char *input)
 
 char	*copy_arg(char *input)
 {
-	int		len;
 	int		i;
 	int		offset;
-	int		quotations;
+	char	quotations;
+	char	prev_quotations;
 	char	*arg;
 
-	len = get_arg_size(input, 0);
-	arg = malloc(sizeof(char) * (len + 1));
+	arg = malloc(sizeof(char) * (get_arg_size(input, 0) + 1));
 	i = 0;
 	quotations = 0;
 	offset = 0;
-	while (i - offset < len)
+	while (input[i] && i - offset < get_arg_size(input, 0))
 	{
-		if ((input[i] == 34 || input[i] == 39)
-			&& (quotations == 0 || quotations == input[i]))
-		{
-			handle_quotations(input[i], &quotations);
+		prev_quotations = quotations;
+		quotations = check_quotations(input[i], quotations);
+		if (prev_quotations != quotations)
 			offset++;
-		}
 		else
 			arg[i - offset] = input[i];
 		i++;
 	}
-	arg[i] = 0;
+	arg[i - offset] = 0;
 	return (arg);
 }
 
-int	get_arg_size(char *input, int include_quotes)
+int	get_arg_size(char *input, bool include_quotes)
 {
-	int	quotations;
-	int	len;
-	int	adjust;
+	int		len;
+	int		adjust;
+	char	quotations;
+	char	prev_quotations;
 
 	len = 0;
 	adjust = 0;
 	quotations = 0;
 	while (input[len] && (quotations != 0 || input[len] != ' '))
 	{
-		if (input[0] == 34 || input[0] == 39)
-		{
-			if (quotations == 0)
-				quotations = input[len];
-			else if (quotations == input[len])
-			{
-				adjust += 2;
-				quotations = 0;
-			}
-		}
+		prev_quotations = quotations;
+		quotations = check_quotations(input[len], quotations);
+		if (prev_quotations != quotations)
+			adjust++;
 		len++;
 	}
-	if (include_quotes == 1)
+	if (include_quotes)
 		return (len);
 	return (len - adjust);
-}
-
-void	handle_quotations(char input, int *quotations)
-{
-	if (*quotations == 0)
-		*quotations = input;
-	else if (*quotations == input)
-		*quotations = 0;
 }

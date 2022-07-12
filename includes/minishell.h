@@ -30,9 +30,25 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
+typedef struct s_inputs
+{
+	int		argc;
+	char	**argv;
+	char	*stdin;
+}	t_inputs;
+
+typedef struct s_outputs
+{
+	char	*stdout;
+	char	*stderr;
+}	t_outputs;
+
 typedef struct s_action
 {
-	char			**command;
+	char			*command;
+	int				argc;
+	char			**argv;
+	char			*relation;
 	struct s_action	*next;
 }	t_action;
 
@@ -79,13 +95,14 @@ char		*read_stdout(t_action *action, int *filedes);
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int			get_command_id(char *input);
-void		switch_command(char **input, char *stdin, int *run);
-char		**get_options(char *input);
+void		switch_command(char *command, t_inputs *input);
+void		get_options(t_action *action, char *input);
+char		check_quotations(char to_check, char quotations);
 
-void		run_executable(char **input);
-void		command_echo(char **input);
-void		command_cd(char **s_input);
-void		command_pwd(char **s_input);
+void		run_executable(t_inputs *input);
+void		command_echo(t_inputs *input);
+void		command_cd(t_inputs *input);
+void		command_pwd(t_inputs *input);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);

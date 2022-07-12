@@ -14,10 +14,9 @@
 
 char	**create_args(char **input);
 
-void	run_executable(char **input)
+void	run_executable(t_inputs *input)
 {
 	char	*cwd;
-	char	**args;
 	pid_t	p;
 
 	//Create buffer with size of PATH_MAX, fill using getcwd to get
@@ -28,22 +27,19 @@ void	run_executable(char **input)
 		free(cwd);
 		printf("Error: could not get directory\n");
 	}
-	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", &input[0][2]), 1);
-	args = create_args(input);
+	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
 	p = fork();
 	if (p == 0)
 	{
-		execve(cwd, input, NULL);
+		execve(cwd, input->argv, NULL);
 		printf("Error: failed to run program\n");
 		exit(1);
 	}
 	wait(NULL);
 	free(cwd);
-	free(args[0]);
-	free(args);
 }
 
-char	**create_args(char **input)
+/*char	**create_args(char **input)
 {
 	char	**args;
 	int		i;
@@ -61,4 +57,4 @@ char	**create_args(char **input)
 	}
 	args[i] = NULL;
 	return (args);
-}
+}*/

@@ -26,7 +26,7 @@ fclean:
 	rm -rf $(NAME)
 
 norm:
-	norminette $(FILES)
+	norminette $(SRC)
 
 git:
 	@clear

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void writeToFile(char *input, char *file)
+/*void writeToFile(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
 }
@@ -50,4 +50,4 @@ void	append_right(char *input)
 		writeToFile_append(out, name);
 	else
 		writeToFile(out, name);
-}
+}*/

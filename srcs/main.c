@@ -12,76 +12,81 @@
 
 #include "minishell.h"
 
-char	**add_element(char **arr, char *toadd)
-{
-	int		i;
-	char	**newarr;
-
-	i = 0;
-	while (arr[i] != NULL)
-		i++;
-	newarr = malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while (arr[i] != NULL)
-	{
-		//printf("arr[i]");
-		newarr[i] = arr[i];
-		i++;
-	}
-	newarr[i] = toadd;
-	newarr[i + 1] = NULL;
-	return (newarr);
-}
+void	execute_actions(t_action *action, bool *run);
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, int *filedes);
 
 int	main(int argc, char **argv, char **env)
 {
 	t_action	*actions;
-	t_action	*tempaction;
-	pid_t		p;
-	int			run;
 	char		*input;
-	char		*stdout;
-	int			filedes[2];
+	bool		*run;
 
 	(void)argc;
 	(void)argv;
  	import_env(env);
-	run = 1;
-	while (run == 1)
+	run = malloc(sizeof(bool));
+	*run = true;
+	while (run)
 	{
 		input = readline("minishell& ");
 		add_history(input);
 		//vv - Do stuff with the input in here - vv -b
 		actions = split_actions(input);
-		tempaction = actions;
-		while (tempaction != NULL)
-		{
-			stdout = NULL;
-			//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
-			if (ft_strncmp(tempaction->command[0], "cd", 3) == 0)
-				command_cd(tempaction->command);
-			else
-			{
-				pipe(filedes);
-				p = fork();
-				if (p == 0)
-				{
-					while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
-						;
-					switch_command(tempaction->command, stdout, &run);
-					exit(0);
-				}
-				close(filedes[1]);
-				stdout = read_stdout(tempaction, filedes);
-			}
-			if (!tempaction->next && stdout)
-			{
-				printf("%s", stdout);
-				free(stdout);
-			}
-			tempaction = tempaction->next;
-		}
+		execute_actions(actions, run);
 		free(input);
+	}
+	free(run);
+}
+
+void	execute_actions(t_action *action, bool *run)
+{
+	t_inputs	input;
+	t_outputs	output;
+	int			filedes[2];
+	
+	output.stdout = NULL;
+	while (action != NULL)
+	{
+		input.argc = action->argc;
+		input.argv = action->argv;
+		input.stdin = output.stdout;
+		//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
+		if (ft_strncmp(action->command, "exit", 5) == 0)
+		{
+			run = false;
+			if (output.stdout != NULL)
+				free(output.stdout);
+			stdout = NULL;
+			break ;
+		}
+		run_action(action, &input, &output, filedes);
+		action = action->next;
+	}
+	if (output.stdout)
+		printf("%s", output.stdout);
+}
+
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, int *filedes)
+{
+	pid_t	p;
+
+	if (ft_strncmp(action->command, "cd", 3) == 0)
+		command_cd(input);
+	else if (ft_strncmp(action->command, "cat", 4) == 0)
+		printf("%s", input->stdin);
+	else
+	{
+		pipe(filedes);
+		p = fork();
+		if (p == 0)
+		{
+			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+				;
+			switch_command(action->command, input);
+			exit(0);
+		}
+		close(filedes[1]);
+		output->stdout = read_stdout(action, filedes);
 	}
 }
 
