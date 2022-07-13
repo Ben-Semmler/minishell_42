@@ -10,21 +10,26 @@ GENERAL NOTES
 
 
 TASKS TO BE COMPLETED
--Single quote handling
+jaymie
 -Double quote handling
+-Environment variables
+-builtin 'export', no options
+-builtin 'unset', no options
+-builtin 'env', no options or arguments
+
+
+ben
 -Redirection '<' for redirecting input
 -Redirection '>' for redirecting output
 -Redirection '<<' should be given a delimiter to read input until it is seen. Doesnt
 	update history.
 -Redirection '>>' for redirecting output in append mode
--Environment variables
 -Handle '$?'
+-builtin 'exit', no options
+
+
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
 -Handle ctrl-C, ctrl-D and ctrl-\ while in interactive mode
--builtin 'export', no options
--builtin 'unset', no options
--builtin 'env', no options or arguments
--builtin 'exit', no options
 
 
 BONUS TASKS TO BE COMPLETED (?)
@@ -37,6 +42,7 @@ TASKS COMPLETED (?):
 -Display prompt when waiting
 -History for input (bsemmler)
 -Launching executables
+-Single quote handling
 -Pipes ('|' character)
 -builtin 'echo', option '-n' 
 -builtin 'cd' with only relative and absolute paths

@@ -88,6 +88,7 @@ int	get_argn(char *input)
 
 char	*copy_arg(char *input)
 {
+	//insert env variables into the output string
 	int		i;
 	int		offset;
 	char	quotations;
@@ -102,6 +103,7 @@ char	*copy_arg(char *input)
 	{
 		prev_quotations = quotations;
 		quotations = check_quotations(input[i], quotations);
+		//dont do env if variable quotations = 39
 		if (prev_quotations != quotations)
 			offset++;
 		else
@@ -114,6 +116,7 @@ char	*copy_arg(char *input)
 
 int	get_arg_size(char *input, bool include_quotes)
 {
+	//Add the size of env variables here
 	int		len;
 	int		adjust;
 	char	quotations;
@@ -124,6 +127,7 @@ int	get_arg_size(char *input, bool include_quotes)
 	quotations = 0;
 	while (input[len] && (quotations != 0 || input[len] != ' '))
 	{
+		//dont do env if variable quotations = 39
 		prev_quotations = quotations;
 		quotations = check_quotations(input[len], quotations);
 		if (prev_quotations != quotations)
