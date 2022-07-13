@@ -12,17 +12,18 @@
 
 #include "minishell.h"
 
-/*void writeToFile(char *input, char *file)
+void writeToFile(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
 }
 
 void writeToFile_append(char *input, char *file)
 {
+	printf("HERE\n");
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));
 }
 
-void	append_right(char *input)
+/*void	append_right(char *input)
 {
 	int		i;
 	char	*name;

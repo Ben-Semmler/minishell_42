@@ -97,6 +97,8 @@ char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 int			get_command_id(char *input);
 void		switch_command(char *command, t_inputs *input);
 void		get_options(t_action *action, char *input);
+void 		writeToFile(char *stdin, char *file);
+void 		writeToFile_append(char *stdin, char *file);
 char		check_quotations(char to_check, char quotations);
 
 void		run_executable(t_inputs *input);

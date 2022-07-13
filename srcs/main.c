@@ -13,7 +13,8 @@
 #include "minishell.h"
 
 void	execute_actions(t_action *action, bool *run);
-void	run_action(t_action *action, t_inputs *input, t_outputs *output, int *filedes);
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output);
+void	run_action(t_action *action, t_inputs *input, t_outputs *output);
 
 int	main(int argc, char **argv, char **env)
 {
@@ -42,7 +43,6 @@ void	execute_actions(t_action *action, bool *run)
 {
 	t_inputs	input;
 	t_outputs	output;
-	int			filedes[2];
 	
 	output.stdout = NULL;
 	while (action != NULL)
@@ -59,15 +59,31 @@ void	execute_actions(t_action *action, bool *run)
 			stdout = NULL;
 			break ;
 		}
-		run_action(action, &input, &output, filedes);
+		switch_relation(action, &input, &output);
 		action = action->next;
 	}
 	if (output.stdout)
 		printf("%s", output.stdout);
 }
 
-void	run_action(t_action *action, t_inputs *input, t_outputs *output, int *filedes)
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
 {
+	printf("switch relation\n");
+	if (action->relation == NULL || action->relation[0] == '|')
+		run_action(action, input, output);
+	else if (ft_strncmp(action->relation, ">", 2))
+		writeToFile_append(input->stdin, action->command);
+	else if (ft_strncmp(action->relation, ">>", 3))
+		writeToFile(input->stdin, action->command);
+	else if (ft_strncmp(action->relation, "<", 2))
+		;
+	else if (ft_strncmp(action->relation, "<<", 3))
+		;
+}
+
+void	run_action(t_action *action, t_inputs *input, t_outputs *output)
+{
+	int		filedes[2];
 	pid_t	p;
 
 	if (ft_strncmp(action->command, "cd", 3) == 0)

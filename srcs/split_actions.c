@@ -45,9 +45,9 @@ t_action	*split_actions(char *input)
 		fill_action(tempaction, &input[i], j);
 		i += j + k;
 		if (input[i + 1])
-			init_next_action(tempaction, &input[i]);
+			tempaction = init_next_action(tempaction, &input[i]);
 	}
-	//print_actions(actions);
+	print_actions(actions);
 	return (actions);
 }
 
