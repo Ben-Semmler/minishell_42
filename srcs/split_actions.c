@@ -16,7 +16,7 @@ char		*ft_strncpy(char *src, int size);
 int			find_next_seperator(char *input);
 t_action	*redir_reverse(t_action *action, char *input, int *k);
 void		fill_action(t_action *action, char *input, int size);
-t_action	*init_next_action(t_action* action, char *input);
+t_action	*init_next_action(t_action* action);
 int			check_pipe_chars(char *input);
 char		*find_relation(char *input);
 
@@ -45,9 +45,9 @@ t_action	*split_actions(char *input)
 		fill_action(tempaction, &input[i], j);
 		i += j + k;
 		if (input[i + 1])
-			tempaction = init_next_action(tempaction, &input[i]);
+			tempaction = init_next_action(tempaction);
 	}
-	print_actions(actions);
+	//print_actions(actions);
 	return (actions);
 }
 
@@ -76,10 +76,11 @@ int	find_next_seperator(char *input)
 
 t_action	*redir_reverse(t_action *action, char *input, int *k)
 {
+	action->relation = find_relation(input);
 	*k = check_pipe_chars(input);
 	fill_action(action, &input[*k],
 		find_next_seperator(&input[*k]));
-	action = init_next_action(action, input);
+	action = init_next_action(action);
 	*k += find_next_seperator(&input[*k]);
 	return (action);
 }
@@ -94,11 +95,15 @@ void	fill_action(t_action *action, char *input, int size)
 	free(tempin);
 }
 
-t_action	*init_next_action(t_action* action, char *input)
+t_action	*init_next_action(t_action* action)
 {
 	action->next = malloc(sizeof(t_action));
 	action = action->next;
-	action->relation = find_relation(input);
+	action->command = NULL;
+	action->argc = 0;
+	action->argv = NULL;
+	action->relation = NULL;
+	action->next = NULL;
 	return (action);
 }
 

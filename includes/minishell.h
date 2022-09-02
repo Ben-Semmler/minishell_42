@@ -99,6 +99,7 @@ void		switch_command(char *command, t_inputs *input);
 void		get_options(t_action *action, char *input);
 void 		writeToFile(char *stdin, char *file);
 void 		writeToFile_append(char *stdin, char *file);
+void		readFile(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
 void		run_executable(t_inputs *input);

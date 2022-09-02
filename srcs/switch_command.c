@@ -17,41 +17,34 @@ void	free_split_input(char **s_input);
 
 void	switch_command(char *command, t_inputs *input)
 {
-	int		c_id;
-
-	(void)stdin;
-	//Splits the input into the command and the options.
-	c_id = get_command_id(command);
-	if (c_id == -1)
-		//Invalid command
-		printf("minishell: %s: command not found\n", command);
-	else if (c_id == 0)
+	if (ft_strncmp(command, "./", 3) == 0)
 		//command './'
 		run_executable(input);
-	else if (c_id == 1)
-		//command for environment variables
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
-	else if (c_id == 2)
+	else if (ft_strncmp(command, "echo", 5) == 0)
 		//command 'echo'
 		command_echo(input);
-	else if (c_id == 3)
+	else if (ft_strncmp(command, "cd", 3) == 0)
 		//command 'cd'
 		command_cd(input);
-	else if (c_id == 4)
+	else if (ft_strncmp(command, "pwd", 4) == 0)
 		//command 'pwd'
 		command_pwd(input);
-	else if (c_id == 5)
+	else if (ft_strncmp(command, "export", 7) == 0)
 		//command 'export'
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
-	else if (c_id == 6)
+	else if (ft_strncmp(command, "unset", 6) == 0)
 		//command 'unset'
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
-	else if (c_id == 7)
+	else if (ft_strncmp(command, "env", 4) == 0)
 		//command 'env'
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
-	else if (c_id == 8)
+	else if (ft_strncmp(command, "exit", 4) == 0)
 		//command 'exit'
 		//*run = false;
-		printf("ah\n");
+		;
+	else if (ft_strncmp(command, "cat", 4) == 0)
+		printf("%s", input->stdin);
+	else
+		printf("minishell: %s: command not found\n", command);
 	//free_split_input(input);
 }

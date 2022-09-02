@@ -45,7 +45,7 @@ void	execute_actions(t_action *action, bool *run)
 	t_outputs	output;
 	
 	output.stdout = NULL;
-	while (action != NULL)
+	while (true)
 	{
 		input.argc = action->argc;
 		input.argv = action->argv;
@@ -60,25 +60,36 @@ void	execute_actions(t_action *action, bool *run)
 			break ;
 		}
 		switch_relation(action, &input, &output);
+		if (action->next == NULL)
+			break;
 		action = action->next;
 	}
-	if (output.stdout)
+	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
 }
 
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
 {
-	printf("switch relation\n");
-	if (action->relation == NULL || action->relation[0] == '|')
+	//printf("switch relation\n");
+	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
+	{
 		run_action(action, input, output);
-	else if (ft_strncmp(action->relation, ">", 2))
-		writeToFile_append(input->stdin, action->command);
-	else if (ft_strncmp(action->relation, ">>", 3))
+		return ;
+	}
+	else if (ft_strncmp(action->relation, ">", 2) == 0)
 		writeToFile(input->stdin, action->command);
-	else if (ft_strncmp(action->relation, "<", 2))
+	else if (ft_strncmp(action->relation, ">>", 3) == 0)
+		writeToFile_append(input->stdin, action->command);
+	else if (ft_strncmp(action->relation, "<", 2) == 0)
+	{
+		readFile(action->command, output);
+		return ;
+	}
+	else if (ft_strncmp(action->relation, "<<", 3) == 0)
 		;
-	else if (ft_strncmp(action->relation, "<<", 3))
-		;
+	else if (output->stdout != NULL)
+		free(output->stdout);
+	output->stdout = NULL;
 }
 
 void	run_action(t_action *action, t_inputs *input, t_outputs *output)
@@ -86,10 +97,9 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output)
 	int		filedes[2];
 	pid_t	p;
 
+	//Bandaid fix for cd not working as child process, should be modified
 	if (ft_strncmp(action->command, "cd", 3) == 0)
 		command_cd(input);
-	else if (ft_strncmp(action->command, "cat", 4) == 0)
-		printf("%s", input->stdin);
 	else
 	{
 		pipe(filedes);

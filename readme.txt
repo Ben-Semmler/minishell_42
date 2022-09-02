@@ -7,29 +7,32 @@ GENERAL NOTES
 -command cd does not work because it is a child process now. dunno how to fix
 -command cd should go to base directory if no arguments
 -need to account for standard error, is all standard out rn
+-redirections to file make a new file if it dont exist
+-redirection > doesnt ovrwrite properly
 
 
 TASKS TO BE COMPLETED
 jaymie
--Double quote handling
--Environment variables
+-Double quote handling (comment in get_options.c)
 -builtin 'export', no options
 -builtin 'unset', no options
 -builtin 'env', no options or arguments
+-Environment variables (testing)
 
 
 ben
 -Redirection '<' for redirecting input
--Redirection '>' for redirecting output
 -Redirection '<<' should be given a delimiter to read input until it is seen. Doesnt
 	update history.
 -Redirection '>>' for redirecting output in append mode
 -Handle '$?'
+-STANDARD ERROR
 -builtin 'exit', no options
 
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
 -Handle ctrl-C, ctrl-D and ctrl-\ while in interactive mode
+-handle '\'
 
 
 BONUS TASKS TO BE COMPLETED (?)
@@ -44,13 +47,14 @@ TASKS COMPLETED (?):
 -Launching executables
 -Single quote handling
 -Pipes ('|' character)
--builtin 'echo', option '-n' 
+-builtin 'echo', option '-n'
+-Redirection '>' for redirecting output
 -builtin 'cd' with only relative and absolute paths
 -builtin 'pwd', no options
 
 
 KNOWN BUGS:
--No known bugs! (they are hiding from us)
+-echo with '-n' option adds a space before the output string
 
 
 || is the OR operator. It executes the command on the right only if the command on the left returned an error
