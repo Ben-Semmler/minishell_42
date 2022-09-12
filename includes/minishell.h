@@ -100,12 +100,14 @@ void		get_options(t_action *action, char *input);
 void 		writeToFile(char *stdin, char *file);
 void 		writeToFile_append(char *stdin, char *file);
 void		readFile(char *command, t_outputs *output);
+void		insert_doc(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
-void		run_executable(t_inputs *input);
-void		command_echo(t_inputs *input);
-void		command_cd(t_inputs *input);
-void		command_pwd(t_inputs *input);
+void		run_executable(const t_inputs *input);
+void		command_echo(const t_inputs *input);
+void		command_cd(const t_inputs *input);
+void		command_pwd(const t_inputs *input);
+void		command_cat(const t_inputs *input);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);

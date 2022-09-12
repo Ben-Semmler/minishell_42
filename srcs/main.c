@@ -86,7 +86,10 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
 		return ;
 	}
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-		;
+	{
+		insert_doc(action->command, output);
+		return ;
+	}
 	else if (output->stdout != NULL)
 		free(output->stdout);
 	output->stdout = NULL;

@@ -14,7 +14,7 @@
 
 int	get_echo_len(char **argv);
 
-void	command_echo(t_inputs *input)
+void	command_echo(const t_inputs *input)
 {
 	int	i;
 

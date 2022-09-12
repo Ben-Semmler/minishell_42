@@ -15,7 +15,7 @@
 void	cd_absolute(char **argv);
 void	cd_relative(char **argv);
 
-void	command_cd(t_inputs *input)
+void	command_cd(const t_inputs *input)
 {
 	if (input->argv[0] == NULL)
 		return ;
