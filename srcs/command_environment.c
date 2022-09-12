@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/06/14 15:50:44 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/12 14:46:43 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,12 @@ void	command_env(void)
 	while (++i <= 2048)
 		if (g_env_table[i].key)
 			printf("%s=%s\n", g_env_table[i].key, g_env_table[i].data);
+}
+
+int get_env_len(char *str)
+{
+	char	*key;
+
+	key = get_key(str);
+	return (ft_strlen(search(key).data));
 }
