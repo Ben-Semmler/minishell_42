@@ -13,8 +13,8 @@
 #include "minishell.h"
 
 void	execute_actions(t_action *action, bool *run);
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output);
-void	run_action(t_action *action, t_inputs *input, t_outputs *output);
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
 int	main(int argc, char **argv, char **env)
 {
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **env)
  	import_env(env);
 	run = malloc(sizeof(bool));
 	*run = true;
-	while (run)
+	while (*run)
 	{
 		input = readline("minishell& ");
 		add_history(input);
@@ -50,16 +50,7 @@ void	execute_actions(t_action *action, bool *run)
 		input.argc = action->argc;
 		input.argv = action->argv;
 		input.stdin = output.stdout;
-		//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
-		if (ft_strncmp(action->command, "exit", 5) == 0)
-		{
-			run = false;
-			if (output.stdout != NULL)
-				free(output.stdout);
-			stdout = NULL;
-			break ;
-		}
-		switch_relation(action, &input, &output);
+		switch_relation(action, &input, &output, run);
 		if (action->next == NULL)
 			break;
 		action = action->next;
@@ -68,12 +59,12 @@ void	execute_actions(t_action *action, bool *run)
 		printf("%s", output.stdout);
 }
 
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
 	//printf("switch relation\n");
 	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
 	{
-		run_action(action, input, output);
+		run_action(action, input, output, run);
 		return ;
 	}
 	else if (ft_strncmp(action->relation, ">", 2) == 0)
@@ -95,14 +86,16 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
 	output->stdout = NULL;
 }
 
-void	run_action(t_action *action, t_inputs *input, t_outputs *output)
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
 	int		filedes[2];
 	pid_t	p;
 
-	//Bandaid fix for cd not working as child process, should be modified
+	//Bandaid fix for cd and exit not working as child process, should be modified
 	if (ft_strncmp(action->command, "cd", 3) == 0)
 		command_cd(input);
+	else if (ft_strncmp(action->command, "exit", 5) == 0)
+		*run = false;
 	else
 	{
 		pipe(filedes);

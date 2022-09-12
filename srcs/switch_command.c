@@ -40,7 +40,6 @@ void	switch_command(char *command, t_inputs *input)
 		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
 	else if (ft_strncmp(command, "exit", 4) == 0)
 		//command 'exit'
-		//*run = false;
 		;
 	else if (ft_strncmp(command, "cat", 4) == 0)
 		command_cat(input);
