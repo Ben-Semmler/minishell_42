@@ -14,7 +14,7 @@
 
 int	get_echo_len(char **argv);
 
-void	command_echo(t_inputs *input)
+void	command_echo(const t_inputs *input)
 {
 	int	i;
 
@@ -71,7 +71,6 @@ void	command_echo(t_inputs *input)
 
 int	get_echo_len(char **argv)
 {
-	int		len;
 	int		i;
 	int		j;
 	char	*key;
@@ -79,7 +78,6 @@ int	get_echo_len(char **argv)
 
 	i = (ft_strncmp(argv[0], "-n", 3) == 0);
 	sum = 0;
-	len = 0;
 	while (argv[++i])
 	{
 		j = -1;

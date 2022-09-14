@@ -12,12 +12,15 @@
 
 #include "minishell.h"
 
-void	command_pwd(t_inputs *input)
+void	command_pwd(const t_inputs *input)
 {
 	char	*cwd;
 
 	//Use of input to appease -WWW, not needed for function
-	input->argc += 0;
+	if (input->argc == 0)
+	{
+		;
+	}
 	//Create buffer with size of PATH_MAX, fill using getcwd to get
 	//the working directory and prints
 	cwd = malloc(PATH_MAX + 1);

@@ -23,29 +23,6 @@ void	writeToFile_append(char *input, char *file)
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));
 }
 
-void	readFile(char *command, t_outputs *output)
-{
-	int		fd;
-	int		return_val;
-	char	buf[256];
-
-	perror("hello\n");
-	fd = open(command, O_RDONLY);
-	printf("HERE\n");
-	output->stdout = NULL;
-	while (true)
-	{
-		return_val = read(fd, buf, 255);
-		if (return_val <= 0)
-			break;
-		buf[return_val] = 0;
-		if (output->stdout != NULL)
-			output->stdout = ft_joinfree(output->stdout, 1, buf, 0);
-		else
-			output->stdout = ft_strdup(buf);
-	}
-}
-
 /*void	append_right(char *input)
 {
 	int		i;

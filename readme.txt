@@ -25,6 +25,7 @@ ben
 -Redirection '<<' should be given a delimiter to read input until it is seen. Doesnt
 	update history.
 -Redirection '>>' for redirecting output in append mode
+
 -Handle '$?'
 -STANDARD ERROR
 -builtin 'exit', no options
@@ -33,6 +34,7 @@ ben
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
 -Handle ctrl-C, ctrl-D and ctrl-\ while in interactive mode
 -handle '\'
+-We might need to do "ls" at some point maybe????? its in the eval doc on discord
 
 
 BONUS TASKS TO BE COMPLETED (?)

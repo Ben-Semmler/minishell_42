@@ -167,7 +167,7 @@ int	get_arg_size(char *input, bool include_quotes)
 		}
 	}
 	len += env_len;
-	printf("arg size = %d\n", len);
+	//printf("arg size = %d\n", len);
 	if (include_quotes)
 		return (len);
 	return (len - adjust);

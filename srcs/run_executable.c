@@ -14,7 +14,7 @@
 
 char	**create_args(char **input);
 
-void	run_executable(t_inputs *input)
+void	run_executable(const t_inputs *input)
 {
 	char	*cwd;
 	pid_t	p;

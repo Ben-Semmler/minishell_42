@@ -43,7 +43,7 @@ void	switch_command(char *command, t_inputs *input)
 		//*run = false;
 		;
 	else if (ft_strncmp(command, "cat", 4) == 0)
-		printf("%s", input->stdin);
+		command_cat(input);
 	else
 		printf("minishell: %s: command not found\n", command);
 	//free_split_input(input);

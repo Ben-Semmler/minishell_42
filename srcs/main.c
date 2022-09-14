@@ -53,7 +53,7 @@ void	execute_actions(t_action *action, bool *run)
 		//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
 		if (ft_strncmp(action->command, "exit", 5) == 0)
 		{
-			run = false;
+			*run = false;
 			if (output.stdout != NULL)
 				free(output.stdout);
 			stdout = NULL;
@@ -86,7 +86,10 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
 		return ;
 	}
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-		;
+	{
+		insert_doc(action->command, output);
+		return ;
+	}
 	else if (output->stdout != NULL)
 		free(output->stdout);
 	output->stdout = NULL;
