@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:05:05 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/12 15:31:27 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/16 18:42:13 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,17 @@ char	*copy_arg(char *input)
 	char	*arg;
 	char	do_env;
 
-	arg = malloc(get_arg_size(input, 0) + 1);
+	//printf("==========================================\ncopying arg =%s\n", input);
+
+	int arg_size = get_arg_size(input, 0);
+
+	arg = malloc(arg_size + 1);
 	i = 0;
 	quotations = 0;
 	offset = 0;
 	do_env = 1;
 
-	while (input[i] && i - offset < get_arg_size(input, 0))
+	while (input[i] && i - offset < arg_size)
 	{
 		prev_quotations = quotations;
 		quotations = check_quotations(input[i], quotations);
@@ -114,9 +118,10 @@ char	*copy_arg(char *input)
 		{
 			i++;
 			offset++;
-			offset += insert_data(&arg[i - offset], get_key(&input[i]));
+			//printf("insert data size =%d=\n", insert_data(&arg[i - offset], get_key(&input[i])));
+			offset -= insert_data(&arg[i - offset], get_key(&input[i])) - ft_strlen(get_key(&input[i]));
 			i += ft_strlen(get_key(&input[i]));
-			printf("arg =%s\n", arg);
+			//printf("offset	=%d=\ni	=%d=\noffset + i	=%d=\n", offset, i, i - offset);
 		}
 		else
 		{
@@ -128,6 +133,7 @@ char	*copy_arg(char *input)
 		}
 	}
 	arg[i - offset] = 0;
+	//printf("arg =%s=\n==============================================\n", arg);
 	return (arg);
 }
 
@@ -154,8 +160,12 @@ int	get_arg_size(char *input, bool include_quotes)
 		{
 			len++;
 			env_len += ft_strlen(search(get_key(&input[len])).data);
-			env_len -= ft_strlen(get_key(&input[len]));
+			//printf("env len for =%s=\n	got =%d=\n", search(get_key(&input[len])).data, env_len);
+			env_len -= ft_strlen(get_key(&input[len])) + 1;
+			//printf("env KEY len for =%s=\n	got =%zu=\n", get_key(&input[len]), ft_strlen(get_key(&input[len])));
 			len += ft_strlen(get_key(&input[len]));
+			if (include_quotes)
+				env_len -= 2;
 		}
 		else 
 		{
@@ -167,7 +177,7 @@ int	get_arg_size(char *input, bool include_quotes)
 		}
 	}
 	len += env_len;
-	//printf("arg size = %d\n", len);
+	//printf("size = %d-----------------\n", len);
 	if (include_quotes)
 		return (len);
 	return (len - adjust);
