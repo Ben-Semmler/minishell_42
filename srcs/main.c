@@ -13,30 +13,36 @@
 #include "minishell.h"
 
 void	execute_actions(t_action *action, bool *run);
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output);
-void	run_action(t_action *action, t_inputs *input, t_outputs *output);
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
 int	main(int argc, char **argv, char **env)
 {
+	debug = false;
+
 	t_action	*actions;
 	char		*input;
-	bool		*run;
+	bool		run;
 
 	(void)argc;
 	(void)argv;
  	import_env(env);
-	run = malloc(sizeof(bool));
-	*run = true;
+	run = true;
 	while (run)
 	{
 		input = readline("minishell& ");
 		add_history(input);
+
+		//DEBUG
+		if (debug)
+			printf("Raw input: %s\n\n", input);
+		//DEBUG
+
 		//vv - Do stuff with the input in here - vv -b
 		actions = split_actions(input);
-		execute_actions(actions, run);
+		execute_actions(actions, &run);
 		free(input);
 	}
-	free(run);
 }
 
 void	execute_actions(t_action *action, bool *run)
@@ -50,16 +56,7 @@ void	execute_actions(t_action *action, bool *run)
 		input.argc = action->argc;
 		input.argv = action->argv;
 		input.stdin = output.stdout;
-		//BANDAID FIX FOR CD NOT WORKING AS A CHILD PROCESS, FIX LATER
-		if (ft_strncmp(action->command, "exit", 5) == 0)
-		{
-			*run = false;
-			if (output.stdout != NULL)
-				free(output.stdout);
-			stdout = NULL;
-			break ;
-		}
-		switch_relation(action, &input, &output);
+		switch_relation(action, &input, &output, run);
 		if (action->next == NULL)
 			break;
 		action = action->next;
@@ -68,41 +65,35 @@ void	execute_actions(t_action *action, bool *run)
 		printf("%s", output.stdout);
 }
 
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output)
+void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
-	//printf("switch relation\n");
 	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
-	{
-		run_action(action, input, output);
-		return ;
-	}
+		run_action(action, input, output, run);
 	else if (ft_strncmp(action->relation, ">", 2) == 0)
 		writeToFile(input->stdin, action->command);
 	else if (ft_strncmp(action->relation, ">>", 3) == 0)
 		writeToFile_append(input->stdin, action->command);
 	else if (ft_strncmp(action->relation, "<", 2) == 0)
-	{
 		readFile(action->command, output);
-		return ;
-	}
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-	{
 		insert_doc(action->command, output);
-		return ;
-	}
 	else if (output->stdout != NULL)
 		free(output->stdout);
-	output->stdout = NULL;
+	if (action->relation != NULL && (ft_strncmp(action->relation, ">", 2) == 0
+		|| ft_strncmp(action->relation, ">>", 3) == 0))
+		output->stdout = NULL;
 }
 
-void	run_action(t_action *action, t_inputs *input, t_outputs *output)
+void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
 	int		filedes[2];
 	pid_t	p;
 
-	//Bandaid fix for cd not working as child process, should be modified
+	//Bandaid fix for cd and exit not working as child process
 	if (ft_strncmp(action->command, "cd", 3) == 0)
 		command_cd(input);
+	else if (ft_strncmp(action->command, "exit", 5) == 0)
+		*run = false;
 	else
 	{
 		pipe(filedes);

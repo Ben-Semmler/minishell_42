@@ -17,6 +17,11 @@ void	free_split_input(char **s_input);
 
 void	switch_command(char *command, t_inputs *input)
 {
+	//DEBUG
+	if (debug)
+		printf("EXECUTING COMMAND\n");
+	//DEBUG
+
 	if (ft_strncmp(command, "./", 3) == 0)
 		//command './'
 		run_executable(input);
@@ -39,8 +44,7 @@ void	switch_command(char *command, t_inputs *input)
 		//command 'env'
 		command_env();
 	else if (ft_strncmp(command, "exit", 4) == 0)
-		//command 'exit'
-		//*run = false;
+		//command 'exit''
 		;
 	else if (ft_strncmp(command, "cat", 4) == 0)
 		command_cat(input);

@@ -32,6 +32,9 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
+//DEBUG MODE
+bool debug;
+
 typedef struct s_inputs
 {
 	int		argc;
