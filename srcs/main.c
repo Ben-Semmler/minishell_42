@@ -16,9 +16,14 @@ void	execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
+//DEBUG
+void	print_inputs(const t_inputs input);
+void	print_outputs(const t_outputs output);
+//DEBUG
+
 int	main(int argc, char **argv, char **env)
 {
-	debug = false;
+	debug = true;
 
 	t_action	*actions;
 	char		*input;
@@ -47,19 +52,53 @@ int	main(int argc, char **argv, char **env)
 
 void	execute_actions(t_action *action, bool *run)
 {
+	//DEBUG
+	int			i = 0;
+	//DEBUG
+
 	t_inputs	input;
 	t_outputs	output;
 	
 	output.stdout = NULL;
 	while (true)
 	{
+		//DEBUG
+		if (debug)
+			printf("------ACTION %i------\n", i + 1);
+		//DEBUG
+
 		input.argc = action->argc;
 		input.argv = action->argv;
 		input.stdin = output.stdout;
+
+		//DEBUG
+		if (debug)
+		{
+			print_inputs(input);
+			printf("\n");
+		}
+		//DEBUG
+
 		switch_relation(action, &input, &output, run);
+
+		//DEBUG
+		if (debug)
+		{
+			printf("\n");
+			print_outputs(output);
+			printf("\n");
+		}
+		//DEBUG
+
 		if (action->next == NULL)
 			break;
 		action = action->next;
+		
+		//DEBUG
+		if (debug)
+			printf("\n");
+		i++;
+		//DEBUG
 	}
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
@@ -86,6 +125,11 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool 
 
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
+	//DEBUG
+	if (debug)
+		printf("EXECUTING COMMAND (DEFAULT ACTION)\n");
+	//DEBUG
+
 	int		filedes[2];
 	pid_t	p;
 
@@ -123,6 +167,30 @@ void	free_split_input(char **s_input)
 	}
 	free(s_input);
 }
+
+//DEBUG
+void	print_inputs(const t_inputs input)
+{
+	printf("--INPUT STRUCT--\n");
+	printf("ARGC: %i\n", input.argc);
+
+	printf("ARGV:\n");
+	for (int i = 0; input.argv[i]; i++)
+		printf("  ARG %i: %s\n", i, input.argv[i]);
+
+	printf("STDIN: %s", input.stdin);
+	printf("\n");
+
+}
+
+void	print_outputs(const t_outputs output)
+{
+	printf("--OUTPUT STRUCT--\n");
+	printf("STDOUT: %s", output.stdout);
+	if (output.stdout == NULL)
+		printf("\n");
+}
+//DEBUG
 
 // int	main(int argc, char **argv, char **env)
 // {

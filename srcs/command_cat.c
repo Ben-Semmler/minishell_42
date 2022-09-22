@@ -6,9 +6,8 @@ void	command_cat(const t_inputs *input)
 
 	if (input->argc > 0)
 	{
-		printf("Here!!\n");
 		readFile(input->argv[0], &output);
-		printf("%s", output.stdout);
+		printf("%s\n", output.stdout);
 	}
 	else
 		printf("%s", input->stdin);

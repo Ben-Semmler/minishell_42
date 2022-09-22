@@ -17,11 +17,6 @@ void	free_split_input(char **s_input);
 
 void	switch_command(char *command, t_inputs *input)
 {
-	//DEBUG
-	if (debug)
-		printf("EXECUTING COMMAND\n");
-	//DEBUG
-
 	if (ft_strncmp(command, "./", 3) == 0)
 		//command './'
 		run_executable(input);

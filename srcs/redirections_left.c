@@ -4,7 +4,7 @@ void	readFile(char *command, t_outputs *output)
 {
 	//DEBUG
 	if (debug)
-		printf("READING FROM FILE\n");
+		printf("READING FROM FILE (REDIRECTION '<')\n");
 	//DEBUG
 
 	int		fd;
@@ -30,7 +30,7 @@ void	insert_doc(char *command, t_outputs *output)
 {
 	//DEBUG
 	if (debug)
-		printf("USING DOCUMENT INSERTION\n");
+		printf("USING DOCUMENT INSERTION (REDIRECTION '<<')\n");
 	//DEBUG
 
 	char	*input;

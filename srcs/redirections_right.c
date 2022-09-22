@@ -16,7 +16,7 @@ void	writeToFile(char *input, char *file)
 {
 	//DEBUG
 	if (debug)
-		printf("WRITING TO FILE (NO OVERWRITE)\n");
+		printf("WRITING TO FILE (NO OVERWRITE) (REDIRECTION '>')\n");
 	//DEBUG
 
 	//Doesnt overwrite file
@@ -27,7 +27,7 @@ void	writeToFile_append(char *input, char *file)
 {
 	//DEBUG
 	if (debug)
-		printf("WRITING TO FILE (OVERWRITES)\n");
+		printf("WRITING TO FILE (OVERWRITES) (REDIRECTION '>>')\n");
 	//DEBUG
 
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));

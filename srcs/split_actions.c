@@ -163,15 +163,17 @@ void	print_actions(t_action *actions)
 	printf("---TOTAL ACTIONS TO PERFORM: %i---\n", size);
 	while (count < size)
 	{
-		printf("ACTION %i:\nCOMMAND: %s\nARGC: %i\n", count + 1, actions->command, actions->argc);
-		printf("ARGV:");
+		printf("-ACTION %i-\n", count + 1);
+		printf("COMMAND:  %s\n", actions->command);
+		printf("RELATION: %s\n", actions->relation);
+		printf("ARGC:\t  %i\n", actions->argc);
 		i = 0;
 		while (actions->argv[i] != NULL)
 		{
-			printf(" %s", actions->argv[i]);
+			printf("ARG %i:\t%s\n", i, actions->argv[i]);
 			i++;
 		}
-		printf("\nRELATION: %s\n\n", actions->relation);
+		printf("\n");
 		count++;
 		actions = actions->next;
 	}
