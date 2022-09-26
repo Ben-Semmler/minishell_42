@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 13:26:30 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/06/14 15:50:19 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:24:22 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,11 @@ t_env	search(char *key)
 	hashindex = hash(key, ENV_SIZE);
 	while (g_env_table[hashindex].key != NULL)
 	{
-		if (!ft_strncmp(g_env_table[hashindex].key, key, ft_strlen(key)))
+		//if (!ft_strncmp(g_env_table[hashindex].key, key, ft_strlen(key)))
 			return (g_env_table[hashindex]);
 		++hashindex;
 		hashindex %= ENV_SIZE;
 	}
-	printf("FOUND KEY; DATA IS: %s\n", g_env_table[hashindex].data);
 	return (g_env_table[hashindex]);
 }
 //insert a key-value pair into the hashtable

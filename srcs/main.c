@@ -16,44 +16,89 @@ void	execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
+//DEBUG
+void	print_inputs(const t_inputs input);
+void	print_outputs(const t_outputs output);
+//DEBUG
+
 int	main(int argc, char **argv, char **env)
 {
+	debug = true;
+
 	t_action	*actions;
 	char		*input;
-	bool		*run;
+	bool		run;
 
 	(void)argc;
 	(void)argv;
  	import_env(env);
-	run = malloc(sizeof(bool));
-	*run = true;
-	while (*run)
+	run = true;
+	while (run)
 	{
 		input = readline("minishell& ");
 		add_history(input);
+
+		//DEBUG
+		if (debug)
+			printf("Raw input: %s\n\n", input);
+		//DEBUG
+
 		//vv - Do stuff with the input in here - vv -b
 		actions = split_actions(input);
-		execute_actions(actions, run);
+		execute_actions(actions, &run);
 		free(input);
 	}
-	free(run);
 }
 
 void	execute_actions(t_action *action, bool *run)
 {
+	//DEBUG
+	int			i = 0;
+	//DEBUG
+
 	t_inputs	input;
 	t_outputs	output;
 	
 	output.stdout = NULL;
 	while (true)
 	{
+		//DEBUG
+		if (debug)
+			printf("------ACTION %i------\n", i + 1);
+		//DEBUG
+
 		input.argc = action->argc;
 		input.argv = action->argv;
 		input.stdin = output.stdout;
+
+		//DEBUG
+		if (debug)
+		{
+			print_inputs(input);
+			printf("\n");
+		}
+		//DEBUG
+
 		switch_relation(action, &input, &output, run);
+
+		//DEBUG
+		if (debug)
+		{
+			printf("\n");
+			print_outputs(output);
+			printf("\n");
+		}
+		//DEBUG
+
 		if (action->next == NULL)
 			break;
 		action = action->next;
+		
+		//DEBUG
+		if (debug)
+			printf("\n");
+		i++;
+		//DEBUG
 	}
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
@@ -61,37 +106,34 @@ void	execute_actions(t_action *action, bool *run)
 
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
-	//printf("switch relation\n");
 	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
-	{
 		run_action(action, input, output, run);
-		return ;
-	}
 	else if (ft_strncmp(action->relation, ">", 2) == 0)
 		writeToFile(input->stdin, action->command);
 	else if (ft_strncmp(action->relation, ">>", 3) == 0)
 		writeToFile_append(input->stdin, action->command);
 	else if (ft_strncmp(action->relation, "<", 2) == 0)
-	{
 		readFile(action->command, output);
-		return ;
-	}
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-	{
 		insert_doc(action->command, output);
-		return ;
-	}
 	else if (output->stdout != NULL)
 		free(output->stdout);
-	output->stdout = NULL;
+	if (action->relation != NULL && (ft_strncmp(action->relation, ">", 2) == 0
+		|| ft_strncmp(action->relation, ">>", 3) == 0))
+		output->stdout = NULL;
 }
 
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
+	//DEBUG
+	if (debug)
+		printf("EXECUTING COMMAND (DEFAULT ACTION)\n");
+	//DEBUG
+
 	int		filedes[2];
 	pid_t	p;
 
-	//Bandaid fix for cd and exit not working as child process, should be modified
+	//Bandaid fix for cd and exit not working as child process
 	if (ft_strncmp(action->command, "cd", 3) == 0)
 		command_cd(input);
 	else if (ft_strncmp(action->command, "exit", 5) == 0)
@@ -125,6 +167,30 @@ void	free_split_input(char **s_input)
 	}
 	free(s_input);
 }
+
+//DEBUG
+void	print_inputs(const t_inputs input)
+{
+	printf("--INPUT STRUCT--\n");
+	printf("ARGC: %i\n", input.argc);
+
+	printf("ARGV:\n");
+	for (int i = 0; input.argv[i]; i++)
+		printf("  ARG %i: %s\n", i, input.argv[i]);
+
+	printf("STDIN: %s", input.stdin);
+	printf("\n");
+
+}
+
+void	print_outputs(const t_outputs output)
+{
+	printf("--OUTPUT STRUCT--\n");
+	printf("STDOUT: %s", output.stdout);
+	if (output.stdout == NULL)
+		printf("\n");
+}
+//DEBUG
 
 // int	main(int argc, char **argv, char **env)
 // {

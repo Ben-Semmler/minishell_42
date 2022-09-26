@@ -1,6 +1,7 @@
 NAME = minishell
 
-c_flags = -Wall -Werror -Wextra -lreadline
+c_flags = -Wall -Werror -Wextra
+libraries = -lreadline libft/libft.a
 
 INC = includes
 LIB = libft
@@ -9,8 +10,9 @@ INCS = -I$(LIB) -I$(INC)
 SRC = srcs/*.c
 
 all:
-	$(MAKE) -C libft
-	gcc $(c_flags) -o $(NAME) $(INCS) libft/libft.a $(SRC)
+	$(MAKE) -C libft re
+	$(MAKE) -C libft clean
+	gcc $(c_flags) -o $(NAME) $(SRC) $(INCS) $(libraries)
 
 r:
 	@make

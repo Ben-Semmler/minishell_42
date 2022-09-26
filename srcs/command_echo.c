@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:35:20 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:51:35 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/12 13:38:11 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	command_echo(const t_inputs *input)
 
 int	get_echo_len(char **argv)
 {
-	int		len;
 	int		i;
 	int		j;
 	char	*key;
@@ -79,7 +78,6 @@ int	get_echo_len(char **argv)
 
 	i = (ft_strncmp(argv[0], "-n", 3) == 0);
 	sum = 0;
-	len = 0;
 	while (argv[++i])
 	{
 		j = -1;

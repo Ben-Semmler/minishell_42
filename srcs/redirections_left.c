@@ -2,6 +2,11 @@
 
 void	readFile(char *command, t_outputs *output)
 {
+	//DEBUG
+	if (debug)
+		printf("READING FROM FILE (REDIRECTION '<')\n");
+	//DEBUG
+
 	int		fd;
 	int		return_val;
 	char	buf[256];
@@ -23,6 +28,11 @@ void	readFile(char *command, t_outputs *output)
 
 void	insert_doc(char *command, t_outputs *output)
 {
+	//DEBUG
+	if (debug)
+		printf("USING DOCUMENT INSERTION (REDIRECTION '<<')\n");
+	//DEBUG
+
 	char	*input;
 
 	input = ft_strdup("");
