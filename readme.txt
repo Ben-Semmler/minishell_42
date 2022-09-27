@@ -13,12 +13,12 @@ GENERAL NOTES
 
 TASKS TO BE COMPLETED
 jaymie
--Double quote handling (comment in get_options.c)
--builtin 'export', no options
--builtin 'unset', no options
--builtin 'env', no options or arguments
 -Environment variables (testing)
 
+-builtin 'unset', no options
+-builtin 'export', no options
+-Double quote handling (comment in get_options.c)
+-builtin 'env', no options or arguments
 
 ben
 -Redirection '<' for redirecting input

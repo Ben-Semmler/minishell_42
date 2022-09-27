@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:51:10 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/27 14:04:30 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,10 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	//Bandaid fix for cd and exit not working as child process
 	if (ft_strncmp(action->command, "cd", 3) == 0)
 		command_cd(input);
+	if (ft_strncmp(action->command, "export", 7) == 0)
+		command_export(input);
+	if (ft_strncmp(action->command, "unset", 6) == 0)
+		unset(input);
 	else if (ft_strncmp(action->command, "exit", 5) == 0)
 		*run = false;
 	else

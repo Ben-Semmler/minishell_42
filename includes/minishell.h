@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:28:27 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/27 13:30:03 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void		command_echo(const t_inputs *input);
 void		command_cd(const t_inputs *input);
 void		command_pwd(const t_inputs *input);
 void		command_cat(const t_inputs *input);
+void		unset(t_inputs *input);
+void		command_export(t_inputs *input);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);

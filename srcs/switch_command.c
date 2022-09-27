@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:23:22 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:30:26 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/27 13:30:38 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void	switch_command(char *command, t_inputs *input)
 		command_pwd(input);
 	else if (ft_strncmp(command, "export", 7) == 0)
 		//command 'export'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		command_export(input);
 	else if (ft_strncmp(command, "unset", 6) == 0)
 		//command 'unset'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		unset(input);
 	else if (ft_strncmp(command, "env", 4) == 0)
 		//command 'env'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		command_env();
 	else if (ft_strncmp(command, "exit", 4) == 0)
 		//command 'exit'
 		;
