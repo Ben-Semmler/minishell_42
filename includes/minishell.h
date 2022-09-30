@@ -33,7 +33,7 @@
 # include <fcntl.h>
 
 //DEBUG MODE
-bool debug;
+extern bool debug;
 
 typedef struct s_inputs
 {
@@ -54,6 +54,7 @@ typedef struct s_action
 	int				argc;
 	char			**argv;
 	char			*relation;
+	bool			fork;
 	struct s_action	*next;
 }	t_action;
 
@@ -81,7 +82,7 @@ typedef struct s_env
 }	t_env;
 
 # define ENV_SIZE 2048
-t_env	g_env_table[ENV_SIZE];
+extern t_env	*g_env_table;
 
 // env funs
 u_int64_t	hash(char *str, int envlen);
@@ -100,7 +101,7 @@ char		*read_stdout(t_action *action, int *filedes);
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int			get_command_id(char *input);
-void		switch_command(char *command, t_inputs *input);
+void		switch_command(char *command, t_inputs *input, bool *run);
 void		get_options(t_action *action, char *input);
 void 		writeToFile(char *stdin, char *file);
 void 		writeToFile_append(char *stdin, char *file);

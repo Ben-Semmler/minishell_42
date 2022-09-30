@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+bool debug;
+
 void	execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
@@ -36,17 +38,24 @@ int	main(int argc, char **argv, char **env)
 	while (run)
 	{
 		input = readline("minishell& ");
-		add_history(input);
+		if (input[0])
+		{
+			add_history(input);
 
-		//DEBUG
-		if (debug)
-			printf("Raw input: %s\n\n", input);
-		//DEBUG
+			//DEBUG
+			if (debug)
+				printf("Raw input: %s\n\n", input);
+			//DEBUG
 
-		//vv - Do stuff with the input in here - vv -b
-		actions = split_actions(input);
-		execute_actions(actions, &run);
-		free(input);
+			//vv - Do stuff with the input in here - vv -b
+			actions = split_actions(input);
+			execute_actions(actions, &run);
+			free(input);
+		}
+		//DEBUG
+		else
+			printf("SKIPPED\n");
+		//DEBUG
 	}
 }
 
@@ -127,21 +136,21 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
 	//DEBUG
 	if (debug)
+	{
 		printf("EXECUTING COMMAND (DEFAULT ACTION)\n");
+		if (action->fork)
+			printf("FORKED\n");
+		else
+			printf("NOT FORKED\n");
+	}
 	//DEBUG
 
 	int		filedes[2];
 	pid_t	p;
 
 	//Bandaid fix for cd and exit not working as child process
-	if (ft_strncmp(action->command, "cd", 3) == 0)
-		command_cd(input);
-	if (ft_strncmp(action->command, "export", 7) == 0)
-		command_export(input);
-	if (ft_strncmp(action->command, "unset", 6) == 0)
-		unset(input);
-	else if (ft_strncmp(action->command, "exit", 5) == 0)
-		*run = false;
+	if (!action->fork)
+		switch_command(action->command, input, run);
 	else
 	{
 		pipe(filedes);
@@ -150,7 +159,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 		{
 			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
 				;
-			switch_command(action->command, input);
+			switch_command(action->command, input, run);
 			exit(0);
 		}
 		close(filedes[1]);

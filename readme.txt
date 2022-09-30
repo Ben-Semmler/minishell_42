@@ -58,6 +58,9 @@ TASKS COMPLETED (?):
 KNOWN BUGS:
 -echo with '-n' option adds a space before the output string
 
+THINGS TO TEST:
+-Make sure there arent any cases where pipes/redirections shouldnt be forked.
+
 
 || is the OR operator. It executes the command on the right only if the command on the left returned an error
 && The second command will only execute if the first command has executed successfully

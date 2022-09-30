@@ -12,10 +12,13 @@
 
 #include "minishell.h"
 
+t_env	*g_env_table;
+
 void	import_env(char **env)
 {
 	int	i;
 
+	g_env_table = malloc(ENV_SIZE * sizeof(t_env));
 	i = -1;
 	while (env[++i])
 		insert(get_key(env[i]), get_data(env[i]));

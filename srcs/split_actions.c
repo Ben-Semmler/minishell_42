@@ -33,6 +33,7 @@ t_action	*split_actions(char *input)
 	actions = malloc(sizeof(t_action));
 	tempaction = actions;
 	tempaction->command = NULL;
+	tempaction->fork = true;
 	i = 0;
 	while ((size_t)i < ft_strlen(input))
 	{
@@ -47,6 +48,8 @@ t_action	*split_actions(char *input)
 		if (input[i])
 			tempaction = init_next_action(tempaction);
 	}
+	if (actions->next == NULL)
+		actions->fork = false;
 
 	//DEBUG
 	if (debug)
@@ -109,6 +112,7 @@ t_action	*init_next_action(t_action* action)
 	action->argv = NULL;
 	action->relation = NULL;
 	action->next = NULL;
+	action->fork = true;
 	return (action);
 }
 
