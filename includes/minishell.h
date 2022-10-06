@@ -110,11 +110,11 @@ void		readFile(char *command, t_outputs *output);
 void		insert_doc(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
-void		run_executable(const t_inputs *input);
-void		command_echo(const t_inputs *input);
-void		command_cd(const t_inputs *input);
-void		command_pwd(const t_inputs *input);
-void		command_cat(const t_inputs *input);
+int			run_executable(const t_inputs *input);
+int			command_echo(const t_inputs *input);
+int			command_cd(const t_inputs *input);
+int			command_pwd(const t_inputs *input);
+int			command_cat(const t_inputs *input);
 void		unset(t_inputs *input);
 void		command_export(t_inputs *input);
 

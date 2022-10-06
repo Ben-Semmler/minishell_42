@@ -14,7 +14,7 @@
 
 bool debug;
 
-void	execute_actions(t_action *action, bool *run);
+int		execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
@@ -35,6 +35,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
  	import_env(env);
+	returnval = 0;
 	run = true;
 	while (run)
 	{
@@ -160,7 +161,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 
 	//Bandaid fix for cd and exit not working as child process
 	if (!action->fork)
-		switch_command(action->command, input, run);
+		output->returnval = switch_command(action->command, input, run);
 	else
 	{
 		if (debug)
