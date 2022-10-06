@@ -6,13 +6,15 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:51:10 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/27 14:04:30 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		execute_actions(t_action *action, bool *run);
+bool debug;
+
+void	execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
@@ -37,7 +39,7 @@ int	main(int argc, char **argv, char **env)
 	while (run)
 	{
 		input = readline("minishell& ");
-		if (ft_strncmp(input, "", 1))
+		if (input[0])
 		{
 			add_history(input);
 
@@ -144,7 +146,13 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
 	//DEBUG
 	if (debug)
+	{
 		printf("EXECUTING COMMAND (DEFAULT ACTION)\n");
+		if (action->fork)
+			printf("FORKED\n");
+		else
+			printf("NOT FORKED\n");
+	}
 	//DEBUG
 
 	int		filedes[2];
@@ -152,11 +160,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 
 	//Bandaid fix for cd and exit not working as child process
 	if (!action->fork)
-	{
-		if (debug)
-			printf("NOT FORKED\n");
-		output->returnval = switch_command(action->command, input, run);
-	}
+		switch_command(action->command, input, run);
 	else
 	{
 		if (debug)

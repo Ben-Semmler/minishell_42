@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/23 12:28:27 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/09/27 13:30:03 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include <fcntl.h>
 
 //DEBUG MODE
-bool debug;
+extern bool debug;
 
 typedef struct s_inputs
 {
@@ -83,7 +83,7 @@ typedef struct s_env
 }	t_env;
 
 # define ENV_SIZE 2048
-t_env	g_env_table[ENV_SIZE];
+extern t_env	*g_env_table;
 
 // env funs
 u_int64_t	hash(char *str, int envlen);
@@ -110,11 +110,13 @@ void		readFile(char *command, t_outputs *output);
 void		insert_doc(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
-int			run_executable(const t_inputs *input);
-int			command_echo(const t_inputs *input);
-int			command_cd(const t_inputs *input);
-int			command_pwd(const t_inputs *input);
-int			command_cat(const t_inputs *input);
+void		run_executable(const t_inputs *input);
+void		command_echo(const t_inputs *input);
+void		command_cd(const t_inputs *input);
+void		command_pwd(const t_inputs *input);
+void		command_cat(const t_inputs *input);
+void		unset(t_inputs *input);
+void		command_export(t_inputs *input);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);
