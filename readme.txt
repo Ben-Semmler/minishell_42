@@ -13,6 +13,8 @@ GENERAL NOTES
 
 TASKS TO BE COMPLETED
 jaymie
+
+
 -Double quote handling (comment in get_options.c)
 -builtin 'export', no options
 -builtin 'unset', no options
@@ -26,13 +28,12 @@ ben
 	update history.
 -Redirection '>>' for redirecting output in append mode
 
--Handle '$?'
+-Handle '\' (still needs tests);
 -STANDARD ERROR
 
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
 -Handle ctrl-C, ctrl-D and ctrl-\ while in interactive mode
--handle '\'
 -We might need to do "ls" at some point maybe????? its in the eval doc on discord
 
 
