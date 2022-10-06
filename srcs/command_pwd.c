@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	command_pwd(const t_inputs *input)
+int	command_pwd(const t_inputs *input)
 {
 	char	*cwd;
 
@@ -27,6 +27,11 @@ void	command_pwd(const t_inputs *input)
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
 		printf("%s\n", cwd);
 	else
+	{
 		printf("Error: could not get directory\n");
+		free(cwd);
+		return (1);
+	}
 	free(cwd);
+	return (0);
 }

@@ -14,7 +14,7 @@
 
 char	**create_args(char **input);
 
-void	run_executable(const t_inputs *input)
+int	run_executable(const t_inputs *input)
 {
 	char	*cwd;
 	pid_t	p;
@@ -33,10 +33,11 @@ void	run_executable(const t_inputs *input)
 	{
 		execve(cwd, input->argv, NULL);
 		printf("Error: failed to run program\n");
-		exit(1);
+		return (1);
 	}
 	wait(NULL);
 	free(cwd);
+	return (0);
 }
 
 /*char	**create_args(char **input)

@@ -14,7 +14,7 @@
 
 int	get_echo_len(char **argv);
 
-void	command_echo(const t_inputs *input)
+int	command_echo(const t_inputs *input)
 {
 	int	i;
 
@@ -28,6 +28,7 @@ void	command_echo(const t_inputs *input)
 	}
 	if (input->argc == 0 || ft_strncmp(input->argv[0], "-n", 3) != 0)
 		printf("\n");
+	return (0);
 
 	//int		len;
 	//int		i;

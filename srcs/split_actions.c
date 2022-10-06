@@ -14,15 +14,15 @@
 
 char		*ft_strncpy(char *src, int size);
 int			find_next_seperator(char *input);
-t_action	*redir_reverse(t_action *action, char *input, int *k);
-void		fill_action(t_action *action, char *input, int size);
+t_action	*redir_reverse(t_action *action, char *input, int *k, int returnval);
+void		fill_action(t_action *action, char *input, int size, int returnval);
 t_action	*init_next_action(t_action* action);
 int			check_pipe_chars(char *input);
 char		*find_relation(char *input);
 
 void	print_actions(t_action *actions);
 
-t_action	*split_actions(char *input)
+t_action	*split_actions(char *input, int returnval)
 {
 	t_action	*actions;
 	t_action 	*tempaction;
@@ -33,6 +33,7 @@ t_action	*split_actions(char *input)
 	actions = malloc(sizeof(t_action));
 	tempaction = actions;
 	tempaction->command = NULL;
+	tempaction->fork = true;
 	i = 0;
 	while ((size_t)i < ft_strlen(input))
 	{
@@ -41,12 +42,14 @@ t_action	*split_actions(char *input)
 		i += check_pipe_chars(&input[i]);
 		j = find_next_seperator(&input[i]);
 		if (input[i + j] == '<')
-			tempaction = redir_reverse(tempaction, &input[i + j], &k);
-		fill_action(tempaction, &input[i], j);
+			tempaction = redir_reverse(tempaction, &input[i + j], &k, returnval);
+		fill_action(tempaction, &input[i], j, returnval);
 		i += j + k;
 		if (input[i])
 			tempaction = init_next_action(tempaction);
 	}
+	if (actions->next == NULL)
+		actions->fork = false;
 
 	//DEBUG
 	if (debug)
@@ -79,23 +82,23 @@ int	find_next_seperator(char *input)
 	return (i);
 }
 
-t_action	*redir_reverse(t_action *action, char *input, int *k)
+t_action	*redir_reverse(t_action *action, char *input, int *k, int returnval)
 {
 	action->relation = find_relation(input);
 	*k = check_pipe_chars(input);
 	fill_action(action, &input[*k],
-		find_next_seperator(&input[*k]));
+		find_next_seperator(&input[*k]), returnval);
 	action = init_next_action(action);
 	*k += find_next_seperator(&input[*k]);
 	return (action);
 }
 
-void	fill_action(t_action *action, char *input, int size)
+void	fill_action(t_action *action, char *input, int size, int returnval)
 {
 	char	*tempin;
 
 	tempin = ft_strncpy(input, size);
-	get_options(action, tempin);
+	get_options(action, tempin, returnval);
 	action->next = NULL;
 	free(tempin);
 }
@@ -109,6 +112,7 @@ t_action	*init_next_action(t_action* action)
 	action->argv = NULL;
 	action->relation = NULL;
 	action->next = NULL;
+	action->fork = true;
 	return (action);
 }
 

@@ -28,7 +28,6 @@ ben
 
 -Handle '$?'
 -STANDARD ERROR
--builtin 'exit', no options
 
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
@@ -54,10 +53,12 @@ TASKS COMPLETED (?):
 -builtin 'cd' with only relative and absolute paths
 -builtin 'pwd', no options
 
+STUFF TO TEST:
+-Test edge cases with the '\' character, like quotations.
 
 KNOWN BUGS:
 -echo with '-n' option adds a space before the output string
-
+-Return value doesnt work with pipes
 
 || is the OR operator. It executes the command on the right only if the command on the left returned an error
 && The second command will only execute if the first command has executed successfully

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	execute_actions(t_action *action, bool *run);
+int		execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 
@@ -23,11 +23,12 @@ void	print_outputs(const t_outputs output);
 
 int	main(int argc, char **argv, char **env)
 {
-	debug = true;
+	debug = false;
 
 	t_action	*actions;
 	char		*input;
 	bool		run;
+	int			returnval;
 
 	(void)argc;
 	(void)argv;
@@ -36,21 +37,35 @@ int	main(int argc, char **argv, char **env)
 	while (run)
 	{
 		input = readline("minishell& ");
-		add_history(input);
+		if (ft_strncmp(input, "", 1))
+		{
+			add_history(input);
 
-		//DEBUG
-		if (debug)
-			printf("Raw input: %s\n\n", input);
-		//DEBUG
+			//DEBUG
+			if (debug)
+				printf("Raw input: %s\n\n", input);
+			//DEBUG
 
-		//vv - Do stuff with the input in here - vv -b
-		actions = split_actions(input);
-		execute_actions(actions, &run);
-		free(input);
+			//vv - Do stuff with the input in here - vv -b
+			actions = split_actions(input, returnval);
+			returnval = execute_actions(actions, &run);
+			free(input);
+
+			//DEBUG
+			if (debug)
+				printf("Returnval: %i\n", returnval);
+			//DEBUG
+		}
+		//DEBUG
+		else if (debug)
+		{
+			printf("SKIPPED\n");
+		}
+		//DEBUG
 	}
 }
 
-void	execute_actions(t_action *action, bool *run)
+int	execute_actions(t_action *action, bool *run)
 {
 	//DEBUG
 	int			i = 0;
@@ -60,6 +75,7 @@ void	execute_actions(t_action *action, bool *run)
 	t_outputs	output;
 	
 	output.stdout = NULL;
+	output.returnval = INT_MAX;
 	while (true)
 	{
 		//DEBUG
@@ -102,6 +118,7 @@ void	execute_actions(t_action *action, bool *run)
 	}
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
+	return (output.returnval);
 }
 
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run)
@@ -134,19 +151,23 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	pid_t	p;
 
 	//Bandaid fix for cd and exit not working as child process
-	if (ft_strncmp(action->command, "cd", 3) == 0)
-		command_cd(input);
-	else if (ft_strncmp(action->command, "exit", 5) == 0)
-		*run = false;
+	if (!action->fork)
+	{
+		if (debug)
+			printf("NOT FORKED\n");
+		output->returnval = switch_command(action->command, input, run);
+	}
 	else
 	{
+		if (debug)
+			printf("FORKED\n");
 		pipe(filedes);
 		p = fork();
 		if (p == 0)
 		{
 			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
 				;
-			switch_command(action->command, input);
+			switch_command(action->command, input, false);
 			exit(0);
 		}
 		close(filedes[1]);

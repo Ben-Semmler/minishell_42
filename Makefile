@@ -27,7 +27,10 @@ clean:
 fclean:
 	rm -rf $(NAME)
 
-norm:
+run: all
+	./minishell
+
+norm: all
 	norminette $(SRC)
 
 git:

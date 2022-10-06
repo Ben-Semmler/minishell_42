@@ -15,35 +15,36 @@
 char	**split_input(char *input);
 void	free_split_input(char **s_input);
 
-void	switch_command(char *command, t_inputs *input)
+int	switch_command(char *command, t_inputs *input, bool *run)
 {
 	if (ft_strncmp(command, "./", 3) == 0)
 		//command './'
-		run_executable(input);
+		return (run_executable(input));
 	else if (ft_strncmp(command, "echo", 5) == 0)
 		//command 'echo'
-		command_echo(input);
+		return (command_echo(input));
 	else if (ft_strncmp(command, "cd", 3) == 0)
 		//command 'cd'
-		command_cd(input);
+		return (command_cd(input));
 	else if (ft_strncmp(command, "pwd", 4) == 0)
 		//command 'pwd'
-		command_pwd(input);
+		return (command_pwd(input));
 	else if (ft_strncmp(command, "export", 7) == 0)
 		//command 'export'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		return (printf("minishell: %s: NOT YET IMPLEMENTED\n", command));
 	else if (ft_strncmp(command, "unset", 6) == 0)
 		//command 'unset'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		return (printf("minishell: %s: NOT YET IMPLEMENTED\n", command));
 	else if (ft_strncmp(command, "env", 4) == 0)
 		//command 'env'
-		printf("minishell: %s: NOT YET IMPLEMENTED\n", command);
+		return (printf("minishell: %s: NOT YET IMPLEMENTED\n", command));
 	else if (ft_strncmp(command, "exit", 4) == 0)
 		//command 'exit'
-		;
+		*run = false;
 	else if (ft_strncmp(command, "cat", 4) == 0)
-		command_cat(input);
+		return (command_cat(input));
 	else
 		printf("minishell: %s: command not found\n", command);
+	return (1);
 	//free_split_input(input);
 }
