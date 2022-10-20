@@ -78,6 +78,7 @@ int	execute_actions(t_action *action, bool *run)
 	t_outputs	output;
 	
 	output.stdout = NULL;
+	output.stderr = NULL;
 	output.returnval = INT_MAX;
 	while (true)
 	{
@@ -121,6 +122,8 @@ int	execute_actions(t_action *action, bool *run)
 	}
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
+	if (output.stderr != NULL)
+		printf("%s\n", output.stderr);
 	return (output.returnval);
 }
 
@@ -161,7 +164,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 
 	//Bandaid fix for cd and exit not working as child process
 	if (!action->fork)
-		output->returnval = switch_command(action->command, input, run);
+		output->returnval = switch_command(action->command, input, output, run);
 	else
 	{
 		if (debug)
@@ -172,7 +175,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 		{
 			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
 				;
-			switch_command(action->command, input, false);
+			switch_command(action->command, input, output, false);
 			exit(0);
 		}
 		close(filedes[1]);

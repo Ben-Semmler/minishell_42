@@ -41,4 +41,8 @@ git:
 	git commit -m "$$COMMIT"; \
 	git push;
 
+test: all
+	gcc testmain.c
+	./minishell
+
 re: fclean all

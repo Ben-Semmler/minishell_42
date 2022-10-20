@@ -14,48 +14,34 @@
 
 char	**create_args(char **input);
 
-int	run_executable(const t_inputs *input)
+int	run_executable(const t_inputs *input, t_outputs *output)
 {
 	char	*cwd;
 	pid_t	p;
-
+	int		filedes[3];
+	int		wstatus;
 	//Create buffer with size of PATH_MAX, fill using getcwd to get
 	//the working directory
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) == NULL)
 	{
 		free(cwd);
-		printf("Error: could not get directory\n");
+		//output->stderr = ft_joinfree("./", 0, ft_strjoin(input->argv[0]""))
+		return (1);
 	}
 	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
+	pipe(filedes);
 	p = fork();
 	if (p == 0)
 	{
 		execve(cwd, input->argv, NULL);
-		printf("Error: failed to run program\n");
-		return (1);
+		output->stderr = ft_joinfree("minishell: ./", 0, ft_strjoin(input->argv[0], ": cannot execute file"), 1);
+		exit(127);
 	}
-	wait(NULL);
+	//waitpid(0, &wstatus, 0);
+	t_action	act;
+	act.next = NULL;
+	read_stdout(&act, &filedes[2]);
 	free(cwd);
-	return (0);
+	return (WEXITSTATUS(wstatus));
 }
-
-/*char	**create_args(char **input)
-{
-	char	**args;
-	int		i;
-
-	i = 0;
-	while (input[i] != NULL)
-		i++;
-	args = malloc(sizeof(char *) * i);
-	args[0] = ft_strdup(&input[0][2]);
-	i = 1;
-	while (input[i] != NULL)
-	{
-		args[i] = input[i];
-		i++;
-	}
-	args[i] = NULL;
-	return (args);
-}*/

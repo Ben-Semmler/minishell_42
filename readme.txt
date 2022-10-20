@@ -23,12 +23,8 @@ jaymie
 
 
 ben
--Redirection '<' for redirecting input
--Redirection '<<' should be given a delimiter to read input until it is seen. Doesnt
-	update history.
 -Redirection '>>' for redirecting output in append mode
-
--Handle '\' (still needs tests);
+-Return values with pipes
 -STANDARD ERROR
 
 
@@ -50,12 +46,17 @@ TASKS COMPLETED (?):
 -Single quote handling
 -Pipes ('|' character)
 -builtin 'echo', option '-n'
+-Redirection '<' for redirecting input
+-Redirection '<<' should be given a delimiter to read input until it is seen. Doesnt
+	update history.
+-Handle '\';
 -Redirection '>' for redirecting output
 -builtin 'cd' with only relative and absolute paths
 -builtin 'pwd', no options
 
 STUFF TO TEST:
 -Test edge cases with the '\' character, like quotations.
+-Need to go through eval document to make sure everything works as needed
 
 KNOWN BUGS:
 -echo with '-n' option adds a space before the output string

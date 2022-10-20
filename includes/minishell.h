@@ -102,7 +102,7 @@ char		*read_stdout(t_action *action, int *filedes);
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int			get_command_id(char *input);
-int			switch_command(char *command, t_inputs *input, bool *run);
+int			switch_command(char *command, t_inputs *input, t_outputs *output, bool *run);
 void		get_options(t_action *action, char *input, int returnval);
 void 		writeToFile(char *stdin, char *file);
 void 		writeToFile_append(char *stdin, char *file);
@@ -110,11 +110,11 @@ void		readFile(char *command, t_outputs *output);
 void		insert_doc(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
-int			run_executable(const t_inputs *input);
+int			run_executable(const t_inputs *input, t_outputs *output);
 int			command_echo(const t_inputs *input);
 int			command_cd(const t_inputs *input);
 int			command_pwd(const t_inputs *input);
-int			command_cat(const t_inputs *input);
+int			command_cat(const t_inputs *input, t_outputs *output);
 void		unset(t_inputs *input);
 void		command_export(t_inputs *input);
 

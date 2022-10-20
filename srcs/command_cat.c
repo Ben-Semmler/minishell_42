@@ -12,16 +12,19 @@
 
 #include "minishell.h"
 
-int	command_cat(const t_inputs *input)
+int	command_cat(const t_inputs *input, t_outputs *output)
 {
-	t_outputs	output;
+	t_outputs	output_read;
 
 	if (input->argc > 0)
 	{
-		readFile(input->argv[0], &output);
-		if (output.stdout == NULL)
+		readFile(input->argv[0], &output_read);
+		if (output_read.stdout == NULL)
+		{
+			output->stderr = ft_strjoin(input->argv[0], ": No such file or directory"); 
 			return (1);
-		printf("%s\n", output.stdout);
+		}
+		printf("%s\n", output_read.stdout);
 	}
 	else
 		printf("%s", input->stdin);
