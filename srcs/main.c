@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/27 14:04:30 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/21 15:56:14 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,36 @@ void	print_inputs(const t_inputs input);
 void	print_outputs(const t_outputs output);
 //DEBUG
 
-void	testy()
+bool *return_run(bool *run)
 {
-	printf("here I am\n");
+	static bool *rp;
+
+	if (run != NULL)
+		rp = run;
+	return (rp);
+}
+
+void handle_sig(int sig)
+{
+	bool *r;
+
+	r = return_run(NULL);
+	if (sig == SIGQUIT)
+		*r = false;
+	else
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	debug = false;
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &handle_sig);
+	
 
 	t_action	*actions;
 	char		*input;
@@ -44,10 +66,16 @@ int	main(int argc, char **argv, char **env)
  	import_env(env);
 	returnval = 0;
 	run = true;
+	return_run(&run);
+
+	
+
 	while (run)
 	{
 		input = readline("minishell& ");
-		if (input[0])
+		if (!input)
+			run = false;
+		if (input && input[0])
 		{
 			add_history(input);
 
@@ -80,6 +108,8 @@ int	execute_actions(t_action *action, bool *run)
 	//DEBUG
 	int			i = 0;
 	//DEBUG
+
+
 
 	t_inputs	input;
 	t_outputs	output;
