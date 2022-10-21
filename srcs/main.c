@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/27 14:04:30 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/21 15:56:14 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,20 @@ void handle_sig(int sig)
 	bool *r;
 
 	r = return_run(NULL);
-	printf("\nminishell& ");
 	if (sig == SIGQUIT)
 		*r = false;
+	else
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	debug = false;
 
-	signal(SIGQUIT, &handle_sig);
+	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_sig);
 	
 
@@ -67,7 +71,9 @@ int	main(int argc, char **argv, char **env)
 	while (run)
 	{
 		input = readline("minishell& ");
-		if (input[0])
+		if (!input)
+			run = false;
+		if (input && input[0])
 		{
 			add_history(input);
 
@@ -93,8 +99,6 @@ int	main(int argc, char **argv, char **env)
 		}
 		//DEBUG
 	}
-	printf("***exitting***\n");
-	free(input);
 }
 
 int	execute_actions(t_action *action, bool *run)
