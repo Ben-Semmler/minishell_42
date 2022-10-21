@@ -59,16 +59,12 @@ int	main(int argc, char **argv, char **env)
 	bool		run;
 	int			returnval;
 
-	signal(SIGXCPU, &testy);
-
 	(void)argc;
 	(void)argv;
  	import_env(env);
 	returnval = 0;
 	run = true;
 	return_run(&run);
-
-	
 
 	while (run)
 	{
