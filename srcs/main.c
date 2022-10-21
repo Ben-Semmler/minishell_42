@@ -23,6 +23,11 @@ void	print_inputs(const t_inputs input);
 void	print_outputs(const t_outputs output);
 //DEBUG
 
+void	testy()
+{
+	printf("here I am\n");
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	debug = false;
@@ -31,6 +36,8 @@ int	main(int argc, char **argv, char **env)
 	char		*input;
 	bool		run;
 	int			returnval;
+
+	signal(SIGXCPU, &testy);
 
 	(void)argc;
 	(void)argv;
@@ -161,25 +168,27 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 
 	int		filedes[2];
 	pid_t	p;
+	int		wstatus;
 
 	//Bandaid fix for cd and exit not working as child process
 	if (!action->fork)
 		output->returnval = switch_command(action->command, input, output, run);
 	else
 	{
-		if (debug)
-			printf("FORKED\n");
 		pipe(filedes);
 		p = fork();
 		if (p == 0)
 		{
 			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
 				;
-			switch_command(action->command, input, output, false);
-			exit(0);
+			exit(switch_command(action->command, input, output, false));
 		}
 		close(filedes[1]);
-		output->stdout = read_stdout(action, filedes);
+		output->stdout = read_fd(filedes, action->next != NULL);
+		waitpid(p, &wstatus, 0);
+		printf("return: %i\n", WEXITSTATUS(wstatus));
+		if (action->next == NULL)
+			output->returnval = WEXITSTATUS(wstatus);
 	}
 }
 

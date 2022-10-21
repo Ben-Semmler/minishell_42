@@ -30,6 +30,8 @@ ben
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
 -Handle ctrl-C, ctrl-D and ctrl-\ while in interactive mode
+
+
 -We might need to do "ls" at some point maybe????? its in the eval doc on discord
 
 

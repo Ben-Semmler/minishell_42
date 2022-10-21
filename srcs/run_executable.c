@@ -18,7 +18,7 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 {
 	char	*cwd;
 	pid_t	p;
-	int		filedes[3];
+	int		filedes[2];
 	int		wstatus;
 	//Create buffer with size of PATH_MAX, fill using getcwd to get
 	//the working directory
@@ -34,14 +34,15 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 	p = fork();
 	if (p == 0)
 	{
+		/*while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+			;*/
 		execve(cwd, input->argv, NULL);
 		output->stderr = ft_joinfree("minishell: ./", 0, ft_strjoin(input->argv[0], ": cannot execute file"), 1);
 		exit(127);
 	}
-	//waitpid(0, &wstatus, 0);
-	t_action	act;
-	act.next = NULL;
-	read_stdout(&act, &filedes[2]);
+	close(filedes[1]);
+	//read_fd(filedes, true);
+	waitpid(p, &wstatus, 0);
 	free(cwd);
 	return (WEXITSTATUS(wstatus));
 }

@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-char	*read_stdout(t_action *action, int *filedes)
+char	*read_fd(int *fd, bool print)
 {
 	char		*output;
 	char		*buffer;
@@ -21,7 +21,9 @@ char	*read_stdout(t_action *action, int *filedes)
 	buffer = ft_calloc(256, sizeof(char));
 	while (1)
 	{
-		ssize_t count = read(filedes[0], buffer, sizeof(buffer) - 1);
+		printf("1\n");
+		ssize_t count = read(fd[0], buffer, sizeof(buffer) - 1);
+		printf("2\n");
 		if (count == -1)
 		{
 			if (errno == EINTR)
@@ -37,13 +39,13 @@ char	*read_stdout(t_action *action, int *filedes)
 		else
 		{
 			buffer[count] = 0;
-			if (action->next == NULL)
+			if (print)
 				printf("%s", buffer);
 			else
 				output = ft_joinfree(output, 1, buffer, 0);
 		}
 	}
-	if (action->next != NULL)
+	if (!print)
 		return (output);
 	return (NULL);
 }
