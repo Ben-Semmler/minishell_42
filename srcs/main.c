@@ -23,9 +23,32 @@ void	print_inputs(const t_inputs input);
 void	print_outputs(const t_outputs output);
 //DEBUG
 
+bool *return_run(bool *run)
+{
+	static bool *rp;
+
+	if (run != NULL)
+		rp = run;
+	return (rp);
+}
+
+void handle_sig(int sig)
+{
+	bool *r;
+
+	r = return_run(NULL);
+	printf("\nminishell& ");
+	if (sig == SIGQUIT)
+		*r = false;
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	debug = false;
+
+	signal(SIGQUIT, &handle_sig);
+	signal(SIGINT, &handle_sig);
+	
 
 	t_action	*actions;
 	char		*input;
@@ -37,6 +60,10 @@ int	main(int argc, char **argv, char **env)
  	import_env(env);
 	returnval = 0;
 	run = true;
+	return_run(&run);
+
+	
+
 	while (run)
 	{
 		input = readline("minishell& ");
@@ -66,6 +93,8 @@ int	main(int argc, char **argv, char **env)
 		}
 		//DEBUG
 	}
+	printf("***exitting***\n");
+	free(input);
 }
 
 int	execute_actions(t_action *action, bool *run)
@@ -73,6 +102,8 @@ int	execute_actions(t_action *action, bool *run)
 	//DEBUG
 	int			i = 0;
 	//DEBUG
+
+
 
 	t_inputs	input;
 	t_outputs	output;
