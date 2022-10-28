@@ -34,14 +34,14 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 	p = fork();
 	if (p == 0)
 	{
-		/*while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
-			;*/
+		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
+			;
 		execve(cwd, input->argv, NULL);
 		output->stderr = ft_joinfree("minishell: ./", 0, ft_strjoin(input->argv[0], ": cannot execute file"), 1);
 		exit(127);
 	}
 	close(filedes[1]);
-	//read_fd(filedes, true);
+	output->stderr = read_fd(filedes, false);
 	waitpid(p, &wstatus, 0);
 	free(cwd);
 	return (WEXITSTATUS(wstatus));

@@ -21,9 +21,9 @@ char	*read_fd(int *fd, bool print)
 	buffer = ft_calloc(256, sizeof(char));
 	while (1)
 	{
-		printf("1\n");
+		//printf("1\n");
 		ssize_t count = read(fd[0], buffer, sizeof(buffer) - 1);
-		printf("2\n");
+		//printf("2\n");
 		if (count == -1)
 		{
 			if (errno == EINTR)
@@ -45,7 +45,7 @@ char	*read_fd(int *fd, bool print)
 				output = ft_joinfree(output, 1, buffer, 0);
 		}
 	}
-	if (!print)
+	if (!print && ft_strncmp(output, "", 1) != 0)
 		return (output);
 	return (NULL);
 }

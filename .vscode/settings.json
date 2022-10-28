@@ -1,6 +1,7 @@
 {
 	"makefile.extensionOutputFolder": "./.vscode",
 	"files.associations": {
-		"complex": "c"
+		"complex": "c",
+		"types.h": "c"
 	}
 }

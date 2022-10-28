@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 int	main()
 {
 	printf("hello this is a test program\n");
 
-	/*int	stuff[1];
-
-	for (int i = 0; ; i++)
-		stuff[i] = 0;*/
+	fprintf(stderr, "HERE IS AN ERROR FOR YOU");
+	exit(69);
 }

@@ -17,6 +17,7 @@ bool debug;
 int		execute_actions(t_action *action, bool *run);
 void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
+size_t	action_size(t_action *action);
 
 //DEBUG
 void	print_inputs(const t_inputs input);
@@ -101,18 +102,15 @@ int	main(int argc, char **argv, char **env)
 
 int	execute_actions(t_action *action, bool *run)
 {
-	//DEBUG
 	int			i = 0;
-	//DEBUG
-
-
-
 	t_inputs	input;
 	t_outputs	output;
+	char		**stderrs;
 	
 	output.stdout = NULL;
 	output.stderr = NULL;
 	output.returnval = INT_MAX;
+	stderrs = malloc(sizeof(char*) * action_size(action));
 	while (true)
 	{
 		//DEBUG
@@ -133,6 +131,7 @@ int	execute_actions(t_action *action, bool *run)
 		//DEBUG
 
 		switch_relation(action, &input, &output, run);
+		stderrs[i] = output.stderr;
 
 		//DEBUG
 		if (debug)
@@ -150,13 +149,18 @@ int	execute_actions(t_action *action, bool *run)
 		//DEBUG
 		if (debug)
 			printf("\n");
-		i++;
 		//DEBUG
+		i++;
 	}
+
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
-	if (output.stderr != NULL)
-		printf("%s\n", output.stderr);
+	while (i >=0)
+	{
+		if (stderrs[i] != NULL)
+			printf("%s\n", output.stderr);
+		i--;
+	}
 	return (output.returnval);
 }
 
@@ -210,9 +214,9 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 			exit(switch_command(action->command, input, output, false));
 		}
 		close(filedes[1]);
-		output->stdout = read_fd(filedes, action->next != NULL);
+		output->stdout = read_fd(filedes, action->next == NULL);
 		waitpid(p, &wstatus, 0);
-		printf("return: %i\n", WEXITSTATUS(wstatus));
+		//printf("return: %i\n", WEXITSTATUS(wstatus));
 		if (action->next == NULL)
 			output->returnval = WEXITSTATUS(wstatus);
 	}
@@ -230,6 +234,19 @@ void	free_split_input(char **s_input)
 		i++;
 	}
 	free(s_input);
+}
+
+size_t	action_size(t_action *action)
+{
+	size_t	i;
+	
+	i = 1;
+	while (action->next != NULL)
+	{
+		action = action->next;
+		i++;
+	}
+	return(i);
 }
 
 //DEBUG

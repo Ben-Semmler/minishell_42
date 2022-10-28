@@ -127,7 +127,7 @@ char	*copy_arg(char *input, int returnval)
 					i2++;
 				}
 				i += 2;
-				offset -= i2;
+				offset -= i2 - 2;
 			}
 			else
 			{
@@ -139,12 +139,6 @@ char	*copy_arg(char *input, int returnval)
 				//printf("offset	=%d=\ni	=%d=\noffset + i	=%d=\n", offset, i, i - offset);
 			}
 		}
-		else if (input[i] == '\\' && input[i] && interpret)
-		{
-			arg[i - offset] = input[i + 1];
-			offset++;
-			i += 2;
-		}
 		else
 		{
 			if (prev_quotations != quotations)
@@ -155,11 +149,10 @@ char	*copy_arg(char *input, int returnval)
 		}
 	}
 	arg[i - offset] = 0;
-	//printf("arg =%s=\n==============================================\n", arg);
 	return (arg);
 }
 
-int	get_arg_size(char *input, bool include_quotes, int returnval)
+int	get_arg_size(char *input, bool include_interpret, int returnval)
 {
 	//Add the size of env variables here
 	int		len;
@@ -183,7 +176,7 @@ int	get_arg_size(char *input, bool include_quotes, int returnval)
 			if (input[len + 1] == '?')
 			{
 				len += 2;
-				env_len -= ft_strlen(ft_itoa(returnval));
+				env_len += (int)ft_strlen(ft_itoa(returnval)) - 2;
 			}
 			else
 			{
@@ -193,14 +186,9 @@ int	get_arg_size(char *input, bool include_quotes, int returnval)
 				env_len -= ft_strlen(get_key(&input[len])) + 1;
 				//printf("env KEY len for =%s=\n	got =%zu=\n", get_key(&input[len]), ft_strlen(get_key(&input[len])));
 				len += ft_strlen(get_key(&input[len]));
-				if (include_quotes)
+				if (include_interpret)
 					env_len -= 2;
 			}
-		}
-		else if (input[len] == '\\' && input[len] && interpret)
-		{
-			env_len--;
-			len += 2;
 		}
 		else 
 		{
@@ -211,8 +199,7 @@ int	get_arg_size(char *input, bool include_quotes, int returnval)
 			len++;
 		}
 	}
-	len += env_len;
-	if (include_quotes)
+	if (include_interpret)
 		return (len);
-	return (len - adjust);
+	return (len + env_len - adjust);
 }
