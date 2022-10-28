@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/10/21 15:56:14 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/21 19:00:33 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void handle_sig(int sig)
 		*r = false;
 	else
 	{
+		
+        rl_replace_line("", 0);
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
 	}

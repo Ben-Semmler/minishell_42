@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/27 13:30:03 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/21 18:59:48 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>  
 # include <fcntl.h>
 
 //DEBUG MODE

@@ -1,7 +1,7 @@
 NAME = minishell
 
 c_flags = -Wall -Werror -Wextra
-libraries = -lreadline libft/libft.a
+libraries = -lreadline libft/libft.a -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib
 
 INC = includes
 LIB = libft
