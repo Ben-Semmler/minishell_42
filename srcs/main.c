@@ -157,12 +157,17 @@ int	execute_actions(t_action *action, bool *run)
 
 	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
 		printf("%s", output.stdout);
-	while (i >=0)
+	i = 0;
+	while ((unsigned int)i < action_size(action))
 	{
 		if (stderrs[i] != NULL)
-			printf("%s\n", output.stderr);
-		i--;
+		{
+			printf("%s\n", stderrs[i]);
+			free(stderrs[i]);
+		}
+		i++;
 	}
+	free(stderrs);
 	return (output.returnval);
 }
 
@@ -198,7 +203,8 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	}
 	//DEBUG
 
-	int		filedes[2];
+	int		fstdout[2];
+	int		fstderr[2];
 	pid_t	p;
 	int		wstatus;
 
@@ -207,16 +213,21 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 		output->returnval = switch_command(action->command, input, output, run);
 	else
 	{
-		pipe(filedes);
+		pipe(fstdout);
+		pipe(fstderr);
 		p = fork();
 		if (p == 0)
 		{
-			while ((dup2(filedes[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+			while ((dup2(fstdout[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+				;
+			while ((dup2(fstderr[1], STDERR_FILENO) == -1) && (errno == EINTR))
 				;
 			exit(switch_command(action->command, input, output, false));
 		}
-		close(filedes[1]);
-		output->stdout = read_fd(filedes, action->next == NULL);
+		close(fstdout[1]);
+		close(fstderr[1]);
+		output->stdout = read_fd(fstdout, action->next == NULL);
+		output->stderr = read_fd(fstderr, action->next == NULL);
 		waitpid(p, &wstatus, 0);
 		//printf("return: %i\n", WEXITSTATUS(wstatus));
 		if (action->next == NULL)

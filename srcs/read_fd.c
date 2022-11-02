@@ -49,3 +49,58 @@ char	*read_fd(int *fd, bool print)
 		return (output);
 	return (NULL);
 }
+
+char	**read_stdout_stderr(int *stdout, int *stderr, bool print)
+{
+	char	**outputs;
+	char	*buffero;
+	char	*buffere;
+
+	outputs = malloc(sizeof(char *) * 2);
+	outputs[0] = ft_strdup("");
+	outputs[1] = ft_strdup("");
+	buffero = ft_calloc(256, sizeof(char));
+	buffere = ft_calloc(256, sizeof(char));
+	while (1)
+	{
+		//printf("1\n");
+		ssize_t counte = read(stderr[0], buffere, sizeof(buffere) - 1);
+		ssize_t counto = read(stdout[0], buffero, sizeof(buffero) - 1);
+		//printf("2\n");
+		/*if (count == -1)
+		{
+			if (errno == EINTR)
+				continue;
+			else
+			{
+				perror("read");
+				exit(1);
+			}
+		}
+		else */if (counto == 0 && counte == 0)
+			break;
+		else
+		{
+			buffero[counto] = 0;
+			buffere[counte] = 0;
+			if (print)
+				printf("%s", buffero);
+			else
+				outputs[0] = ft_joinfree(outputs[0], 1, buffero, 0);
+			outputs[1] = ft_joinfree(outputs[1], 1, buffere, 0);
+		}
+	}
+	if (!print && ft_strncmp(outputs[0], "", 1) == 0)
+	{
+		free(outputs[0]);
+		outputs[0] = NULL;
+	}
+	if (!print && ft_strncmp(outputs[1], "", 1) == 0)
+	{
+		free(outputs[1]);
+		outputs[1] = NULL;
+	}
+	return (outputs);
+}
+
+
