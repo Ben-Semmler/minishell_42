@@ -17,63 +17,34 @@ EVAL DOC:
 		- Too many global variables (just remove debug when we're done, easy fix)
 		- Inputting only spaces does not skip line
 		- Cannot input tab, readline interprets as searching for a file. might be ok. 
-
 	Arguments & history ✅
-
-	echo ❌
-		- echo with '-n' option prints an erronious space before the output
-
-	exit ❌
-		-Exit prints a command not found error but otherwise works
-
-	Return value of a process ❌
-		- needs a closer look
-
+	echo ❌ - puts a space at start when using -n - J
+	exit ❌ - outputs command not found - B
+	Return value of a process ❌ - needs a closer look  - BJ
 	Signals ✅
-
 	Double Quotes ✅
-
 	Single Quotes ✅
-
-	env ❌
-		- seg faulting
-
-	export ❌
-		- cant test cause of env seg faulting
-
-	unset ❌
-		- cant test cause of env seg faulting
-	
+	env ❌ - seg faulting - J
+	export ❌ - cant test cause of env seg faulting  - J
+	unset ❌ - cant test cause of env seg faulting - J
 	cd ✅
-
 	pwd ✅
-
 	Relative Path ✅
+	Environment path ❌ - needs execve to test
+	Redirection ❌ - ">" does not reset file - J
+	Pipes ❌ - need to execve "grep" - B
+	Go Crazy and history ❌ - need to execve "ls" - B
+	Environment variables ❌ - need to handle double quotes - J
 
-	Environment path ❌
-		- needs execve to test
-
-	Redirection ❌
-		- ">" does not reset file
-
-	Pipes ❌
-		- need to execve "grep"
-
-	Go Crazy and history ❌
-		- need to execve "ls"
-
-	Environment variables ❌
-		- need to handle double quotes
-
+✅❌
 TASKS TO BE COMPLETED
 jaymie
--Double quote handling (comment in get_options.c) (echo "$USER") does not work
-
-
--builtin 'export', no options
--builtin 'unset', no options
--builtin 'env', no options or arguments
--Environment variables (testing)
+env ❌ - seg faulting
+export ❌ - cant test cause of env seg faulting
+unset ❌ - cant test cause of env seg faulting
+echo ❌ - puts a space at start when using -n
+Redirection ❌ - ">" does not reset file
+Environment variables ❌ - need to handle double quotes
 
 
 ben
