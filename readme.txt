@@ -16,6 +16,7 @@ EVAL DOC:
 	Simple Command & global variables ❌ 
 		- Too many global variables (just remove debug when we're done, easy fix)
 		- Inputting only spaces does not skip line
+		- Cannot input tab, readline interprets as searching for a file. might be ok. 
 
 	Arguments & history ✅
 
@@ -42,6 +43,7 @@ EVAL DOC:
 
 	unset ❌
 		- cant test cause of env seg faulting
+	
 	cd ✅
 
 	pwd ✅
@@ -75,9 +77,8 @@ jaymie
 
 
 ben
--Redirection '>>' for redirecting output in append mode
--Return values with pipes
--STANDARD ERROR
+-add executable command check instead of immediate "command not found"
+-stderr with pipes
 
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing
