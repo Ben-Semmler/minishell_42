@@ -10,12 +10,34 @@ GENERAL NOTES
 -redirections to file make a new file if it dont exist
 -redirection > doesnt ovrwrite properly
 
+EVAL DOC:
+	Compile
+	Simple Command & global variables
+	Arguments & history
+	echo
+	exit
+	Return value of a process ❌ - needs a closer look 
+	Signals ✅
+	Double Quotes ✅
+	Single Quotes ✅
+	env ❌ - seg faulting
+	export ❌ - cant test cause of env seg faulting
+	unset ❌ - cant test cause of env seg faulting
+	cd ✅
+	pwd ✅
+	Relative Path ✅
+	Environment path ❌ - needs execve to test
+	Redirection ❌ - ">" does not reset file
+	Pipes ❌ - need to execve "grep"
+	Go Crazy and history ❌ - need to execve "ls"
+	Environment variables ❌ - need to handle double quotes
 
+✅❌
 TASKS TO BE COMPLETED
 jaymie
+-Double quote handling (comment in get_options.c) (echo "$USER") does not work
 
 
--Double quote handling (comment in get_options.c)
 -builtin 'export', no options
 -builtin 'unset', no options
 -builtin 'env', no options or arguments
