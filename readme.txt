@@ -11,28 +11,58 @@ GENERAL NOTES
 -redirection > doesnt ovrwrite properly
 
 EVAL DOC:
-	Compile
-	Simple Command & global variables
-	Arguments & history
-	echo
-	exit
-	Return value of a process ❌ - needs a closer look 
-	Signals ✅
-	Double Quotes ✅
-	Single Quotes ✅
-	env ❌ - seg faulting
-	export ❌ - cant test cause of env seg faulting
-	unset ❌ - cant test cause of env seg faulting
-	cd ✅
-	pwd ✅
-	Relative Path ✅
-	Environment path ❌ - needs execve to test
-	Redirection ❌ - ">" does not reset file
-	Pipes ❌ - need to execve "grep"
-	Go Crazy and history ❌ - need to execve "ls"
-	Environment variables ❌ - need to handle double quotes
+	Compile ✅
 
-✅❌
+	Simple Command & global variables ❌ 
+		- Too many global variables (just remove debug when we're done, easy fix)
+		- Inputting only spaces does not skip line
+
+	Arguments & history ✅
+
+	echo ❌
+		- echo with '-n' option prints an erronious space before the output
+
+	exit ❌
+		-Exit prints a command not found error but otherwise works
+
+	Return value of a process ❌
+		- needs a closer look
+
+	Signals ✅
+
+	Double Quotes ✅
+
+	Single Quotes ✅
+
+	env ❌
+		- seg faulting
+
+	export ❌
+		- cant test cause of env seg faulting
+
+	unset ❌
+		- cant test cause of env seg faulting
+	cd ✅
+
+	pwd ✅
+
+	Relative Path ✅
+
+	Environment path ❌
+		- needs execve to test
+
+	Redirection ❌
+		- ">" does not reset file
+
+	Pipes ❌
+		- need to execve "grep"
+
+	Go Crazy and history ❌
+		- need to execve "ls"
+
+	Environment variables ❌
+		- need to handle double quotes
+
 TASKS TO BE COMPLETED
 jaymie
 -Double quote handling (comment in get_options.c) (echo "$USER") does not work
@@ -91,49 +121,3 @@ KNOWN BUGS:
 
 TO ADD PREEXISTING EXECUTABLES FOR COMMANDS
 check for executable in the path directory (check each folder). when found, run the command using execve.
-
-EVAL DOCUMENT CHECKS
-
-✅ Compile:
--no issues
-
-❌ Simple command and global variables
--Too many global variables (we have 2, but one is the debug so easy fix)
--inputting only spaces does not skip line
-
-✅ Arguments and history
--no issues
-
-❌ Echo
--echo with '-n' option prints an eronious space before the output
-
-❌ Exit
--Exit prints "minishell: exit: command not found" but otherwise works
-
-❌ Return value of a process:
--No issues that we've found, but needs a closer look
-
-✅ Signals
--no issues
-
-✅ Double Quotes
--no issues
-
-✅ Single Quotes
--no issues
-
-❌ env
--env segmentation faults but otherwise works.
--prints a command not found error, can be fixed by implementing a return value
-
-❌ export
--export prints debug info and a command not found error (can be fixed with a return value). otherwise works fine
-
-❌ unset
--prints a command not found error, can be fixed by implementing a return value
-
-✅ cd
--no issues
-
-✅ pwd
--no issues
