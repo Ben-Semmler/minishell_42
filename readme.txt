@@ -66,3 +66,52 @@ KNOWN BUGS:
 
 || is the OR operator. It executes the command on the right only if the command on the left returned an error
 && The second command will only execute if the first command has executed successfully
+
+TO ADD PREEXISTING EXECUTABLES FOR COMMANDS
+check for executable in the path directory (check each folder). when found, run the command using execve.
+
+EVAL DOCUMENT CHECKS
+
+✅ Compile:
+-no issues
+
+❌ Simple command and global variables
+-Too many global variables (we have 2, but one is the debug so easy fix)
+-inputting only spaces does not skip line
+
+✅ Arguments and history
+-no issues
+
+❌ Echo
+-echo with '-n' option prints an eronious space before the output
+
+❌ Exit
+-Exit prints "minishell: exit: command not found" but otherwise works
+
+❌ Return value of a process:
+-No issues that we've found, but needs a closer look
+
+✅ Signals
+-no issues
+
+✅ Double Quotes
+-no issues
+
+✅ Single Quotes
+-no issues
+
+❌ env
+-env segmentation faults but otherwise works.
+-prints a command not found error, can be fixed by implementing a return value
+
+❌ export
+-export prints debug info and a command not found error (can be fixed with a return value). otherwise works fine
+
+❌ unset
+-prints a command not found error, can be fixed by implementing a return value
+
+✅ cd
+-no issues
+
+✅ pwd
+-no issues
