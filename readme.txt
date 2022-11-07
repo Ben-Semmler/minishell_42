@@ -18,8 +18,8 @@ EVAL DOC:
 		- Inputting only spaces does not skip line
 		- Cannot input tab, readline interprets as searching for a file. might be ok. 
 	Arguments & history ✅
-	echo ❌ - puts a space at start when using -n - J
-	exit ❌ - outputs command not found - B
+	echo ✅
+	exit ✅
 	Return value of a process ❌ - needs a closer look  - BJ
 	Signals ✅
 	Double Quotes ✅
@@ -31,7 +31,7 @@ EVAL DOC:
 	pwd ✅
 	Relative Path ✅
 	Environment path ❌ - needs execve to test
-	Redirection ❌ - ">" does not reset file - J
+	Redirection ✅
 	Pipes ❌ - need to execve "grep" - B
 	Go Crazy and history ❌ - need to execve "ls" - B
 	Environment variables ❌ - need to handle double quotes - J
@@ -42,8 +42,6 @@ jaymie
 env ❌ - seg faulting
 export ❌ - cant test cause of env seg faulting
 unset ❌ - cant test cause of env seg faulting
-echo ❌ - puts a space at start when using -n
-Redirection ❌ - ">" does not reset file
 Environment variables ❌ - need to handle double quotes
 
 
