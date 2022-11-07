@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:35:20 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/12 13:38:11 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/07 22:15:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,18 @@ int	get_echo_len(char **argv);
 
 int	command_echo(const t_inputs *input)
 {
-	int	i;
+	int		i;
+	bool	space;
 
 	i = (input->argc > 0 && ft_strncmp(input->argv[0], "-n", 3) == 0);
+	space = i;
 	while (input->argv[i])
 	{
-		if (i != 0)
+		if (i != 0 && space == false)
 			printf(" ");
 		printf("%s", input->argv[i]);
 		i++;
+		space = false;
 	}
 	if (input->argc == 0 || ft_strncmp(input->argv[0], "-n", 3) != 0)
 		printf("\n");
