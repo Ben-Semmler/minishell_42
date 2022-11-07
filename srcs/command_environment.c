@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_environment.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/09/27 14:05:12 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/07 22:18:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char *get_data(char *str)
 	return (rtn);
 }
 
-void	command_env(void)
+int	command_env()
 {
 	int	i;
 
@@ -100,6 +100,7 @@ void	command_env(void)
 	while (++i <= 2048)
 		if (g_env_table[i].key)
 			printf("%s=%s\n", g_env_table[i].key, g_env_table[i].data);
+	return (0);
 }
 
 int get_env_len(char *str)

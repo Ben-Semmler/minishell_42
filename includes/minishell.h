@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/10/21 18:59:48 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/07 22:19:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ t_env		search(char *key);
 void		insert(char *key, char *data);
 char 		*get_key(char *str);
 char 		*get_data(char *str);
-void		command_env(void);
 void		import_env(char **env);
 int			check_env(char **input);
 int 		insert_data(char *line, char *key);
@@ -119,6 +118,7 @@ int			command_pwd(const t_inputs *input);
 int			command_cat(const t_inputs *input, t_outputs *output);
 void		unset(t_inputs *input);
 void		command_export(t_inputs *input);
+int			command_env();
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);
