@@ -51,7 +51,7 @@ void handle_sig(int sig)
 
 int	main(int argc, char **argv, char **env)
 {
-	debug = false;
+	debug = true;
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_sig);
@@ -162,7 +162,7 @@ int	execute_actions(t_action *action, bool *run)
 	{
 		if (stderrs[i] != NULL)
 		{
-			printf("%s\n", stderrs[i]);
+			printf("%s", stderrs[i]);
 			free(stderrs[i]);
 		}
 		i++;
@@ -206,6 +206,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	int		fstdout[2];
 	int		fstderr[2];
 	pid_t	p;
+	//pid_t	p2;
 	int		wstatus;
 
 	//Bandaid fix for cd and exit not working as child process
@@ -227,9 +228,11 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 		close(fstdout[1]);
 		close(fstderr[1]);
 		output->stdout = read_fd(fstdout, action->next == NULL);
-		output->stderr = read_fd(fstderr, action->next == NULL);
 		waitpid(p, &wstatus, 0);
-		//printf("return: %i\n", WEXITSTATUS(wstatus));
+		//STILL DOESNT WORK AS INTENDED, SOLUTIONS TO DISCUSS: 
+		//	-try forking a seperate process for the stdout or stderr again
+		//	-create a file to store stdout, would fix some non-builtin issues but is kinda jank
+
 		if (action->next == NULL)
 			output->returnval = WEXITSTATUS(wstatus);
 	}

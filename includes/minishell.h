@@ -119,6 +119,7 @@ int			command_cat(const t_inputs *input, t_outputs *output);
 void		unset(t_inputs *input);
 void		command_export(t_inputs *input);
 int			command_env();
+int			run_cmd_exec(char *command, t_inputs *input, t_outputs *output);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);

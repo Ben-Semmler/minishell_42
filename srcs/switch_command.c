@@ -32,10 +32,9 @@ int	switch_command(char *command, t_inputs *input, t_outputs *output, bool *run)
 	else if (ft_strncmp(command, "env", 3) == 0)
 		return (command_env());
 	else if (ft_strncmp(command, "exit", 4) == 0)
+	{
 		*run = false;
-	else if (ft_strncmp(command, "cat", 4) == 0)
-		return (command_cat(input, output));
-	if (*run == true)
-		output->stderr = ft_joinfree("minishell: ", 0, ft_strjoin(command, ": command not found"), 1);
-	return (127);
+		return (0);
+	}
+	return (run_cmd_exec(command, input, output));
 }
