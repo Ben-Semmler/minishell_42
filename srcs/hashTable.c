@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 13:26:30 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/09/12 15:24:22 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/10 14:45:40 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ u_int64_t	hash(char *str, int envlen)
 t_env	search(char *key)
 {
 	unsigned long	hashindex;
+
 	hashindex = hash(key, ENV_SIZE);
 	while (g_env_table[hashindex].key != NULL)
 	{
-		//if (!ft_strncmp(g_env_table[hashindex].key, key, ft_strlen(key)))
+		if (!ft_strncmp(g_env_table[hashindex].key, key, ft_strlen(key)))
 			return (g_env_table[hashindex]);
 		++hashindex;
 		hashindex %= ENV_SIZE;
@@ -53,4 +54,5 @@ void	insert(char *key, char *data)
 	}
 	g_env_table[hashindex].key = key;
 	g_env_table[hashindex].data = data;
+	*g_env_table[hashindex].spot = hashindex;
 }

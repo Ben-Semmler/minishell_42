@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/07 22:19:06 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/10 14:38:50 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_env
 {
 	char	*key;
 	char	*data;
+	int		*spot;
 }	t_env;
 
 # define ENV_SIZE 2048
@@ -116,8 +117,8 @@ int			command_echo(const t_inputs *input);
 int			command_cd(const t_inputs *input);
 int			command_pwd(const t_inputs *input);
 int			command_cat(const t_inputs *input, t_outputs *output);
-void		unset(t_inputs *input);
-void		command_export(t_inputs *input);
+int			unset(t_inputs *input);
+int			command_export(t_inputs *input);
 int			command_env();
 int			run_cmd_exec(char *command, t_inputs *input, t_outputs *output);
 
