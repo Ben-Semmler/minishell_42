@@ -180,7 +180,7 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool 
 	else if (ft_strncmp(action->relation, ">>", 3) == 0)
 		writeToFile_append(input->stdin, action->command);
 	else if (ft_strncmp(action->relation, "<", 2) == 0)
-		readFile(action->command, output);
+		redir_left(action->command, output);
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
 		insert_doc(action->command, output);
 	else if (output->stdout != NULL)
@@ -206,7 +206,7 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	int		fstdout[2];
 	int		fstderr[2];
 	pid_t	p;
-	//pid_t	p2;
+	int		stdinfile;
 	int		wstatus;
 
 	//Bandaid fix for cd and exit not working as child process
@@ -214,20 +214,21 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 		output->returnval = switch_command(action->command, input, output, run);
 	else
 	{
+		stdinfile = open("stdout.swp", O_RDONLY);
 		pipe(fstdout);
 		pipe(fstderr);
 		p = fork();
 		if (p == 0)
 		{
-			while ((dup2(fstdout[1], STDOUT_FILENO) == -1) && (errno == EINTR))
-				;
-			while ((dup2(fstderr[1], STDERR_FILENO) == -1) && (errno == EINTR))
-				;
+			dup2(stdinfile, STDIN_FILENO);
+			dup2(fstdout[1], STDOUT_FILENO);
+			dup2(fstderr[1], STDERR_FILENO);
 			exit(switch_command(action->command, input, output, false));
 		}
 		close(fstdout[1]);
 		close(fstderr[1]);
 		output->stdout = read_fd(fstdout, action->next == NULL);
+		write(open("stdout.swp", O_WRONLY | O_CREAT | O_TRUNC, 0644), output->stdout, ft_strlen(output->stdout));
 		waitpid(p, &wstatus, 0);
 		//STILL DOESNT WORK AS INTENDED, SOLUTIONS TO DISCUSS: 
 		//	-try forking a seperate process for the stdout or stderr again

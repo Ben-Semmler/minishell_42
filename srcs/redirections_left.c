@@ -1,29 +1,36 @@
 #include "minishell.h"
 
-void	readFile(char *command, t_outputs *output)
+void	redir_left(char *command, t_outputs *output)
 {
 	//DEBUG
 	if (debug)
 		printf("READING FROM FILE (REDIRECTION '<')\n");
 	//DEBUG
 
+	output->stdout = readFile(command);
+}
+
+char	*readFile(char *filename)
+{
 	int		fd;
 	int		return_val;
 	char	buf[256];
+	char	*content;
 
-	fd = open(command, O_RDONLY);
-	output->stdout = NULL;
+	fd = open(filename, O_RDONLY);
+	content = NULL;
 	while (true)
 	{
 		return_val = read(fd, buf, 255);
 		if (return_val <= 0)
 			break;
 		buf[return_val] = 0;
-		if (output->stdout != NULL)
-			output->stdout = ft_joinfree(output->stdout, 1, buf, 0);
+		if (content != NULL)
+			content = ft_joinfree(content, 1, buf, 0);
 		else
-			output->stdout = ft_strdup(buf);
+			content = ft_strdup(buf);
 	}
+	return (content);
 }
 
 void	insert_doc(char *command, t_outputs *output)

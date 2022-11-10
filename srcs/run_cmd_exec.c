@@ -2,6 +2,7 @@
 
 char	*next_dir(bool reset, const char *PATH, char *command);
 char	**make_args(char *command, char **args);
+bool	does_stdout_swp_exist();
 
 int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 {
@@ -18,8 +19,7 @@ int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 	p = fork();
 	if (p == 0)
 	{
-		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
-			;
+		dup2(filedes[1], STDERR_FILENO);
 		dir = next_dir(true, PATH, command);
 		while (dir != NULL)
 		{
