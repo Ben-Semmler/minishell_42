@@ -51,7 +51,7 @@ void handle_sig(int sig)
 
 int	main(int argc, char **argv, char **env)
 {
-	debug = true;
+	debug = false;
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_sig);

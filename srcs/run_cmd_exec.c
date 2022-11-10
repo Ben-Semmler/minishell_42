@@ -1,79 +1,75 @@
 #include "minishell.h"
 
-char	*back_dir(char *cwd);
+char	*next_dir(bool reset, const char *PATH, char *command);
 char	**make_args(char *command, char **args);
 
 int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 {
-	char	*cwd;
-	char	*cwdcmd;
+	char	*PATH;
+	char	*dir;
 	char	**args;
 	pid_t	p;
 	int		filedes[2];
 	int		wstatus;
 
-	//Create buffer with size of PATH_MAX, fill using getcwd to get
-	//the working directory
-	cwd = malloc(PATH_MAX + 1);
-	if (getcwd(cwd, PATH_MAX + 1) == NULL)
-	{
-		free(cwd);
-		//output->stderr = ft_joinfree("./", 0, ft_strjoin(input->argv[0]""))
-		return (1);
-	}
+	PATH = search("PATH").data;
 	args = make_args(command, input->argv);
 	pipe(filedes);
 	p = fork();
-
-	bool	islinux = true;
 	if (p == 0)
 	{
 		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
 			;
-		if (!islinux)
+		dir = next_dir(true, PATH, command);
+		while (dir != NULL)
 		{
-			while (cwd != NULL)
-			{
-				cwdcmd = ft_joinfree(cwd, 0, ft_strjoin("/", command), 1);
-				execve(cwdcmd, args, NULL);
-				free(cwdcmd);
-				cwd = back_dir(cwd);
-			}
+			execve(dir, args, NULL);
+			free(dir);
+			dir = next_dir(false, PATH, command);
 		}
-		else
-			execve(ft_strjoin("/usr/sbin/", command), args, NULL);
 		perror(ft_joinfree("minishell: ", 0, ft_strjoin(command, ": command not found"), 1));
 		exit(127);
 	}
 	close(filedes[1]);
 	output->stderr = read_fd(filedes, false);
 	waitpid(p, &wstatus, 0);
-	free(cwd);
 	free(args);
 	return (WEXITSTATUS(wstatus));
 }
 
-char	*back_dir(char *cwd)
+char	*next_dir(bool reset, const char *PATH, char *command)
 {
-	char	*newcwd;
-	int		size;
-	int		pos;
+	char		*new_dir;
+	int			size;
+	int			pos;
+	int			cmd_pos;
+	static int	path_pos = 0;
 
-	size = ft_strlen(cwd);
-	while (cwd[size] != '/')
-		size--;
-	if (size == 0)
+	if (reset)
+		path_pos = 0;
+	if ((size_t)path_pos >= ft_strlen(PATH))
 		return (NULL);
-	newcwd = malloc(sizeof(char) * size);
+	size = 0;
+	while (PATH[path_pos + size] && PATH[path_pos + size] != ':')
+		size++;
+	new_dir = malloc(sizeof(char) * (size + ft_strlen(command) + 1));
 	pos = 0;
 	while (pos < size)
 	{
-		newcwd[pos] = cwd[pos];
+		new_dir[pos] = PATH[path_pos + pos];
 		pos++;
 	}
-	newcwd[pos] = 0;
-	free(cwd);
-	return (newcwd);
+	new_dir[pos] = '/';
+	pos++;
+	cmd_pos = 0;
+	while (command[cmd_pos])
+	{
+		new_dir[pos + cmd_pos] = command[cmd_pos];
+		cmd_pos++;
+	}
+	new_dir[pos + cmd_pos] = 0;
+	path_pos += size + 1;
+	return (new_dir);
 }
 
 char	**make_args(char *command, char **args)
