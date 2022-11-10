@@ -24,9 +24,9 @@ EVAL DOC:
 	Signals ✅
 	Double Quotes ✅
 	Single Quotes ✅
-	env ❌ - seg faulting - J
-	export ❌ - cant test cause of env seg faulting  - J
-	unset ❌ - cant test cause of env seg faulting - J
+	env ✅ - seg faulting - J
+	export ✅ - cant test cause of env seg faulting  - J
+	unset ✅ - cant test cause of env seg faulting - J
 	cd ✅
 	pwd ✅
 	Relative Path ✅
@@ -39,9 +39,6 @@ EVAL DOC:
 ✅❌
 TASKS TO BE COMPLETED
 jaymie
-env ❌ - seg faulting
-export ❌ - cant test cause of env seg faulting
-unset ❌ - cant test cause of env seg faulting
 Environment variables ❌ - need to handle double quotes
 
 
