@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/11/10 14:55:40 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/10 15:19:34 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char *get_key(char *str)
 	char	*rtn;
 
 	i = 0;
-	while (str[i] && str[i] != '=' && str[i] != ' ')
+	while (str[i] && str[i] != '=' && str[i] != ' ' && str[i] != '"')
 		i++;
 	rtn = malloc(i + 1);
 	rtn[i] = '\0';

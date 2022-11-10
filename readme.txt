@@ -20,7 +20,7 @@ EVAL DOC:
 	Arguments & history ✅
 	echo ✅
 	exit ✅
-	Return value of a process ❌ - needs a closer look  - BJ
+	Return value of a process ✅
 	Signals ✅
 	Double Quotes ✅
 	Single Quotes ✅
@@ -30,16 +30,15 @@ EVAL DOC:
 	cd ✅
 	pwd ✅
 	Relative Path ✅
-	Environment path ❌ - needs execve to test
+	Environment path ✅
 	Redirection ✅
-	Pipes ❌ - need to execve "grep" - B
-	Go Crazy and history ❌ - need to execve "ls" - B
-	Environment variables ❌ - need to handle double quotes - J
+	Pipes ✅
+	Go Crazy and history ✅
+	Environment variables ✅
 
 ✅❌
 TASKS TO BE COMPLETED
 jaymie
-Environment variables ❌ - need to handle double quotes
 
 
 ben
