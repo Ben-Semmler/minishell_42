@@ -99,7 +99,6 @@ int 		insert_data(char *line, char *key);
 
 t_action	*split_actions(char *input, int returnval);
 char		*read_fd(int *fd, bool print);
-char		**read_stdout_stderr(int *stdout, int *stderr, bool print);
 
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 

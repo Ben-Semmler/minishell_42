@@ -19,11 +19,6 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool 
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
 size_t	action_size(t_action *action);
 
-//DEBUG
-void	print_inputs(const t_inputs input);
-void	print_outputs(const t_outputs output);
-//DEBUG
-
 bool *return_run(bool *run)
 {
 	static bool *rp;
@@ -78,27 +73,11 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(input);
 
-			//DEBUG
-			if (debug)
-				printf("Raw input: %s\n\n", input);
-			//DEBUG
-
 			//vv - Do stuff with the input in here - vv -b
 			actions = split_actions(input, returnval);
 			returnval = execute_actions(actions, &run);
 			free(input);
-
-			//DEBUG
-			if (debug)
-				printf("Returnval: %i\n", returnval);
-			//DEBUG
 		}
-		//DEBUG
-		else if (debug)
-		{
-			printf("SKIPPED\n");
-		}
-		//DEBUG
 	}
 }
 
@@ -115,43 +94,15 @@ int	execute_actions(t_action *action, bool *run)
 	stderrs = malloc(sizeof(char*) * action_size(action));
 	while (true)
 	{
-		//DEBUG
-		if (debug)
-			printf("------ACTION %i------\n", i + 1);
-		//DEBUG
-
+		printf("STARTING LOOP\n");
 		input.argc = action->argc;
 		input.argv = action->argv;
 		input.stdin = output.stdout;
-
-		//DEBUG
-		if (debug)
-		{
-			print_inputs(input);
-			printf("\n");
-		}
-		//DEBUG
-
 		switch_relation(action, &input, &output, run);
 		stderrs[i] = output.stderr;
-
-		//DEBUG
-		if (debug)
-		{
-			printf("\n");
-			print_outputs(output);
-			printf("\n");
-		}
-		//DEBUG
-
 		if (action->next == NULL)
 			break;
 		action = action->next;
-		
-		//DEBUG
-		if (debug)
-			printf("\n");
-		//DEBUG
 		i++;
 	}
 
@@ -192,51 +143,60 @@ void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool 
 
 void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 {
-	//DEBUG
-	if (debug)
-	{
-		printf("EXECUTING COMMAND (DEFAULT ACTION)\n");
-		if (action->fork)
-			printf("FORKED\n");
-		else
-			printf("NOT FORKED\n");
-	}
-	//DEBUG
-
+	int		fstdin[2];
 	int		fstdout[2];
 	int		fstderr[2];
 	pid_t	p;
-	int		stdinfile;
+	pid_t	p2;
 	int		wstatus;
 
 	//Bandaid fix for cd and exit not working as child process
 	if (!action->fork)
 		output->returnval = switch_command(action->command, input, output, run);
+	//DON'T MODIFY THIS SECTION
+	//vvv
 	else
 	{
-		stdinfile = open("stdout.swp", O_RDONLY);
+		pipe(fstdin);
 		pipe(fstdout);
 		pipe(fstderr);
 		p = fork();
 		if (p == 0)
 		{
-			dup2(stdinfile, STDIN_FILENO);
-			dup2(fstdout[1], STDOUT_FILENO);
+			if (input->stdin != NULL)
+				write(fstdin[1], input->stdin, ft_strlen(input->stdin));
+			p2 = fork();
+			if (p2 == 0)
+			{
+				dup2(fstdin[0], STDIN_FILENO);
+				dup2(fstdout[1], STDOUT_FILENO);
+				dup2(fstderr[1], STDERR_FILENO);
+				exit(switch_command(action->command, input, output, false));
+			}
+			waitpid(p2, &wstatus, 0);
+			exit(WEXITSTATUS(wstatus));
+		}
+		p2 = fork();
+		if (p2 == 0)
+		{
+			close(fstderr[1]);
+			output->stderr = read_fd(fstderr, false);
+			waitpid(p, NULL, 0);
 			dup2(fstderr[1], STDERR_FILENO);
-			exit(switch_command(action->command, input, output, false));
+			write(fstderr[1], output->stderr, ft_strlen(output->stderr));
+			exit(0);
 		}
 		close(fstdout[1]);
 		close(fstderr[1]);
 		output->stdout = read_fd(fstdout, action->next == NULL);
-		write(open("stdout.swp", O_WRONLY | O_CREAT | O_TRUNC, 0644), output->stdout, ft_strlen(output->stdout));
 		waitpid(p, &wstatus, 0);
-		//STILL DOESNT WORK AS INTENDED, SOLUTIONS TO DISCUSS: 
-		//	-try forking a seperate process for the stdout or stderr again
-		//	-create a file to store stdout, would fix some non-builtin issues but is kinda jank
-
+		output->stderr = read_fd(fstderr, false);
+		waitpid(p2, NULL, 0);
 		if (action->next == NULL)
 			output->returnval = WEXITSTATUS(wstatus);
 	}
+	//^^^
+	//DON'T MODIFY THIS SECTION
 }
 
 void	free_split_input(char **s_input)
