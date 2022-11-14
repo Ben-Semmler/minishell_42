@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/14 15:46:26 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:53:25 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ void		insert(char *key, char *data);
 // main_utils
 void		free_split_input(char **s_input);
 size_t		action_size(t_action *action);
-int			execute_actions2(t_inputs *input,
-				t_outputs *outputs, char **stderrs);
+int			execute_actions2(t_outputs *output, char **stderrs,
+				t_action *action);
 int			execute_actions(t_action *action, bool *run);
 void		switch_relation(t_action *action, t_inputs *input,
 				t_outputs 	*output, bool *run);
