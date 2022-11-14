@@ -6,13 +6,13 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 15:31:40 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/14 15:11:53 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 16:00:18 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	run_executable2(int *filedes, char *cwd,
+int	run_executable2(int filedes[2], char *cwd,
 	t_inputs *input, t_outputs *output)
 {
 	while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
@@ -23,7 +23,7 @@ int	run_executable2(int *filedes, char *cwd,
 	exit(127);
 }
 
-int	run_executable(const t_inputs *input, t_outputs *output)
+int	run_executable(t_inputs *input, t_outputs *output)
 {
 	char	*cwd;
 	pid_t	p;
@@ -40,7 +40,7 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 	pipe(filedes);
 	p = fork();
 	if (p == 0)
-		run_executable2(&filedes, cwd, input, output);
+		run_executable2(filedes, cwd, input, output);
 	close(filedes[1]);
 	output->stderr = read_fd(filedes, false);
 	waitpid(p, &wstatus, 0);

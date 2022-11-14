@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/14 15:53:25 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 16:01:51 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,9 +175,7 @@ char		*next_dir(bool reset, const char *path, char *command);
 char		**make_args(char *command, char **args);
 
 // run_executable
-int			run_executable2(int *filedes, char *cwd,
-				t_inputs *input, t_outputs *output);
-int			run_executable(const t_inputs *input, t_outputs *output);
+int			run_executable(t_inputs *input, t_outputs *output);
 
 // split_actions_utils
 void		fill_action(t_action *action, char *input, int size, int returnval);
