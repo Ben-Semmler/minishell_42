@@ -21,7 +21,7 @@ int	switch_command(char *command, t_inputs *input, t_outputs *output, bool *run)
 	else if (ft_strncmp(command, "cd", 3) == 0)
 		return (command_cd(input));
 	else if (ft_strncmp(command, "pwd", 4) == 0)
-		return (command_pwd(input));
+		return (command_pwd());
 	else if (ft_strncmp(command, "export", 7) == 0)
 		return (command_export(input));
 	else if (ft_strncmp(command, "unset", 6) == 0)
