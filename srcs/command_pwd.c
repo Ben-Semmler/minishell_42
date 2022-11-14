@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   command_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 18:18:08 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/14 18:18:09 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:46:18 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	command_pwd(const t_inputs *input)
+int	command_pwd(void)
 {
 	char	*cwd;
 
