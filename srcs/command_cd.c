@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:31:21 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/14 15:13:19 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:45:33 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,19 @@ int	cd_absolute(char **argv)
 	return (0);
 }
 
-void	cd_relative2(char *cwd, char *ext, char *cwdext, int *returnval)
+int	cd_relative2(char *ext, char *cwdext, char **argv)
 {
-	ext = ft_strjoin("/", argv[0]);
-	cwdext = ft_strjoin(cwd, ext);
+	int	i;
+
+	i = 0;
 	if (chdir(cwdext) != 0)
 	{
 		printf("minishell: %s: No such file or directory\n", argv[0]);
-		*returnval = 1;
+		i = 1;
 	}
 	free(ext);
 	free(cwdext);
+	return (i);
 }
 
 int	cd_relative(char **argv)
@@ -55,7 +57,11 @@ int	cd_relative(char **argv)
 	returnval = 0;
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
-		cd_relative2(cwd, ext, cwdext, &returnval);
+	{
+		cwdext = ft_strjoin(cwd, ext);
+		ext = ft_strjoin("/", argv[0]);
+		returnval = cd_relative2(ext, cwdext, argv);
+	}
 	else
 	{
 		printf("Error: could not get working directory\n");

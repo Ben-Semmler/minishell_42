@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/14 15:48:11 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/11/14 15:53:20 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_split_input(char **s_input)
@@ -26,13 +38,14 @@ size_t	action_size(t_action *action)
 	return (i);
 }
 
-int	execute_actions2(t_inputs *input, t_outputs *outputs, char **stderrs)
+int	execute_actions2(t_outputs *output, char **stderrs,
+	t_action *action)
 {
 	int	i;
 
-	if (output.stdout && (action->relation == NULL
+	if (output->stdout && (action->relation == NULL
 			|| ft_strncmp(action->relation, "|", 2) == 0))
-		printf("%s", output.stdout);
+		printf("%s", output->stdout);
 	i = 0;
 	while ((unsigned int)i < action_size(action))
 	{
@@ -44,7 +57,7 @@ int	execute_actions2(t_inputs *input, t_outputs *outputs, char **stderrs)
 		i++;
 	}
 	free(stderrs);
-	return (output.returnval);
+	return (output->returnval);
 }
 
 int	execute_actions(t_action *action, bool *run)
@@ -71,7 +84,7 @@ int	execute_actions(t_action *action, bool *run)
 		action = action->next;
 		i++;
 	}
-	return (execute_actions2(&input, &output, stderrs));
+	return (execute_actions2(&output, stderrs, action));
 }
 
 void	switch_relation(t_action *action, t_inputs *input,

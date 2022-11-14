@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/14 15:16:42 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:53:25 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char		check_quotations(char to_check, char quotations);
 // command_cd
 int			command_cd(const t_inputs *input);
 int			cd_absolute(char **argv);
-void		cd_relative2(char *cwd, char *ext, char *cwdext, int *returnval);
+int			cd_relative2(char *ext, char *cwdext, char **argv);
 int			cd_relative(char **argv);
 
 // command_echo
@@ -120,7 +120,7 @@ int			unset(t_inputs *input);
 char		*get_key(char *str);
 
 // command_pwd
-int			command_pwd(const t_inputs *input);
+int			command_pwd(void);
 
 // ft_joinfree
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
@@ -142,8 +142,8 @@ void		insert(char *key, char *data);
 // main_utils
 void		free_split_input(char **s_input);
 size_t		action_size(t_action *action);
-int			execute_actions2(t_inputs *input,
-				t_outputs *outputs, char **stderrs);
+int			execute_actions2(t_outputs *output, char **stderrs,
+				t_action *action);
 int			execute_actions(t_action *action, bool *run);
 void		switch_relation(t_action *action, t_inputs *input,
 				t_outputs 	*output, bool *run);
