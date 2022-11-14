@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   command_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:31:21 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/14 17:31:22 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:13:19 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	cd_absolute(char **argv);
-int	cd_relative(char **argv);
 
 int	command_cd(const t_inputs *input)
 {

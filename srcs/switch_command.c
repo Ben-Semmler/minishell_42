@@ -6,14 +6,11 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:23:22 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/10 13:51:56 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:11:41 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**split_input(char *input);
-void	free_split_input(char **s_input);
 
 int	switch_command(char *command, t_inputs *input, t_outputs *output, bool *run)
 {

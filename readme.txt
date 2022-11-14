@@ -25,8 +25,8 @@ EVAL DOC:
 	Double Quotes ✅
 	Single Quotes ✅
 	env ✅ - seg faulting - J
-	export ✅ - cant test cause of env seg faulting  - J
-	unset ✅ - cant test cause of env seg faulting - J
+	export ✅
+	unset ✅
 	cd ✅
 	pwd ✅
 	Relative Path ✅

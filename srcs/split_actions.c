@@ -3,39 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   split_actions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/28 15:15:01 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/06/28 15:15:02 by bsemmler         ###   ########.fr       */
+/*   Created: 2022/11/14 14:06:12 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/11/14 15:11:56 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*ft_strncpy(char *src, int size);
-int			find_next_seperator(char *input);
-t_action	*redir_reverse(t_action *action, char *input,
-				int *k, int returnval);
-void		fill_action(t_action *action, char *input, int size, int returnval);
-t_action	*init_next_action(t_action* action);
-int			check_pipe_chars(char *input);
-char		*find_relation(char *input);
-
-void		print_actions(t_action *actions);
-
-t_action	*split_actions(char *input, int returnval)
+int	inti_split_actions(t_action	*actions, t_action	*tempaction)
 {
-	t_action	*actions;
-	t_action 	*tempaction;
-	int			i;
-	int			j;
-	int			k;
-
 	actions = malloc(sizeof(t_action));
 	tempaction = actions;
 	tempaction->command = NULL;
 	tempaction->fork = true;
-	i = 0;
+	return (0);
+}
+
+t_action	*split_actions(char *input, int returnval)
+{
+	t_action	*actions;
+	t_action	*tempaction;
+	int			i;
+	int			j;
+	int			k;
+
+	i = inti_split_actions(actions, tempaction);
 	while ((size_t)i < ft_strlen(input))
 	{
 		k = 0;
@@ -86,29 +80,6 @@ t_action	*redir_reverse(t_action *action, char *input, int *k, int returnval)
 		find_next_seperator(&input[*k]), returnval);
 	action = init_next_action(action);
 	*k += find_next_seperator(&input[*k]);
-	return (action);
-}
-
-void	fill_action(t_action *action, char *input, int size, int returnval)
-{
-	char	*tempin;
-
-	tempin = ft_strncpy(input, size);
-	get_options(action, tempin, returnval);
-	action->next = NULL;
-	free(tempin);
-}
-
-t_action	*init_next_action(t_action *action)
-{
-	action->next = malloc(sizeof(t_action));
-	action = action->next;
-	action->command = NULL;
-	action->argc = 0;
-	action->argv = NULL;
-	action->relation = NULL;
-	action->next = NULL;
-	action->fork = true;
 	return (action);
 }
 

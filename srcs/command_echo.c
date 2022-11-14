@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   command_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:35:20 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/07 22:15:07 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/14 15:13:09 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	get_echo_len(char **argv);
 
 int	command_echo(const t_inputs *input)
 {

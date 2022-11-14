@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/10/21 19:00:33 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:12:39 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	main(int argc, char **argv, char **env)
 		}
 	}
 }
-
-
 
 void	run_action(t_action *action, t_inputs *input,
 	t_outputs *output, bool *run)

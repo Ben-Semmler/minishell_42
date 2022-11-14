@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   run_executable.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 15:31:40 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/22 15:31:41 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:11:53 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_args(char **input);
+int	run_executable2(int *filedes, char *cwd,
+	t_inputs *input, t_outputs *output)
+{
+	while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
+		;
+	execve(cwd, input->argv, NULL);
+	output->stderr = ft_joinfree("minishell: ./", 0,
+			ft_strjoin(input->argv[0], ": cannot execute file"), 1);
+	exit(127);
+}
 
 int	run_executable(const t_inputs *input, t_outputs *output)
 {
@@ -31,14 +40,7 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 	pipe(filedes);
 	p = fork();
 	if (p == 0)
-	{
-		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
-			;
-		execve(cwd, input->argv, NULL);
-		output->stderr = ft_joinfree("minishell: ./", 0,
-				ft_strjoin(input->argv[0], ": cannot execute file"), 1);
-		exit(127);
-	}
+		run_executable2(&filedes, cwd, input, output);
 	close(filedes[1]);
 	output->stderr = read_fd(filedes, false);
 	waitpid(p, &wstatus, 0);
