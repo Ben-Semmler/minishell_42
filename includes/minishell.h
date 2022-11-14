@@ -168,9 +168,9 @@ void		write_to_file(char *input, char *file);
 void		write_to_file_append(char *input, char *file);
 
 // run_cmd_exec
-void		run_cmd_exec2(char *dir, char *path, char **args, char *command);
+void		run_cmd_exec2(char *path, char **args, char *command);
 int			run_cmd_exec(char *command, t_inputs *input, t_outputs *output);
-void		next_dir2(bool reset, int *path_pos, char *path, int *size);
+void		next_dir2(bool reset, int *path_pos, const char *path, int *size);
 char		*next_dir(bool reset, const char *path, char *command);
 char		**make_args(char *command, char **args);
 
@@ -187,7 +187,7 @@ int			check_pipe_chars(char *input);
 char		*find_relation(char *input);
 
 // split_ations
-int			inti_split_actions(t_action	*actions, t_action	*tempaction);
+int			init_split_actions(t_action	*tempaction);
 t_action	*split_actions(char *input, int returnval);
 int			find_next_seperator(char *input);
 t_action	*redir_reverse(t_action *action, char *input,

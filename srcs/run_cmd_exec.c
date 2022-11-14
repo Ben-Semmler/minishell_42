@@ -12,8 +12,10 @@
 
 #include "minishell.h"
 
-void	run_cmd_exec2(char *dir, char *path, char **args, char *command)
+void	run_cmd_exec2(char *path, char **args, char *command)
 {
+	char	*dir;
+
 	dir = next_dir(true, path, command);
 	while (dir != NULL)
 	{
@@ -29,7 +31,6 @@ void	run_cmd_exec2(char *dir, char *path, char **args, char *command)
 int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 {
 	char	*path;
-	char	*dir;
 	char	**args;
 	pid_t	p;
 	int		filedes[2];
@@ -41,7 +42,7 @@ int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 	if (p == 0)
 	{
 		dup2(filedes[1], STDERR_FILENO);
-		run_cmd_exec2(dir, path, args, command);
+		run_cmd_exec2(path, args, command);
 	}
 	close(filedes[1]);
 	output->stderr = read_fd(filedes, false);
@@ -50,12 +51,12 @@ int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 	return (WEXITSTATUS(filedes[1]));
 }
 
-void	next_dir2(bool reset, int *path_pos, char *path, int *size)
+void	next_dir2(bool reset, int *path_pos, const char *path, int *size)
 {
 	if (reset)
 		*path_pos = 0;
 	if ((size_t)path_pos >= ft_strlen(path))
-		return (NULL);
+		return ;
 	*size = 0;
 	while (path[*path_pos + *size] && path[*path_pos + *size] != ':')
 		*size += 1;
@@ -70,6 +71,7 @@ char	*next_dir(bool reset, const char *path, char *command)
 	static int	path_pos = 0;
 
 	pos = 0;
+	next_dir2(reset, &path_pos, path, &size);
 	new_dir = malloc(sizeof(char) * (size + ft_strlen(command) + 1));
 	while (pos < size)
 	{
