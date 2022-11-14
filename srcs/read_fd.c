@@ -16,16 +16,17 @@ char	*read_fd(int *fd, bool print)
 {
 	char		*output;
 	char		*buffer;
+	ssize_t		count;
 
 	output = ft_strdup("");
 	buffer = ft_calloc(256, sizeof(char));
 	while (true)
 	{
-		ssize_t count = read(fd[0], buffer, sizeof(buffer) - 1);
+		count = read(fd[0], buffer, sizeof(buffer) - 1);
 		if (count == -1)
 		{
 			if (errno == EINTR)
-				continue;
+				continue ;
 			else
 			{
 				perror("read");
@@ -33,7 +34,7 @@ char	*read_fd(int *fd, bool print)
 			}
 		}
 		else if (count == 0)
-			break;
+			break ;
 		else
 		{
 			buffer[count] = 0;

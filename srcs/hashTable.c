@@ -16,11 +16,13 @@
 u_int64_t	hash(char *str, int envlen)
 {
 	u_int64_t	hash;
+
 	hash = 5381L;
 	while (*str++)
 		hash = ((hash << 5) + hash) + (*str - 1);
 	return (hash % envlen);
 }
+
 //returns an environmariable from a key
 t_env	search(char *key)
 {
@@ -36,10 +38,12 @@ t_env	search(char *key)
 	}
 	return (g_env_table[hashindex]);
 }
+
 //insert a key-value pair into the hashtable
 void	insert(char *key, char *data)
 {
 	unsigned long	hashindex;
+
 	hashindex = hash(key, ENV_SIZE);
 	while (g_env_table[hashindex].key != NULL
 		&& ft_strncmp(key, g_env_table[hashindex].key, ft_strlen(key)))

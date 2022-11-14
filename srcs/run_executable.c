@@ -20,13 +20,11 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 	pid_t	p;
 	int		filedes[2];
 	int		wstatus;
-	//Create buffer with size of PATH_MAX, fill using getcwd to get
-	//the working directory
+
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) == NULL)
 	{
 		free(cwd);
-		//output->stderr = ft_joinfree("./", 0, ft_strjoin(input->argv[0]""))
 		return (1);
 	}
 	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
@@ -37,7 +35,8 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
 			;
 		execve(cwd, input->argv, NULL);
-		output->stderr = ft_joinfree("minishell: ./", 0, ft_strjoin(input->argv[0], ": cannot execute file"), 1);
+		output->stderr = ft_joinfree("minishell: ./", 0,
+				ft_strjoin(input->argv[0], ": cannot execute file"), 1);
 		exit(127);
 	}
 	close(filedes[1]);

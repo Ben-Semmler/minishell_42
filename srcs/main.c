@@ -12,58 +12,50 @@
 
 #include "minishell.h"
 
-bool debug;
-
-int		execute_actions(t_action *action, bool *run);
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run);
-void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run);
-size_t	action_size(t_action *action);
-
-bool *return_run(bool *run)
+bool	*return_run(bool *run)
 {
-	static bool *rp;
+	static bool	*rp;
 
 	if (run != NULL)
 		rp = run;
 	return (rp);
 }
 
-void handle_sig(int sig)
+void	handle_sig(int sig)
 {
-	bool *r;
+	bool	*r;
 
 	r = return_run(NULL);
 	if (sig == SIGQUIT)
 		*r = false;
 	else
 	{
-		
-        rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
 	}
 }
 
-int	main(int argc, char **argv, char **env)
+int	inti(int argc, char **argv, char **env, bool *run)
 {
-	debug = false;
-
+	(void)argc;
+	(void)argv;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_sig);
-	
+	import_env(env);
+	run = true;
+	return_run(&run);
+	return (0);
+}
 
+int	main(int argc, char **argv, char **env)
+{
 	t_action	*actions;
 	char		*input;
 	bool		run;
 	int			returnval;
 
-	(void)argc;
-	(void)argv;
- 	import_env(env);
-	returnval = 0;
-	run = true;
-	return_run(&run);
-
+	returnval = inti(argc, argv, env, &run);
 	while (run)
 	{
 		input = readline("minishell& ");
@@ -72,8 +64,6 @@ int	main(int argc, char **argv, char **env)
 		if (input && input[0])
 		{
 			add_history(input);
-
-			//vv - Do stuff with the input in here - vv -b
 			actions = split_actions(input, returnval);
 			returnval = execute_actions(actions, &run);
 			free(input);
@@ -81,67 +71,10 @@ int	main(int argc, char **argv, char **env)
 	}
 }
 
-int	execute_actions(t_action *action, bool *run)
-{
-	int			i = 0;
-	t_inputs	input;
-	t_outputs	output;
-	char		**stderrs;
-	
-	output.stdout = NULL;
-	output.stderr = NULL;
-	output.returnval = INT_MAX;
-	stderrs = malloc(sizeof(char*) * action_size(action));
-	while (true)
-	{
-		printf("STARTING LOOP\n");
-		input.argc = action->argc;
-		input.argv = action->argv;
-		input.stdin = output.stdout;
-		switch_relation(action, &input, &output, run);
-		stderrs[i] = output.stderr;
-		if (action->next == NULL)
-			break;
-		action = action->next;
-		i++;
-	}
 
-	if (output.stdout && (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0))
-		printf("%s", output.stdout);
-	i = 0;
-	while ((unsigned int)i < action_size(action))
-	{
-		if (stderrs[i] != NULL)
-		{
-			printf("%s", stderrs[i]);
-			free(stderrs[i]);
-		}
-		i++;
-	}
-	free(stderrs);
-	return (output.returnval);
-}
 
-void	switch_relation(t_action *action, t_inputs *input, t_outputs *output, bool *run)
-{
-	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
-		run_action(action, input, output, run);
-	else if (ft_strncmp(action->relation, ">", 2) == 0)
-		writeToFile(input->stdin, action->command);
-	else if (ft_strncmp(action->relation, ">>", 3) == 0)
-		writeToFile_append(input->stdin, action->command);
-	else if (ft_strncmp(action->relation, "<", 2) == 0)
-		redir_left(action->command, output);
-	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-		insert_doc(action->command, output);
-	else if (output->stdout != NULL)
-		free(output->stdout);
-	if (action->relation != NULL && (ft_strncmp(action->relation, ">", 2) == 0
-		|| ft_strncmp(action->relation, ">>", 3) == 0))
-		output->stdout = NULL;
-}
-
-void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
+void	run_action(t_action *action, t_inputs *input,
+	t_outputs *output, bool *run)
 {
 	int		fstdin[2];
 	int		fstdout[2];
@@ -199,33 +132,9 @@ void	run_action(t_action *action, t_inputs *input, t_outputs *output, bool *run)
 	//DON'T MODIFY THIS SECTION
 }
 
-void	free_split_input(char **s_input)
-{
-	int	i;
 
-	//Free the split input
-	i = 0;
-	while (s_input[i] != NULL)
-	{
-		free(s_input[i]);
-		i++;
-	}
-	free(s_input);
-}
 
-size_t	action_size(t_action *action)
-{
-	size_t	i;
-	
-	i = 1;
-	while (action->next != NULL)
-	{
-		action = action->next;
-		i++;
-	}
-	return(i);
-}
-
+/*
 //DEBUG
 void	print_inputs(const t_inputs input)
 {
@@ -248,6 +157,7 @@ void	print_outputs(const t_outputs output)
 	if (output.stdout == NULL)
 		printf("\n");
 }
+*/
 //DEBUG
 
 // int	main(int argc, char **argv, char **env)

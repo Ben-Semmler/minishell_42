@@ -35,6 +35,19 @@ int	cd_absolute(char **argv)
 	return (0);
 }
 
+void	cd_relative2(char *cwd, char *ext, char *cwdext, int *returnval)
+{
+	ext = ft_strjoin("/", argv[0]);
+	cwdext = ft_strjoin(cwd, ext);
+	if (chdir(cwdext) != 0)
+	{
+		printf("minishell: %s: No such file or directory\n", argv[0]);
+		*returnval = 1;
+	}
+	free(ext);
+	free(cwdext);
+}
+
 int	cd_relative(char **argv)
 {
 	char	*cwd;
@@ -45,17 +58,7 @@ int	cd_relative(char **argv)
 	returnval = 0;
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
-	{
-		ext = ft_strjoin("/", argv[0]);
-		cwdext = ft_strjoin(cwd, ext);
-		if (chdir(cwdext) != 0)
-		{
-			printf("minishell: %s: No such file or directory\n", argv[0]);
-			returnval = 1;
-		}
-		free(ext);
-		free(cwdext);
-	}
+		cd_relative2(cwd, ext, cwdext, &returnval);
 	else
 	{
 		printf("Error: could not get working directory\n");

@@ -16,13 +16,6 @@ int	command_pwd(const t_inputs *input)
 {
 	char	*cwd;
 
-	//Use of input to appease -WWW, not needed for function
-	if (input->argc == 0)
-	{
-		;
-	}
-	//Create buffer with size of PATH_MAX, fill using getcwd to get
-	//the working directory and prints
 	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) != NULL)
 		printf("%s\n", cwd);

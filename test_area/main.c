@@ -6,12 +6,12 @@
 # include "../libft/libft.h"
 # include "../includes/minishell.h"
 
-void writeToFile(char *input, char *file)
+void write_to_file(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
 }
 
-void writeToFile_append(char *input, char *file)
+void write_to_file_append(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));
 }

@@ -16,8 +16,8 @@ int		get_command(t_action *action, char *input, int returnval);
 int		get_argn(char *input);
 char	*copy_arg(char *input, int returnval);
 int		get_arg_size(char *input, bool include_quotes, int returnval);
-int 	get_env_len(char *str);
-char	 *get_key(char *str);
+int		get_env_len(char *str);
+char	*get_key(char *str);
 
 void	get_options(t_action *action, char *input, int returnval)
 {
@@ -92,16 +92,12 @@ int	get_argn(char *input)
 
 char	*copy_arg(char *input, int returnval)
 {
-	//insert env variables into the output string
 	int		i;
 	int		offset;
 	char	quotations;
 	char	prev_quotations;
 	char	*arg;
 	bool	interpret;
-
-	//printf("==========================================\ncopying arg =%s\n", input);
-
 	int arg_size = get_arg_size(input, 0, returnval);
 
 	arg = malloc(arg_size + 1);
@@ -115,7 +111,7 @@ char	*copy_arg(char *input, int returnval)
 		prev_quotations = quotations;
 		quotations = check_quotations(input[i], quotations);
 		if (input[i] == 39)
-		 	interpret = !interpret;
+			interpret = !interpret;
 		if (input[i] == '$' && interpret)
 		{
 			if (input[i + 1] == '?')
@@ -133,10 +129,8 @@ char	*copy_arg(char *input, int returnval)
 			{
 				i++;
 				offset++;
-				//printf("insert data size =%d=\n", insert_data(&arg[i - offset], get_key(&input[i])));
 				offset -= insert_data(&arg[i - offset], get_key(&input[i])) - ft_strlen(get_key(&input[i]));
 				i += ft_strlen(get_key(&input[i]));
-				//printf("offset	=%d=\ni	=%d=\noffset + i	=%d=\n", offset, i, i - offset);
 			}
 		}
 		else
@@ -150,56 +144,4 @@ char	*copy_arg(char *input, int returnval)
 	}
 	arg[i - offset] = 0;
 	return (arg);
-}
-
-int	get_arg_size(char *input, bool include_interpret, int returnval)
-{
-	//Add the size of env variables here
-	int		len;
-	bool	interpret;
-	int		adjust;
-	char	quotations;
-	char	prev_quotations;
-	int		env_len;
-
-	len = 0;
-	interpret = true;
-	env_len = 0;
-	adjust = 0;
-	quotations = 0;
-	while (input[len] && (quotations != 0 || input[len] != ' '))
-	{
-		if (input[len] == 39)
-		 	interpret = !interpret;
-		if (input[len] == '$' && interpret)
-		{
-			if (input[len + 1] == '?')
-			{
-				len += 2;
-				env_len += (int)ft_strlen(ft_itoa(returnval)) - 2;
-			}
-			else
-			{
-				len++;
-				env_len += ft_strlen(search(get_key(&input[len])).data);
-				//printf("env len for =%s=\n	got =%d=\n", search(get_key(&input[len])).data, env_len);
-				env_len -= ft_strlen(get_key(&input[len])) + 1;
-				//printf("env KEY len for =%s=\n	got =%zu=\n", get_key(&input[len]), ft_strlen(get_key(&input[len])));
-				len += ft_strlen(get_key(&input[len]));
-				if (include_interpret)
-					env_len -= 2;
-			}
-		}
-		else 
-		{
-			prev_quotations = quotations;
-			quotations = check_quotations(input[len], quotations);
-			if (prev_quotations != quotations)
-				adjust++;
-			len++;
-		}
-	}
-	if (include_interpret)
-		return (len);
-	return (len + env_len - adjust);
 }

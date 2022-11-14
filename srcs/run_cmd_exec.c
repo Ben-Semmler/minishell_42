@@ -1,33 +1,44 @@
 #include "minishell.h"
 
-char	*next_dir(bool reset, const char *PATH, char *command);
+char	*next_dir(bool reset, const char *path, char *command);
 char	**make_args(char *command, char **args);
-bool	does_stdout_swp_exist();
+bool	does_stdout_swp_exist(void);
+
+int	run_cmd_exec2(char **args, pid_t	*p, int *filedes, t_inputs *input)
+{
+	char	*path;
+	char	*dir;
+
+	path = search("PATH").data;
+	pipe(*filedes);
+	*p = fork();
+	if (*p == 0)
+	{
+		dup2(filedes[1], STDERR_FILENO);
+		dir = next_dir(true, path, command);
+		while (dir != NULL)
+		{
+			execve(dir, args, NULL);
+			free(dir);
+			dir = next_dir(false, path, command);
+		}
+		return (1);
+	}
+	return (0);
+}
 
 int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
 {
-	char	*PATH;
-	char	*dir;
 	char	**args;
 	pid_t	p;
 	int		filedes[2];
 	int		wstatus;
 
-	PATH = search("PATH").data;
 	args = make_args(command, input->argv);
-	pipe(filedes);
-	p = fork();
-	if (p == 0)
+	if (run_cmd_exec2(args, &p, &filedes, input))
 	{
-		dup2(filedes[1], STDERR_FILENO);
-		dir = next_dir(true, PATH, command);
-		while (dir != NULL)
-		{
-			execve(dir, args, NULL);
-			free(dir);
-			dir = next_dir(false, PATH, command);
-		}
-		perror(ft_joinfree("minishell: ", 0, ft_strjoin(command, ": command not found"), 1));
+		perror(ft_joinfree("minishell: ", 0,
+				ft_strjoin(command, ": command not found"), 1));
 		exit(127);
 	}
 	close(filedes[1]);
@@ -81,7 +92,7 @@ char	**make_args(char *command, char **args)
 	size = 0;
 	while (args[size] != NULL)
 		size++;
-	newargs = malloc(sizeof(char*) * (size + 1));
+	newargs = malloc(sizeof(char *) * (size + 1));
 	newargs[0] = command;
 	pos = 1;
 	while (pos < size + 1)

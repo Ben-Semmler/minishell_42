@@ -33,9 +33,6 @@
 # include <sys/ioctl.h>  
 # include <fcntl.h>
 
-//DEBUG MODE
-extern bool debug;
-
 typedef struct s_inputs
 {
 	int		argc;
@@ -91,11 +88,11 @@ extern t_env	*g_env_table;
 u_int64_t	hash(char *str, int envlen);
 t_env		search(char *key);
 void		insert(char *key, char *data);
-char 		*get_key(char *str);
-char 		*get_data(char *str);
+char		*get_key(char *str);
+char		*get_data(char *str);
 void		import_env(char **env);
 int			check_env(char **input);
-int 		insert_data(char *line, char *key);
+int			insert_data(char *line, char *key);
 
 t_action	*split_actions(char *input, int returnval);
 char		*read_fd(int *fd, bool print);
@@ -103,12 +100,13 @@ char		*read_fd(int *fd, bool print);
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int			get_command_id(char *input);
-int			switch_command(char *command, t_inputs *input, t_outputs *output, bool *run);
+int			switch_command(char *command, t_inputs *input,
+				t_outputs *output, bool *run);
 void		get_options(t_action *action, char *input, int returnval);
-char		*readFile(char *filename);
+char		*read_file(char *filename);
 void		redir_left(char *command, t_outputs *output);
-void 		writeToFile(char *stdin, char *file);
-void 		writeToFile_append(char *stdin, char *file);
+void		write_to_file(char *stdin, char *file);
+void		write_to_file_append(char *stdin, char *file);
 void		insert_doc(char *command, t_outputs *output);
 char		check_quotations(char to_check, char quotations);
 
@@ -119,8 +117,15 @@ int			command_pwd(const t_inputs *input);
 int			command_cat(const t_inputs *input, t_outputs *output);
 int			unset(t_inputs *input);
 int			command_export(t_inputs *input);
-int			command_env();
+int			command_env(void);
 int			run_cmd_exec(char *command, t_inputs *input, t_outputs *output);
+
+int			execute_actions(t_action *action, bool *run);
+void		switch_relation(t_action *action, t_inputs *input,
+				t_outputs *output, bool *run);
+void		run_action(t_action *action, t_inputs *input
+				t_outputs *output, bool *run);
+size_t		action_size(t_action *action);
 
 /*char		*run_executable(char **input);
 char		*command_cd(char **s_input);
