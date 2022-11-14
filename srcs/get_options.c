@@ -18,6 +18,8 @@ char	*copy_arg(char *input, int returnval);
 int		get_arg_size(char *input, bool include_quotes, int returnval);
 int		get_env_len(char *str);
 char	*get_key(char *str);
+int		insert_returnval_env(char *input, int returnval);
+int		insert_char_arg(char *arg, char *input, char *quotations, int *offset);
 
 void	get_options(t_action *action, char *input, int returnval)
 {
@@ -94,54 +96,61 @@ char	*copy_arg(char *input, int returnval)
 {
 	int		i;
 	int		offset;
-	char	quotations;
-	char	prev_quotations;
+	char	quotations[2];
 	char	*arg;
 	bool	interpret;
-	int arg_size = get_arg_size(input, 0, returnval);
 
 	arg = malloc(arg_size + 1);
 	i = 0;
-	quotations = 0;
+	quotations[0] = 0;
 	offset = 0;
 	interpret = true;
-
-	while (input[i] && i - offset < arg_size)
+	while (input[i] && i - offset < get_arg_size(input, 0, returnval))
 	{
-		prev_quotations = quotations;
-		quotations = check_quotations(input[i], quotations);
+		quotations[1] = quotations;
+		quotations[0] = check_quotations(input[i], quotations[0]);
 		if (input[i] == 39)
 			interpret = !interpret;
 		if (input[i] == '$' && interpret)
-		{
-			if (input[i + 1] == '?')
-			{
-				int i2 = 0;
-				while (ft_itoa(returnval)[i2])
-				{
-					arg[i - offset + i2] = ft_itoa(returnval)[i2];
-					i2++;
-				}
-				i += 2;
-				offset -= i2 - 2;
-			}
-			else
-			{
-				i++;
-				offset++;
-				offset -= insert_data(&arg[i - offset], get_key(&input[i])) - ft_strlen(get_key(&input[i]));
-				i += ft_strlen(get_key(&input[i]));
-			}
-		}
+			i += insert_returnval_env(&input[i]);
 		else
-		{
-			if (prev_quotations != quotations)
-				offset++;
-			else
-				arg[i - offset] = input[i];
-			i++;
-		}
+			i += insert_char_arg(quotations, &offset);
 	}
 	arg[i - offset] = 0;
 	return (arg);
+}
+
+int	insert_returnval_env(char *input, int returnval)
+{
+	int	i;
+	int	i2;
+
+	i = 0;
+	if (input[i + 1] == '?')
+	{
+		i2 = 0;
+		while (ft_itoa(returnval)[i2])
+		{
+			arg[i - offset + i2] = ft_itoa(returnval)[i2];
+			i2++;
+		}
+		i += 2;
+		offset -= i2 - 2;
+	}
+	else
+	{
+		offset -= insert_data(&arg[i - offset],
+				get_key(&input[i + 1])) - ft_strlen(get_key(&input[i + 1])) - 1;
+		i += ft_strlen(get_key(&input[i + 1])) + 1;
+	}
+	return (i);
+}
+
+int	insert_char_arg(char *arg, char *input,char *quotations, int *offset)
+{
+	if (quotations[1] != quotations[0])
+		*offset++;
+	else
+		arg[-*offset] = input[0];
+	return (1);
 }
