@@ -36,15 +36,15 @@ void	handle_sig(int sig)
 	}
 }
 
-int	inti(int argc, char **argv, char **env, bool *run)
+int	init(int argc, char **argv, char **env, bool *run)
 {
 	(void)argc;
 	(void)argv;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &handle_sig);
 	import_env(env);
-	run = true;
-	return_run(&run);
+	*run = true;
+	return_run(run);
 	return (0);
 }
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **env)
 	bool		run;
 	int			returnval;
 
-	returnval = inti(argc, argv, env, &run);
+	returnval = init(argc, argv, env, &run);
 	while (run)
 	{
 		input = readline("minishell& ");

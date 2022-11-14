@@ -12,10 +12,8 @@
 
 #include "minishell.h"
 
-int	inti_split_actions(t_action	*actions, t_action	*tempaction)
+int	init_split_actions(t_action	*tempaction)
 {
-	actions = malloc(sizeof(t_action));
-	tempaction = actions;
 	tempaction->command = NULL;
 	tempaction->fork = true;
 	return (0);
@@ -29,7 +27,9 @@ t_action	*split_actions(char *input, int returnval)
 	int			j;
 	int			k;
 
-	i = inti_split_actions(actions, tempaction);
+	actions = malloc(sizeof(t_action));
+	tempaction = actions;
+	i = init_split_actions(tempaction);
 	while ((size_t)i < ft_strlen(input))
 	{
 		k = 0;
@@ -44,8 +44,7 @@ t_action	*split_actions(char *input, int returnval)
 		if (input[i])
 			tempaction = init_next_action(tempaction);
 	}
-	if (actions->next == NULL)
-		actions->fork = false;
+	actions->fork = !(actions->next == NULL);
 	return (actions);
 }
 
