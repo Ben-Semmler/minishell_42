@@ -18,7 +18,7 @@ char	*copy_arg(char *input, int returnval);
 int		get_arg_size(char *input, bool include_quotes, int returnval);
 int		get_env_len(char *str);
 char	*get_key(char *str);
-int		insert_returnval_env(char *input, int returnval);
+int		insert_returnval_env(char *arg, char *input, int returnval, int offset);
 int		insert_char_arg(char *arg, char *input, char *quotations, int *offset);
 
 void	get_options(t_action *action, char *input, int returnval)
@@ -100,27 +100,27 @@ char	*copy_arg(char *input, int returnval)
 	char	*arg;
 	bool	interpret;
 
-	arg = malloc(arg_size + 1);
+	arg = malloc(get_arg_size(input, 0, returnval) + 1);
 	i = 0;
 	quotations[0] = 0;
 	offset = 0;
 	interpret = true;
 	while (input[i] && i - offset < get_arg_size(input, 0, returnval))
 	{
-		quotations[1] = quotations;
+		quotations[1] = quotations[0];
 		quotations[0] = check_quotations(input[i], quotations[0]);
 		if (input[i] == 39)
 			interpret = !interpret;
 		if (input[i] == '$' && interpret)
-			i += insert_returnval_env(&input[i]);
+			i += insert_returnval_env(arg, &input[i], returnval, offset);
 		else
-			i += insert_char_arg(quotations, &offset);
+			i += insert_char_arg(arg, &input[i], quotations, &offset);
 	}
 	arg[i - offset] = 0;
 	return (arg);
 }
 
-int	insert_returnval_env(char *input, int returnval)
+int	insert_returnval_env(char *arg, char *input, int returnval, int offset)
 {
 	int	i;
 	int	i2;
@@ -146,10 +146,10 @@ int	insert_returnval_env(char *input, int returnval)
 	return (i);
 }
 
-int	insert_char_arg(char *arg, char *input,char *quotations, int *offset)
+int	insert_char_arg(char *arg, char *input, char *quotations, int *offset)
 {
 	if (quotations[1] != quotations[0])
-		*offset++;
+		*offset += 1;
 	else
 		arg[-*offset] = input[0];
 	return (1);
