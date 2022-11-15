@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/10/21 19:00:33 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/15 15:50:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ int	main(int argc, char **argv, char **env)
 		if (input && input[0])
 		{
 			add_history(input);
-
-			//vv - Do stuff with the input in here - vv -b
 			actions = split_actions(input, returnval);
 			returnval = execute_actions(actions, &run);
 			free(input);
