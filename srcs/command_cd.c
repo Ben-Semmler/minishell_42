@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:31:21 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/14 17:31:22 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/15 15:59:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,21 @@ int	cd_absolute(char **argv)
 	return (0);
 }
 
+int	cd_relative2(char *ext, char *cwdext, char **argv)
+{
+	int	i;
+
+	i = 0;
+	if (chdir(cwdext) != 0)
+	{
+		printf("minishell: %s: No such file or directory\n", argv[0]);
+		i = 1;
+	}
+	free(ext);
+	free(cwdext);
+	return (i);
+}
+
 int	cd_relative(char **argv)
 {
 	char	*cwd;
@@ -48,13 +63,7 @@ int	cd_relative(char **argv)
 	{
 		ext = ft_strjoin("/", argv[0]);
 		cwdext = ft_strjoin(cwd, ext);
-		if (chdir(cwdext) != 0)
-		{
-			printf("minishell: %s: No such file or directory\n", argv[0]);
-			returnval = 1;
-		}
-		free(ext);
-		free(cwdext);
+		returnval = cd_relative2(ext, cwdext, argv);
 	}
 	else
 	{

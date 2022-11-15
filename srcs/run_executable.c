@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_executable.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 15:31:40 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/04/22 15:31:41 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/15 18:20:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,27 @@
 
 char	**create_args(char **input);
 
+int	run_executable2(char *cwd, const t_inputs *input)
+{
+	if (getcwd(cwd, PATH_MAX + 1) == NULL)
+	{
+		free(cwd);
+		return (1);
+	}
+	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
+	return (0);
+}
+
 int	run_executable(const t_inputs *input, t_outputs *output)
 {
 	char	*cwd;
 	pid_t	p;
 	int		filedes[2];
 	int		wstatus;
-	//Create buffer with size of PATH_MAX, fill using getcwd to get
-	//the working directory
+
 	cwd = malloc(PATH_MAX + 1);
-	if (getcwd(cwd, PATH_MAX + 1) == NULL)
-	{
-		free(cwd);
-		//output->stderr = ft_joinfree("./", 0, ft_strjoin(input->argv[0]""))
+	if (run_executable2(cwd, input))
 		return (1);
-	}
-	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
 	pipe(filedes);
 	p = fork();
 	if (p == 0)
@@ -37,7 +42,8 @@ int	run_executable(const t_inputs *input, t_outputs *output)
 		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
 			;
 		execve(cwd, input->argv, NULL);
-		output->stderr = ft_joinfree("minishell: ./", 0, ft_strjoin(input->argv[0], ": cannot execute file"), 1);
+		output->stderr = ft_joinfree("minishell: ./", 0,
+				ft_strjoin(input->argv[0], ": cannot execute file"), 1);
 		exit(127);
 	}
 	close(filedes[1]);

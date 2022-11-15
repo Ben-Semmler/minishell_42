@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   switch_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 17:23:22 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/10 13:51:56 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/15 16:18:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	switch_command(char *command, t_inputs *input, t_outputs *output, bool *run)
 	else if (ft_strncmp(command, "cd", 3) == 0)
 		return (command_cd(input));
 	else if (ft_strncmp(command, "pwd", 4) == 0)
-		return (command_pwd(input));
+		return (command_pwd());
 	else if (ft_strncmp(command, "export", 7) == 0)
 		return (command_export(input));
 	else if (ft_strncmp(command, "unset", 6) == 0)

@@ -6,12 +6,12 @@
 # include "../libft/libft.h"
 # include "../includes/minishell.h"
 
-void writeToFile(char *input, char *file)
+void write_file(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT, 0644), input, ft_strlen(input));
 }
 
-void writeToFile_append(char *input, char *file)
+void write_file_append(char *input, char *file)
 {
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644), input, ft_strlen(input));
 }
@@ -62,7 +62,7 @@ void	append_out(t_cmd *cmd)
 	i = 0;
 	while (*name && (*name == ' ' || *name == '	'))
 		name++;
-	writeToFile(cmd->output, name);
+	write_file(cmd->output, name);
 }
 
 int	main(int ac, char **av)
@@ -73,7 +73,7 @@ int	main(int ac, char **av)
 
 	//cmd.input = av;
 
-	//writeToFile(test, "t");
+	//write_file(test, "t");
 	cmd.input = test_input;
 	cmd.output = test_output;
 

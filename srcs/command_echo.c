@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:35:20 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/07 22:15:07 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/15 16:02:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,45 +32,6 @@ int	command_echo(const t_inputs *input)
 	if (input->argc == 0 || ft_strncmp(input->argv[0], "-n", 3) != 0)
 		printf("\n");
 	return (0);
-
-	//int		len;
-	//int		i;
-	//int		j;
-	//char	*to_print;
-	//int		nl;
-	/*to_print = malloc(get_echo_len(input->argv));
-	i = (ft_strncmp(input->argv[0], "-n", 3) == 0);
-	nl = i;
-	len = 0;
-	while (input->argv[i])
-	{
-		if (input->argv[i][0] == '>')
-			break ;
-		j = -1;
-		while (input->argv[i][++j])
-		{
-			if (input->argv[i][j] == '$')
-			{
-				len += insert_data(&to_print[len], get_key(&input->argv[i][++j]));
-				while (input->argv[i][j] && input->argv[i][j] != ' ')
-					j++;
-			}
-			else
-			{
-				to_print[len] = input->argv[i][j];
-				len++;
-			}
-		}
-		to_print[len] = ' ';
-		len++;
-		i++;
-	}
-	len--;
-	to_print[len] = '\0';
-	printf("%s", to_print);
-	if (ft_strncmp(input->argv[0], "-n", 3) != 0)
-		printf("\n");
-	free(to_print);*/
 }
 
 int	get_echo_len(char **argv)
