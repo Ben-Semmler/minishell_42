@@ -42,8 +42,8 @@ jaymie
 
 
 ben
--add executable command check instead of immediate "command not found"
 -stderr with pipes
+-malloc errors when command not found
 
 
 -Handle ctrl-C, ctrl-D and ctrl-\ while executing

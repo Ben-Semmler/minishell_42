@@ -154,6 +154,47 @@ void	run_action(t_action *action, t_inputs *input,
 		p = fork();
 		if (p == 0)
 		{
+			input->stdin = ft_strdup("squadala im off\n");
+			if (input->stdin != NULL)
+				write(fstdin[1], input->stdin, ft_strlen(input->stdin));
+			//write(1, input->stdin, ft_strlen(input->stdin));
+			dup2(fstdin[0], STDIN_FILENO);
+			p2 = fork();
+			if (p2 == 0)
+			{
+				write(1, "piss", 4);
+				dup2(fstdout[1], STDOUT_FILENO);
+				dup2(fstderr[1], STDERR_FILENO);
+				exit(switch_command(action->command, input, output, false));
+			}
+			waitpid(p2, &wstatus, 0);
+			exit(WEXITSTATUS(wstatus));
+		}
+		p2 = fork();
+		if (p2 == 0)
+		{
+			close(fstderr[1]);
+			output->stderr = read_fd(fstderr, false); 
+			waitpid(p, NULL, 0);
+			dup2(fstderr[1], STDERR_FILENO);
+			write(fstderr[0], output->stderr, ft_strlen(output->stderr));
+			exit(0);
+		}
+		close(fstdout[1]); 
+		close(fstderr[1]);
+		output->stdout = read_fd(fstdout, action->next == NULL);
+		waitpid(p, &wstatus, 0);
+		output->stderr = read_fd(fstderr, false);
+		waitpid(p2, NULL, 0);
+		if (action->next == NULL)
+			output->returnval = WEXITSTATUS(wstatus);
+
+		/*pipe(fstdin);
+		pipe(fstdout);
+		pipe(fstderr);
+		p = fork();
+		if (p == 0)
+		{
 			if (input->stdin != NULL)
 				write(fstdin[1], input->stdin, ft_strlen(input->stdin));
 			p2 = fork();
@@ -177,14 +218,14 @@ void	run_action(t_action *action, t_inputs *input,
 			write(fstderr[1], output->stderr, ft_strlen(output->stderr));
 			exit(0);
 		}
-		close(fstdout[1]);
+		close(fstdout[1]); 
 		close(fstderr[1]);
 		output->stdout = read_fd(fstdout, action->next == NULL);
 		waitpid(p, &wstatus, 0);
 		output->stderr = read_fd(fstderr, false);
 		waitpid(p2, NULL, 0);
 		if (action->next == NULL)
-			output->returnval = WEXITSTATUS(wstatus);
+			output->returnval = WEXITSTATUS(wstatus);*/
 	}
 	//^^^
 	//DON'T MODIFY THIS SECTION
