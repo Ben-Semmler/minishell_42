@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/15 20:28:54 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/16 18:48:44 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>  
 # include <fcntl.h>
+
+typedef struct s_container
+{
+	int		i1;
+	int		i2;
+	int		i3;
+	char	*c1;
+	char	*c2;
+	char	*c3;
+	bool	b;
+}	t_container;
+
 
 typedef struct s_inputs
 {

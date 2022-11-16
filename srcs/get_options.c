@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:05:05 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/09/16 18:42:13 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:49:08 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,31 @@ int	get_argn(char *input)
 	return (argn);
 }
 
+void	copy_arg2(int returnval, char *arg, int *offset, int *i)
+{
+	int i2;
+
+	i2 = 0;
+	while (ft_itoa(returnval)[i2])
+	{
+		arg[*i - *offset + i2] = ft_itoa(returnval)[i2];
+		i2++;
+	}
+	*i += 2;
+	*offset -= i2 - 2;
+}
+
+void	copy_arg3(int *i, int *offset, char *arg, char *input)
+{
+	*i += 1;
+	*offset += 1;
+	*offset -= insert_data(&arg[*i - *offset], get_key(&input[*i])) - ft_strlen(get_key(&input[*i]));
+	*i += ft_strlen(get_key(&input[*i]));
+}
+
 char	*copy_arg(char *input, int returnval)
 {
-	//insert env variables into the output string
+	t_container c;
 	int		i;
 	int		offset;
 	char	quotations;
@@ -100,44 +122,24 @@ char	*copy_arg(char *input, int returnval)
 	char	*arg;
 	bool	interpret;
 
-	//printf("==========================================\ncopying arg =%s\n", input);
-
-	int arg_size = get_arg_size(input, 0, returnval);
-
+	c.i3 arg_size = get_arg_size(input, 0, returnval);
 	arg = malloc(arg_size + 1);
 	i = 0;
 	quotations = 0;
 	offset = 0;
 	interpret = true;
-
 	while (input[i] && i - offset < arg_size)
 	{
 		prev_quotations = quotations;
 		quotations = check_quotations(input[i], quotations);
 		if (input[i] == 39)
-		 	interpret = !interpret;
+			interpret = !interpret;
 		if (input[i] == '$' && interpret)
 		{
 			if (input[i + 1] == '?')
-			{
-				int i2 = 0;
-				while (ft_itoa(returnval)[i2])
-				{
-					arg[i - offset + i2] = ft_itoa(returnval)[i2];
-					i2++;
-				}
-				i += 2;
-				offset -= i2 - 2;
-			}
+				copy_arg2(returnval, arg, &offset, &i);
 			else
-			{
-				i++;
-				offset++;
-				//printf("insert data size =%d=\n", insert_data(&arg[i - offset], get_key(&input[i])));
-				offset -= insert_data(&arg[i - offset], get_key(&input[i])) - ft_strlen(get_key(&input[i]));
-				i += ft_strlen(get_key(&input[i]));
-				//printf("offset	=%d=\ni	=%d=\noffset + i	=%d=\n", offset, i, i - offset);
-			}
+				copy_arg3(&i, &offset, arg, input);
 		}
 		else
 		{
