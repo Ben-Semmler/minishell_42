@@ -45,25 +45,16 @@ typedef struct s_container
 }	t_container;
 
 
-typedef struct s_inputs
+typedef struct s_args
 {
 	int		argc;
 	char	**argv;
-	char	*stdin;
-}	t_inputs;
-
-typedef struct s_outputs
-{
-	char	*stdout;
-	char	*stderr;
-	int		returnval;
-}	t_outputs;
+}	t_args;
 
 typedef struct s_action
 {
 	char			*command;
-	int				argc;
-	char			**argv;
+	t_args			args;
 	char			*relation;
 	bool			fork;
 	struct s_action	*next;
@@ -107,24 +98,22 @@ char		*ft_strncpy(char *src, int size);
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
 
 int			get_command_id(char *input);
-int			switch_command(char *command, t_inputs *input,
-				t_outputs *output, bool *run);
+int			switch_command(char *command, t_args *args, bool *run);
 void		get_options(t_action *action, char *input, int returnval);
 char		*read_file(char *filename);
-void		redir_left(char *command, t_outputs *output);
-void		write_file(char *stdin, char *file);
-void		write_file_append(char *stdin, char *file);
-void		insert_doc(char *command, t_outputs *output);
+int			write_file(char *file);
+int			write_file_append(char *file);
+int			redir_left(char *command, int outfd);
+int			insert_doc(char *command, int outfd);
 char		check_quotations(char to_check, char quotations);
 
-int			run_executable(const t_inputs *input, t_outputs *output);
-int			command_echo(const t_inputs *input);
-int			command_cd(const t_inputs *input);
+int			run_executable(const t_args *args);
+int			command_echo(const t_args *args);
+int			command_cd(const t_args *args);
 int			command_pwd(void);
-int			command_cat(const t_inputs *input, t_outputs *output);
-int			unset(t_inputs *input);
-int			command_export(t_inputs *input);
+int			unset(t_args *args);
+int			command_export(t_args *args);
 int			command_env(void);
-int			run_cmd_exec(char *command, t_inputs *input, t_outputs *output);
+int			run_cmd_exec(char *command, t_args *args);
 
 #endif

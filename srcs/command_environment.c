@@ -44,26 +44,26 @@ int	insert_data(char *line, char *key)
 	return (i);
 }
 
-int	command_export(t_inputs *input)
+int	command_export(t_args *args)
 {
 	char			*key;
 	char			*data;
 	unsigned long	hashindex;
 
-	key = get_key(input->argv[0]);
-	data = get_data(input->argv[0]);
+	key = get_key(args->argv[0]);
+	data = get_data(args->argv[0]);
 	printf("key = |%s|\n", key);
 	insert(key, data);
-	hashindex = hash(input->argv[0], 2048);
+	hashindex = hash(args->argv[0], 2048);
 	printf("index = %lu\n", hashindex);
 	return (0);
 }
 
-int	unset(t_inputs *input)
+int	unset(t_args *args)
 {
 	t_env	temp;
 
-	temp = search(input->argv[0]);
+	temp = search(args->argv[0]);
 	free(temp.key);
 	free(temp.data);
 	*temp.spot = 0;

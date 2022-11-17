@@ -28,17 +28,17 @@ void	get_options(t_action *action, char *input, int returnval)
 	i = get_command(action, input, returnval);
 	argi = 0;
 	argn = get_argn(&input[i]);
-	action->argv = malloc(sizeof(char *) * (argn + 1));
+	action->args.argv = malloc(sizeof(char *) * (argn + 1));
 	while (input[i] && argi < argn)
 	{
 		while (input[i] && input[i] == ' ')
 			i++;
-		action->argv[argi] = copy_arg(&input[i], returnval);
+		action->args.argv[argi] = copy_arg(&input[i], returnval);
 		i += get_arg_size(&input[i], 1, returnval);
 		argi++;
 	}
-	action->argv[argi] = NULL;
-	action->argc = argi;
+	action->args.argv[argi] = NULL;
+	action->args.argc = argi;
 }
 
 int	get_command(t_action *action, char *input, int returnval)
@@ -114,7 +114,7 @@ void	copy_arg3(int *i, int *offset, char *arg, char *input)
 
 char	*copy_arg(char *input, int returnval)
 {
-	t_container c;
+	//t_container c;
 	int		i;
 	int		offset;
 	char	quotations;
@@ -122,7 +122,7 @@ char	*copy_arg(char *input, int returnval)
 	char	*arg;
 	bool	interpret;
 
-	c.i3 arg_size = get_arg_size(input, 0, returnval);
+	int arg_size = get_arg_size(input, 0, returnval);
 	arg = malloc(arg_size + 1);
 	i = 0;
 	quotations = 0;

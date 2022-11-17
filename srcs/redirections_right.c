@@ -12,14 +12,22 @@
 
 #include "minishell.h"
 
-void	write_file(char *input, char *file)
+int	write_file(char *file)
 {
+	char	*input;
+	input = read_fd(STDIN_FILENO, false);
 	write(open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644),
 		input, ft_strlen(input));
+	free(input);
+	return (0);
 }
 
-void	write_file_append(char *input, char *file)
+int	write_file_append(char *file)
 {
+	char *input;
+	input = read_fd(STDIN_FILENO, false);
 	write(open(file, O_WRONLY | O_CREAT | O_APPEND, 0644),
 		input, ft_strlen(input));
+	free(input);
+	return (0);
 }

@@ -12,42 +12,29 @@
 
 #include "minishell.h"
 
-char	**create_args(char **input);
+// /char	**create_args(char **input);
 
-int	run_executable2(char *cwd, const t_inputs *input)
+int	run_executable(const t_args *args)
 {
+	char	*cwd;
+	pid_t	p;
+	int		wstatus;
+
+	cwd = malloc(PATH_MAX + 1);
 	if (getcwd(cwd, PATH_MAX + 1) == NULL)
 	{
 		free(cwd);
 		return (1);
 	}
-	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", input->argv[0]), 1);
-	return (0);
-}
-
-int	run_executable(const t_inputs *input, t_outputs *output)
-{
-	char	*cwd;
-	pid_t	p;
-	int		filedes[2];
-	int		wstatus;
-
-	cwd = malloc(PATH_MAX + 1);
-	if (run_executable2(cwd, input))
-		return (1);
-	pipe(filedes);
+	cwd = ft_joinfree(cwd, 1, ft_strjoin("/", args->argv[0]), 1);
 	p = fork();
 	if (p == 0)
 	{
-		while ((dup2(filedes[1], STDERR_FILENO) == -1) && (errno == EINTR))
-			;
-		execve(cwd, input->argv, NULL);
-		output->stderr = ft_joinfree("minishell: ./", 0,
-				ft_strjoin(input->argv[0], ": cannot execute file"), 1);
-		exit(127);
+		execve(cwd, args->argv, NULL);
+		perror(ft_joinfree("minishell: ./", 0,
+			ft_strjoin(args->argv[0], ": cannot execute file"), 1));
 	}
-	close(filedes[1]);
-	output->stderr = read_fd(filedes, false);
+	exit(127);
 	waitpid(p, &wstatus, 0);
 	free(cwd);
 	return (WEXITSTATUS(wstatus));

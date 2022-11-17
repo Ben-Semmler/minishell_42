@@ -27,8 +27,8 @@ t_action	*init_next_action(t_action *action)
 	action->next = malloc(sizeof(t_action));
 	action = action->next;
 	action->command = NULL;
-	action->argc = 0;
-	action->argv = NULL;
+	action->args.argc = 0;
+	action->args.argv = NULL;
 	action->relation = NULL;
 	action->next = NULL;
 	action->fork = true;

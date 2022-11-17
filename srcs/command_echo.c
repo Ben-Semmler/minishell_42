@@ -14,22 +14,22 @@
 
 int	get_echo_len(char **argv);
 
-int	command_echo(const t_inputs *input)
+int	command_echo(const t_args *args)
 {
 	int		i;
 	bool	space;
 
-	i = (input->argc > 0 && ft_strncmp(input->argv[0], "-n", 3) == 0);
+	i = (args->argc > 0 && ft_strncmp(args->argv[0], "-n", 3) == 0);
 	space = i;
-	while (input->argv[i])
+	while (args->argv[i])
 	{
 		if (i != 0 && space == false)
 			printf(" ");
-		printf("%s", input->argv[i]);
+		printf("%s", args->argv[i]);
 		i++;
 		space = false;
 	}
-	if (input->argc == 0 || ft_strncmp(input->argv[0], "-n", 3) != 0)
+	if (args->argc == 0 || ft_strncmp(args->argv[0], "-n", 3) != 0)
 		printf("\n");
 	return (0);
 }

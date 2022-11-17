@@ -15,14 +15,14 @@
 int	cd_absolute(char **argv);
 int	cd_relative(char **argv);
 
-int	command_cd(const t_inputs *input)
+int	command_cd(const t_args *args)
 {
-	if (input->argv[0] == NULL)
+	if (args->argv[0] == NULL)
 		return (1);
-	if (input->argv[0][0] == '/')
-		return (cd_absolute(input->argv));
+	if (args->argv[0][0] == '/')
+		return (cd_absolute(args->argv));
 	else
-		return (cd_relative(input->argv));
+		return (cd_relative(args->argv));
 }
 
 int	cd_absolute(char **argv)

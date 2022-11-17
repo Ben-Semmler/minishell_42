@@ -16,55 +16,44 @@ char	*next_dir(bool reset, const char *PATH, char *command);
 char	**make_args(char *command, char **args);
 bool	does_stdout_swp_exist(void);
 
-void	run_cmd_exec2(char *path, char **args, char *command)
-{
-	char	*dir;
-
-	dir = next_dir(true, path, command);
-	while (dir != NULL)
-	{
-		execve(dir, args, NULL);
-		free(dir);
-		dir = next_dir(false, path, command);
-	}
-	perror(ft_joinfree("minishell: ", 0,
-			ft_strjoin(command, ": command not found"), 1));
-	exit(127);
-}
-
-int	run_cmd_exec(char *command, t_inputs *input, t_outputs *output)
+int	run_cmd_exec(char *command, t_args *args)
 {
 	char	*path;
-	char	**args;
+	char	**new_args;
 	pid_t	p;
-	int		filedes[2];
 	int		wstatus;
+	char	*dir;
 
 	path = search("PATH").data;
-	args = make_args(command, input->argv);
-	pipe(filedes);
+	new_args = make_args(command, args->argv);
 	p = fork();
 	if (p == 0)
 	{
-		dup2(filedes[1], STDERR_FILENO);
-		run_cmd_exec2(path, args, command);
+		dir = next_dir(true, path, command);
+		while (dir != NULL)
+		{
+			execve(dir, new_args, NULL);
+			free(dir);
+			dir = next_dir(false, path, command);
+		}
+		perror(ft_joinfree("minishell: ", 0,
+				ft_strjoin(command, ": command not found"), 1));
+		exit(127);
 	}
-	close(filedes[1]);
-	output->stderr = read_fd(filedes, false);
 	waitpid(p, &wstatus, 0);
-	free(args);
+	free(new_args);
 	return (WEXITSTATUS(wstatus));
 }
 
-char	*next_dir2(char *command, int *size, int *path_pos, const char *path)
+char	*next_dir2(char *command, int size, int *path_pos, const char *path)
 {
 	char	*new_dir;
 	int		cmd_pos;
 	int		pos;
 
-	new_dir = malloc(sizeof(char) * (*size + ft_strlen(command) + 1));
+	new_dir = malloc(sizeof(char) * (size + ft_strlen(command) + 1));
 	pos = 0;
-	while (pos < *size)
+	while (pos < size)
 	{
 		new_dir[pos] = path[*path_pos + pos];
 		pos++;
@@ -78,7 +67,7 @@ char	*next_dir2(char *command, int *size, int *path_pos, const char *path)
 		cmd_pos++;
 	}
 	new_dir[pos + cmd_pos] = 0;
-	*path_pos += *size + 1;
+	*path_pos += size + 1;
 	return (new_dir);
 }
 
@@ -94,7 +83,7 @@ char	*next_dir(bool reset, const char *path, char *command)
 	size = 0;
 	while (path[path_pos + size] && path[path_pos + size] != ':')
 		size++;
-	return (next_dir2(command, &size, &path_pos, path));
+	return (next_dir2(command, size, &path_pos, path));
 }
 
 char	**make_args(char *command, char **args)

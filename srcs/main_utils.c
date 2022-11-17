@@ -12,27 +12,19 @@
 
 #include "minishell.h"
 
-void	run_action(t_action *action, t_inputs *input,
-			t_outputs *output, bool *run);
-
-void	switch_relation(t_action *action, t_inputs *input,
-			t_outputs *output, bool *run)
+int	switch_relation(t_action *action, bool *run, int outfd)
 {
 	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
-		run_action(action, input, output, run);
+		return(switch_command(action->command, &action->args, run));
 	else if (ft_strncmp(action->relation, ">", 2) == 0)
-		write_file(input->stdin, action->command);
+		return(write_file(action->command));
 	else if (ft_strncmp(action->relation, ">>", 3) == 0)
-		write_file_append(input->stdin, action->command);
+		return(write_file_append(action->command));
 	else if (ft_strncmp(action->relation, "<", 2) == 0)
-		redir_left(action->command, output);
+		return(redir_left(action->command, outfd));
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-		insert_doc(action->command, output);
-	else if (output->stdout != NULL)
-		free(output->stdout);
-	if (action->relation != NULL && (ft_strncmp(action->relation, ">", 2) == 0
-			|| ft_strncmp(action->relation, ">>", 3) == 0))
-		output->stdout = NULL;
+		return(insert_doc(action->command, outfd));
+	return (0);
 }
 
 void	free_split_input(char **s_input)

@@ -12,9 +12,11 @@
 
 #include "minishell.h"
 
-void	redir_left(char *command, t_outputs *output)
+int	redir_left(char *command, int outfd)
 {
-	output->stdout = read_file(command);
+	if (outfd != STDOUT_FILENO)
+		printf("%s", read_file(command));
+	return (0);
 }
 
 char	*read_file(char *filename)
@@ -40,19 +42,25 @@ char	*read_file(char *filename)
 	return (content);
 }
 
-void	insert_doc(char *command, t_outputs *output)
+int	insert_doc(char *command, int outfd)
 {
 	char	*input;
+	char	*output;
 
+	dup2(STDOUT_FILENO, outfd);
 	input = ft_strdup("");
-	output->stdout = ft_strdup("");
+	output = ft_strdup("");
 	while (true)
 	{
 		input = readline("> ");
 		if (ft_strncmp(input, command, ft_strlen(input) + 1) == 0)
 			break ;
-		output->stdout = ft_joinfree(output->stdout, true, input, true);
-		output->stdout = ft_joinfree(output->stdout, true, "\n", false);
+		output = ft_joinfree(output, true, input, true);
+		output = ft_joinfree(output, true, "\n", false);
 	}
+	dup2(outfd, STDOUT_FILENO);
+	if (outfd != STDOUT_FILENO)
+		printf("%s", output);
 	free(input);
+	return (0);
 }
