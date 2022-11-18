@@ -13,10 +13,7 @@ GENERAL NOTES
 EVAL DOC:
 	Compile ✅
 
-	Simple Command & global variables ❌ 
-		- Too many global variables (just remove debug when we're done, easy fix)
-		- Inputting only spaces does not skip line
-		- Cannot input tab, readline interprets as searching for a file. might be ok. 
+	Simple Command & global variables ✅
 	Arguments & history ✅
 	echo ✅
 	exit ✅

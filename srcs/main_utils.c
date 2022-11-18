@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 16:47:31 by marvin            #+#    #+#             */
-/*   Updated: 2022/11/15 16:47:31 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/18 15:26:31 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ bool	is_command_empty(char *input)
 	int	i;
 
 	i = 0;
+	if (input == NULL)
+	{
+		*return_run(NULL) = false;
+		return (true);
+	}
 	while (input[i] && (input[i] == ' ' || input[i] == '\t'))
 		i++;
 	if (input[i])

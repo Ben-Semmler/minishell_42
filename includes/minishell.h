@@ -6,7 +6,7 @@
 /*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/18 16:16:14 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/18 16:59:58 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ int			unset(t_args *args);
 int			command_export(t_args *args);
 int			command_env(void);
 int			run_cmd_exec(char *command, t_args *args);
+bool		*return_run(bool *run);
 
 #endif
