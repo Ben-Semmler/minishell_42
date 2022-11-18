@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/18 15:07:25 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:26:36 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGINT, &handle_sig);
 	import_env(env);
 	run = true;
+	return_run(&run);
 	while (run)
 	{
 		input = readline("minishell& ");
@@ -45,6 +46,7 @@ int	main(int argc, char **argv, char **env)
 			free(input);
 		}
 	}
+	return (0);
 }
 
 int	execute_actions(t_action *action, bool *run)
