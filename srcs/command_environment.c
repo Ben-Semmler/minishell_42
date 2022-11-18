@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_environment.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 12:47:45 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/11/15 20:23:32 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/18 15:34:35 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ int	command_export(t_args *args)
 
 	key = get_key(args->argv[0]);
 	data = get_data(args->argv[0]);
-	printf("key = |%s|\n", key);
 	insert(key, data);
 	hashindex = hash(args->argv[0], 2048);
-	printf("index = %lu\n", hashindex);
 	return (0);
 }
 
