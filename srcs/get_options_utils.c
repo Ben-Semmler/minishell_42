@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_options_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 11:55:06 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/11/18 13:51:47 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:09:55 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		get_arg_size(char *input, bool include_quotes, int returnval);
 
 /*
 	int		i = c.i1;
