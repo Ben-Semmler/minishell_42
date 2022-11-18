@@ -6,7 +6,7 @@
 /*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:05:05 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/18 15:01:45 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:09:08 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	get_options(t_action *action, char *input, int returnval)
 	action->args.argc = argi;
 }
 
-int	get_command(t_action *action, char *input, int returnval)
+int	get_command(t_action *action,
+	char *input, int returnval)
 {
 	int	i;
 
