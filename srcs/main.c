@@ -3,55 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/15 20:20:44 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/18 15:07:25 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		execute_actions(t_action *action, bool *run);
-int		switch_relation(t_action *action, bool *run, int outfd);
-size_t	action_size(t_action *action);
 int		run_piped_action(t_action *action, int stdin_fd, char **stderrs);
+int		switch_relation(t_action *action, bool *run, int outfd);
 
-bool	*return_run(bool *run)
-{
-	static bool	*rp;
-
-	if (run != NULL)
-		rp = run;
-	return (rp);
-}
-
-void	handle_sig(int sig)
-{
-	bool	*r;
-
-	r = return_run(NULL);
-	if (sig == SIGQUIT)
-		*r = false;
-	else
-	{
-		rl_replace_line("", 0);
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		rl_on_new_line();
-	}
-}
-
-int	init(int argc, char **argv, char **env, bool *run)
-{
-	(void)argc;
-	(void)argv;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, &handle_sig);
-	import_env(env);
-	*run = true;
-	return_run(run);
-	return (0);
-}
+size_t	action_size(t_action *action);
+bool	is_command_empty(char *input);
+void	handle_sig(int sig);
 
 int	main(int argc, char **argv, char **env)
 {
@@ -60,13 +27,17 @@ int	main(int argc, char **argv, char **env)
 	bool		run;
 	int			returnval;
 
-	returnval = init(argc, argv, env, &run);
+	(void)argc;
+	(void)argv;
+	returnval = 0;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &handle_sig);
+	import_env(env);
+	run = true;
 	while (run)
 	{
 		input = readline("minishell& ");
-		if (!input)
-			run = false;
-		if (input && input[0])
+		if (!is_command_empty(input))
 		{
 			add_history(input);
 			actions = split_actions(input, returnval);
@@ -111,7 +82,6 @@ int	run_piped_action(t_action *action, int stdin_fd, char **errors)
 	int		fstdout[2];
 	int		fstderr[2];
 	int		returnval;
-	int		wstatus;
 
 	pipe(fstdout);
 	pipe(fstderr);
@@ -126,10 +96,25 @@ int	run_piped_action(t_action *action, int stdin_fd, char **errors)
 	}
 	close(fstdout[1]);
 	close(fstderr[1]);
+	returnval = 0;
 	if (action->next != NULL)
 		returnval = run_piped_action(action->next, fstdout[0], &errors[1]);
 	errors[0] = read_fd(fstderr, false);
-	waitpid(cmd_p, &wstatus, 0);
-	return (((action->next != NULL) * returnval)
-		+ ((action->next == NULL) * WEXITSTATUS(wstatus)));
+	waitpid(cmd_p, (int *)((long)(action->next == NULL) * (long)&returnval), 0);
+	return (returnval / (((action->next == NULL) * 255) + 1));
+}
+
+int	switch_relation(t_action *action, bool *run, int outfd)
+{
+	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
+		return (switch_command(action->command, &action->args, run));
+	else if (ft_strncmp(action->relation, ">", 2) == 0)
+		return (write_file(action->command));
+	else if (ft_strncmp(action->relation, ">>", 3) == 0)
+		return (write_file_append(action->command));
+	else if (ft_strncmp(action->relation, "<", 2) == 0)
+		return (redir_left(action->command, outfd));
+	else if (ft_strncmp(action->relation, "<<", 3) == 0)
+		return (insert_doc(action->command, outfd));
+	return (127);
 }

@@ -12,21 +12,6 @@
 
 #include "minishell.h"
 
-int	switch_relation(t_action *action, bool *run, int outfd)
-{
-	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
-		return(switch_command(action->command, &action->args, run));
-	else if (ft_strncmp(action->relation, ">", 2) == 0)
-		return(write_file(action->command));
-	else if (ft_strncmp(action->relation, ">>", 3) == 0)
-		return(write_file_append(action->command));
-	else if (ft_strncmp(action->relation, "<", 2) == 0)
-		return(redir_left(action->command, outfd));
-	else if (ft_strncmp(action->relation, "<<", 3) == 0)
-		return(insert_doc(action->command, outfd));
-	return (0);
-}
-
 void	free_split_input(char **s_input)
 {
 	int	i;
@@ -51,4 +36,40 @@ size_t	action_size(t_action *action)
 		i++;
 	}
 	return (i);
+}
+
+bool	*return_run(bool *run)
+{
+	static bool	*rp;
+
+	if (run != NULL)
+		rp = run;
+	return (rp);
+}
+
+void	handle_sig(int sig)
+{
+	bool	*r;
+
+	r = return_run(NULL);
+	if (sig == SIGQUIT)
+		*r = false;
+	else
+	{
+		rl_replace_line("", 0);
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+	}
+}
+
+bool	is_command_empty(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+		i++;
+	if (input[i])
+		return (false);
+	return (true);
 }

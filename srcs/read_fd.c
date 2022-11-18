@@ -24,7 +24,7 @@ char	*read_fd(int *fd, bool print)
 	{
 		count = read(fd[0], buffer, sizeof(buffer) - 1);
 		if (count <= 0)
-			break;
+			break ;
 		else
 		{
 			buffer[count] = 0;

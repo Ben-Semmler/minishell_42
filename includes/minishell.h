@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/16 18:48:44 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:03:00 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ typedef struct s_container
 	int		i1;
 	int		i2;
 	int		i3;
-	char	*c1;
-	char	*c2;
-	char	*c3;
+	int		i4;
+	char	c1;
+	char	c2;
+	char	c3;
+	char	*cp1;
 	bool	b;
 }	t_container;
-
 
 typedef struct s_args
 {

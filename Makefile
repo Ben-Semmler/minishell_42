@@ -33,6 +33,9 @@ run: all
 norm: all
 	norminette $(SRC)
 
+libftrm:
+	rm -rf libft
+
 git:
 	@clear
 	@git add .

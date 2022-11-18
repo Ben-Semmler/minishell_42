@@ -36,5 +36,5 @@ int	switch_command(char *command, t_args *args, bool *run)
 		*run = false;
 		return (0);
 	}
-	return(run_cmd_exec(command, args));
+	return (run_cmd_exec(command, args));
 }

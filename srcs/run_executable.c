@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-// /char	**create_args(char **input);
-
 int	run_executable(const t_args *args)
 {
 	char	*cwd;
@@ -32,9 +30,9 @@ int	run_executable(const t_args *args)
 	{
 		execve(cwd, args->argv, NULL);
 		perror(ft_joinfree("minishell: ./", 0,
-			ft_strjoin(args->argv[0], ": cannot execute file"), 1));
+				ft_strjoin(args->argv[0], ": cannot execute file"), 1));
+		exit(127);
 	}
-	exit(127);
 	waitpid(p, &wstatus, 0);
 	free(cwd);
 	return (WEXITSTATUS(wstatus));
