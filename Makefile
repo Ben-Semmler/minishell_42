@@ -11,8 +11,8 @@ SRC = srcs/*.c
 
 all:
 	$(MAKE) -C libft re
-	$(MAKE) -C libft clean
 	gcc $(c_flags) -o $(NAME) $(SRC) $(INCS) $(libraries)
+	$(MAKE) -C libft fclean
 
 r:
 	@make
@@ -32,9 +32,6 @@ run: all
 
 norm: all
 	norminette $(SRC)
-
-libftrm:
-	rm -rf libft
 
 git:
 	@clear

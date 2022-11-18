@@ -6,7 +6,7 @@
 /*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:22:03 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/18 15:03:00 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/18 16:16:14 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int			check_env(char **input);
 int			insert_data(char *line, char *key);
 
 t_action	*split_actions(char *input, int returnval);
-char		*read_fd(int *fd, bool print);
+char		*read_fd(int fd, bool print);
 char		*ft_strncpy(char *src, int size);
 
 char		*ft_joinfree(char *str1, int free1, char *str2, int free2);
@@ -102,8 +102,8 @@ int			get_command_id(char *input);
 int			switch_command(char *command, t_args *args, bool *run);
 void		get_options(t_action *action, char *input, int returnval);
 char		*read_file(char *filename);
-int			write_file(char *file);
-int			write_file_append(char *file);
+int			write_file(char *file, int infd);
+int			write_file_append(char *file, int infd);
 int			redir_left(char *command, int outfd);
 int			insert_doc(char *command, int outfd);
 char		check_quotations(char to_check, char quotations);

@@ -6,7 +6,7 @@
 /*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:21:48 by bsemmler          #+#    #+#             */
-/*   Updated: 2022/11/18 15:07:25 by bsemmler         ###   ########.fr       */
+/*   Updated: 2022/11/18 16:51:45 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		execute_actions(t_action *action, bool *run);
 int		run_piped_action(t_action *action, int stdin_fd, char **stderrs);
-int		switch_relation(t_action *action, bool *run, int outfd);
+int		switch_relation(t_action *action, bool *run, int in_fd, int outfd);
 
 size_t	action_size(t_action *action);
 bool	is_command_empty(char *input);
@@ -59,7 +59,7 @@ int	execute_actions(t_action *action, bool *run)
 	while (i++ < (int)action_size(action) - 1)
 		errors[i] = NULL;
 	if (action->next == NULL)
-		returnval = switch_relation(action, run, STDOUT_FILENO);
+		returnval = switch_relation(action, run, STDIN_FILENO, STDOUT_FILENO);
 	else
 		returnval = run_piped_action(action, STDIN_FILENO, errors);
 	i = 0;
@@ -89,29 +89,30 @@ int	run_piped_action(t_action *action, int stdin_fd, char **errors)
 	if (cmd_p == 0)
 	{
 		dup2(stdin_fd, STDIN_FILENO);
-		if (action->next != NULL)
+		if (action->next != NULL && (action->relation == NULL
+				|| ft_strncmp(action->relation, "|", 2) == 0))
 			dup2(fstdout[1], STDOUT_FILENO);
 		dup2(fstderr[1], STDERR_FILENO);
-		exit(switch_relation(action, false, fstdout[1]));
+		exit(switch_relation(action, false, stdin_fd, fstdout[1]));
 	}
 	close(fstdout[1]);
 	close(fstderr[1]);
 	returnval = 0;
 	if (action->next != NULL)
 		returnval = run_piped_action(action->next, fstdout[0], &errors[1]);
-	errors[0] = read_fd(fstderr, false);
+	errors[0] = read_fd(fstderr[0], false);
 	waitpid(cmd_p, (int *)((long)(action->next == NULL) * (long)&returnval), 0);
 	return (returnval / (((action->next == NULL) * 255) + 1));
 }
 
-int	switch_relation(t_action *action, bool *run, int outfd)
+int	switch_relation(t_action *action, bool *run, int infd, int outfd)
 {
 	if (action->relation == NULL || ft_strncmp(action->relation, "|", 2) == 0)
 		return (switch_command(action->command, &action->args, run));
 	else if (ft_strncmp(action->relation, ">", 2) == 0)
-		return (write_file(action->command));
+		return (write_file(action->command, infd));
 	else if (ft_strncmp(action->relation, ">>", 3) == 0)
-		return (write_file_append(action->command));
+		return (write_file_append(action->command, infd));
 	else if (ft_strncmp(action->relation, "<", 2) == 0)
 		return (redir_left(action->command, outfd));
 	else if (ft_strncmp(action->relation, "<<", 3) == 0)

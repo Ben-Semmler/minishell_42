@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_left.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bsemmler <bsemmler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 17:11:38 by marvin            #+#    #+#             */
-/*   Updated: 2022/11/15 17:11:42 by marvin           ###   ########.fr       */
+/*   Updated: 2022/11/18 16:56:29 by bsemmler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	redir_left(char *command, int outfd)
 {
+	dup2(outfd, STDOUT_FILENO);
 	if (outfd != STDOUT_FILENO)
 		printf("%s", read_file(command));
 	return (0);
@@ -47,7 +48,6 @@ int	insert_doc(char *command, int outfd)
 	char	*input;
 	char	*output;
 
-	dup2(STDOUT_FILENO, outfd);
 	input = ft_strdup("");
 	output = ft_strdup("");
 	while (true)
@@ -58,9 +58,9 @@ int	insert_doc(char *command, int outfd)
 		output = ft_joinfree(output, true, input, true);
 		output = ft_joinfree(output, true, "\n", false);
 	}
-	dup2(outfd, STDOUT_FILENO);
 	if (outfd != STDOUT_FILENO)
-		printf("%s", output);
+		write(outfd, output, ft_strlen(output));
 	free(input);
+	free(output);
 	return (0);
 }
